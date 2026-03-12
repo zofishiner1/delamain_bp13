@@ -656,15 +656,15 @@ textarea {
       
       <div class="appearance-preview">
         <div style="text-align: center;">
-          <img src="delamain.png" id="appearancePreviewImage" alt="Деламейн" style="width: 200px; height: auto; object-fit: contain; image-rendering: pixelated; border: 1px solid var(--border2); padding: 10px; background: var(--surface); margin-bottom: 10px;" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'200\' height=\'200\' viewBox=\'0 0 200 200\'><rect width=\'200\' height=\'200\' fill=\'%233d6e60\'/><circle cx=\'100\' cy=\'100\' r=\'50\' fill=\'%237eb8a4\'/><text x=\'100\' y=\'120\' text-anchor=\'middle\' fill=\'%2309090a\' font-size=\'40\' font-family=\'monospace\'>D</text></svg>'">
+          <img src="delamain.png" id="appearancePreviewImage" alt="Деламейн" style="width: 400px; height: auto; object-fit: contain; image-rendering: pixelated; border: 1px solid var(--border2); padding: 10px; background: var(--surface); margin-bottom: 10px;" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'400\' viewBox=\'0 0 400 400\'><rect width=\'400\' height=\'400\' fill=\'%233d6e60\'/><circle cx=\'200\' cy=\'200\' r=\'100\' fill=\'%237eb8a4\'/><text x=\'200\' y=\'240\' text-anchor=\'middle\' fill=\'%2309090a\' font-size=\'80\' font-family=\'monospace\'>D</text></svg>'">
           <div style="color: var(--dim); font-size: 10px;">delamain.png</div>
         </div>
         <div style="flex: 1;">
           <div class="form-group" style="margin-bottom: 15px;">
             <label>Размер изображения (px)</label>
             <div style="display: flex; gap: 10px; align-items: center;">
-              <input type="range" id="appearance_image_size" min="100" max="400" value="200" step="10" style="flex: 1;" oninput="updateAppearanceImageSize(this.value)">
-              <input type="number" id="appearance_image_size_input" min="100" max="400" value="200" step="10" style="width: 80px;" onchange="updateAppearanceImageSizeFromInput(this.value)">
+              <input type="range" id="appearance_image_size" min="200" max="600" value="400" step="10" style="flex: 1;" oninput="updateAppearanceImageSize(this.value)">
+              <input type="number" id="appearance_image_size_input" min="200" max="600" value="400" step="10" style="width: 80px;" onchange="updateAppearanceImageSizeFromInput(this.value)">
               <span style="color: var(--dim); font-size: 11px;">px</span>
             </div>
           </div>
@@ -691,7 +691,7 @@ textarea {
         <textarea id="appearance_passenger_note" rows="2">Взял такси ночью. Машина была чистая — неприятно чистая, знаете, как в операционной. Спросил водителя, молчит ли он всегда. Голос говорит: нет, не всегда.</textarea>
       </div>
       
-      <input type="hidden" id="appearance_image_size_value" value="200">
+      <input type="hidden" id="appearance_image_size_value" value="400">
 
       <div class="section-title">// ИНВЕНТАРЬ (ОСНОВНОЕ)</div>
       
@@ -782,15 +782,15 @@ textarea {
       
       <div class="sputnik-preview">
         <div style="text-align: center;">
-          <img src="sputnik.png" id="sputnikPreviewImage" alt="sputnik" style="width: 160px; height: 160px; object-fit: contain; image-rendering: pixelated; border: 1px solid var(--border2); padding: 10px; background: var(--surface); margin-bottom: 10px;" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'160\' height=\'160\' viewBox=\'0 0 160 160\'><rect width=\'160\' height=\'160\' fill=\'%233d6e60\'/><circle cx=\'80\' cy=\'80\' r=\'40\' fill=\'%237eb8a4\'/><text x=\'80\' y=\'100\' text-anchor=\'middle\' fill=\'%2309090a\' font-size=\'30\' font-family=\'monospace\'>S</text></svg>'">
+          <img src="sputnik.png" id="sputnikPreviewImage" alt="sputnik" style="width: 300px; height: 300px; object-fit: contain; image-rendering: pixelated; border: 1px solid var(--border2); padding: 10px; background: var(--surface); margin-bottom: 10px;" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'300\' viewBox=\'0 0 300 300\'><rect width=\'300\' height=\'300\' fill=\'%233d6e60\'/><circle cx=\'150\' cy=\'150\' r=\'80\' fill=\'%237eb8a4\'/><text x=\'150\' y=\'180\' text-anchor=\'middle\' fill=\'%2309090a\' font-size=\'60\' font-family=\'monospace\'>S</text></svg>'">
           <div style="color: var(--dim); font-size: 10px;">sputnik.png</div>
         </div>
         <div style="flex: 1;">
           <div class="form-group" style="margin-bottom: 15px;">
             <label>Размер изображения (px)</label>
             <div style="display: flex; gap: 10px; align-items: center;">
-              <input type="range" id="sputnik_image_size" min="80" max="300" value="160" step="10" style="flex: 1;" oninput="updateSputnikImageSize(this.value)">
-              <input type="number" id="sputnik_image_size_input" min="80" max="300" value="160" step="10" style="width: 80px;" onchange="updateSputnikImageSizeFromInput(this.value)">
+              <input type="range" id="sputnik_image_size" min="150" max="500" value="300" step="10" style="flex: 1;" oninput="updateSputnikImageSize(this.value)">
+              <input type="number" id="sputnik_image_size_input" min="150" max="500" value="300" step="10" style="width: 80px;" onchange="updateSputnikImageSizeFromInput(this.value)">
               <span style="color: var(--dim); font-size: 11px;">px</span>
             </div>
           </div>
@@ -816,18 +816,6 @@ textarea {
           <label>Статус</label>
           <input type="text" id="sputnik_status" value="активен">
         </div>
-        
-        <div class="form-group">
-          <label>Заряд батареи</label>
-          <input type="text" id="sputnik_battery" value="94%">
-        </div>
-      </div>
-      
-      <div class="grid-2">
-        <div class="form-group">
-          <label>Время полёта</label>
-          <input type="text" id="sputnik_flight_time" value="45 мин">
-        </div>
       </div>
       
       <div class="form-group">
@@ -835,7 +823,7 @@ textarea {
         <input type="text" id="sputnik_features" value="запись видео, ночной режим, автовозврат, тихий режим">
       </div>
       
-      <input type="hidden" id="sputnik_image_size_value" value="160">
+      <input type="hidden" id="sputnik_image_size_value" value="300">
     </div>
 
     <!-- Вкладка: Raw JSON -->
@@ -938,7 +926,6 @@ async function submitToken() {
   
   if (tokenHash === VALID_TOKEN_HASH) {
     document.getElementById('tokenModal').classList.add('hidden');
-    // Используем введенный токен для публикации
     await publishToGitHub(token);
   } else {
     document.getElementById('tokenError').textContent = '❌ Неверный токен';
@@ -954,10 +941,9 @@ async function publishToGitHub(token) {
     const jsonData = pendingPublishData || collectFormData();
     const content = btoa(unescape(encodeURIComponent(JSON.stringify(jsonData, null, 2))));
     
-    // Получаем текущий SHA файла
     const shaResponse = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${GITHUB_FILE_PATH}?ref=${GITHUB_BRANCH}`, {
       headers: {
-        'Authorization': `token ${token}`, // Используем введенный токен
+        'Authorization': `token ${token}`,
         'Accept': 'application/vnd.github.v3+json'
       }
     });
@@ -968,11 +954,10 @@ async function publishToGitHub(token) {
       sha = fileData.sha;
     }
     
-    // Отправляем изменения
     const commitResponse = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${GITHUB_FILE_PATH}`, {
       method: 'PUT',
       headers: {
-        'Authorization': `token ${token}`, // Используем введенный токен
+        'Authorization': `token ${token}`,
         'Content-Type': 'application/json',
         'Accept': 'application/vnd.github.v3+json'
       },
@@ -1007,8 +992,8 @@ function updateSputnikImageSize(size) {
 
 function updateSputnikImageSizeFromInput(size) {
   size = parseInt(size);
-  if (size < 80) size = 80;
-  if (size > 300) size = 300;
+  if (size < 150) size = 150;
+  if (size > 500) size = 500;
   document.getElementById('sputnikPreviewImage').style.width = size + 'px';
   document.getElementById('sputnikPreviewImage').style.height = size + 'px';
   document.getElementById('sputnik_image_size').value = size;
@@ -1025,8 +1010,8 @@ function updateAppearanceImageSize(size) {
 
 function updateAppearanceImageSizeFromInput(size) {
   size = parseInt(size);
-  if (size < 100) size = 100;
-  if (size > 400) size = 400;
+  if (size < 200) size = 200;
+  if (size > 600) size = 600;
   document.getElementById('appearancePreviewImage').style.width = size + 'px';
   document.getElementById('appearance_image_size').value = size;
   document.getElementById('appearance_image_size_value').value = size;
@@ -1038,7 +1023,6 @@ async function loadData() {
     const response = await fetch('data_character.json?' + Date.now());
     currentJsonData = await response.json();
     
-    // Заполняем основные поля
     document.getElementById('char_name').value = currentJsonData.name || 'Деламейн';
     document.getElementById('char_location').value = currentJsonData.location || 'торговый район Фродллера';
     document.getElementById('char_owner').value = currentJsonData.owner || 'Деламейн';
@@ -1065,7 +1049,7 @@ async function loadData() {
     document.getElementById('appearance_voice').value = currentJsonData.appearance?.voice || '';
     document.getElementById('appearance_passenger_note').value = currentJsonData.appearance?.passenger_note || '';
     
-    const appearanceSize = currentJsonData.appearance?.image_size || 200;
+    const appearanceSize = currentJsonData.appearance?.image_size || 400;
     document.getElementById('appearance_image_size').value = appearanceSize;
     document.getElementById('appearance_image_size_input').value = appearanceSize;
     document.getElementById('appearance_image_size_value').value = appearanceSize;
@@ -1090,11 +1074,9 @@ async function loadData() {
     document.getElementById('sputnik_type').value = currentJsonData.sputnik?.type || 'дрон // компаньон';
     document.getElementById('sputnik_desc').value = currentJsonData.sputnik?.description || '';
     document.getElementById('sputnik_status').value = currentJsonData.sputnik?.status || 'активен';
-    document.getElementById('sputnik_battery').value = currentJsonData.sputnik?.battery || '94%';
-    document.getElementById('sputnik_flight_time').value = currentJsonData.sputnik?.flight_time || '45 мин';
     document.getElementById('sputnik_features').value = (currentJsonData.sputnik?.features || ['запись видео', 'ночной режим', 'автовозврат', 'тихий режим']).join(', ');
     
-    const sputnikSize = currentJsonData.sputnik?.image_size || 160;
+    const sputnikSize = currentJsonData.sputnik?.image_size || 300;
     document.getElementById('sputnik_image_size').value = sputnikSize;
     document.getElementById('sputnik_image_size_input').value = sputnikSize;
     document.getElementById('sputnik_image_size_value').value = sputnikSize;
@@ -1212,7 +1194,7 @@ function collectFormData() {
       voice: document.getElementById('appearance_voice').value,
       passenger_note: document.getElementById('appearance_passenger_note').value,
       image: 'delamain.png',
-      image_size: parseInt(document.getElementById('appearance_image_size_value').value) || 200
+      image_size: parseInt(document.getElementById('appearance_image_size_value').value) || 400
     },
     
     inventory: {
@@ -1235,11 +1217,9 @@ function collectFormData() {
       type: document.getElementById('sputnik_type').value,
       description: document.getElementById('sputnik_desc').value,
       status: document.getElementById('sputnik_status').value,
-      battery: document.getElementById('sputnik_battery').value,
-      flight_time: document.getElementById('sputnik_flight_time').value,
       features: sputnikFeatures,
       image: 'sputnik.png',
-      image_size: parseInt(document.getElementById('sputnik_image_size_value').value) || 160
+      image_size: parseInt(document.getElementById('sputnik_image_size_value').value) || 300
     }
   };
 }
