@@ -863,7 +863,7 @@ textarea {
 const VALID_PASSWORD_HASH = 'ae91262951b9c8361dcef140f40b51c9a041b20a41e968358e11ee48ba1ea398';
 
 // Хэш токена для GitHub
-const VALID_TOKEN_HASH = '116d58ec5a9105335af03d9637a7ba4e4062fb1b97787ef2740a7e870181380f';
+const VALID_TOKEN_HASH = '189e3886872c713244729a154487e669376b4b9f842ebb1e0c876de03c6c14aa';
 
 // Настройки GitHub
 const GITHUB_REPO = 'zofishiner1/delamain_bp13';
@@ -938,6 +938,7 @@ async function submitToken() {
   
   if (tokenHash === VALID_TOKEN_HASH) {
     document.getElementById('tokenModal').classList.add('hidden');
+    // Используем введенный токен для публикации
     await publishToGitHub(token);
   } else {
     document.getElementById('tokenError').textContent = '❌ Неверный токен';
@@ -956,7 +957,7 @@ async function publishToGitHub(token) {
     // Получаем текущий SHA файла
     const shaResponse = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${GITHUB_FILE_PATH}?ref=${GITHUB_BRANCH}`, {
       headers: {
-        'Authorization': `token ${token}`,
+        'Authorization': `token ${token}`, // Используем введенный токен
         'Accept': 'application/vnd.github.v3+json'
       }
     });
@@ -971,7 +972,7 @@ async function publishToGitHub(token) {
     const commitResponse = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${GITHUB_FILE_PATH}`, {
       method: 'PUT',
       headers: {
-        'Authorization': `token ${token}`,
+        'Authorization': `token ${token}`, // Используем введенный токен
         'Content-Type': 'application/json',
         'Accept': 'application/vnd.github.v3+json'
       },
