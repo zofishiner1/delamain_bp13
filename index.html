@@ -59,7 +59,6 @@ body::before {
   padding: 60px 32px 100px;
 }
 
-/* HEADER */
 .header {
   margin-bottom: 64px;
   position: relative;
@@ -145,7 +144,6 @@ h1 span {
 .badge-act  { color: var(--gold);   border-color: var(--gold2);   background: rgba(196,168,110,0.05); }
 .badge-warn { color: var(--warn);   border-color: var(--warn2);   background: rgba(184,126,126,0.05); }
 
-/* GRID LAYOUT */
 .grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -160,7 +158,6 @@ h1 span {
   margin-bottom: 16px;
 }
 
-/* CARD */
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -233,7 +230,6 @@ h1 span {
 .card-body p { margin-bottom: 12px; }
 .card-body p:last-child { margin-bottom: 0; }
 
-/* SECTION HEADERS */
 .section-header {
   display: flex;
   align-items: center;
@@ -264,7 +260,6 @@ h1 span {
   letter-spacing: 0.1em;
 }
 
-/* ABILITY CARD */
 .ability {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -346,7 +341,6 @@ h1 span {
   font-weight: 400;
 }
 
-/* TERMINAL */
 .terminal-wrap { margin: 8px 0; }
 
 .terminal {
@@ -402,7 +396,6 @@ h1 span {
 }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
-/* WEAKNESS */
 .weakness {
   display: grid;
   grid-template-columns: 36px 1fr;
@@ -438,7 +431,6 @@ h1 span {
   line-height: 1.8;
 }
 
-/* TRAIT LIST */
 .trait-list {
   list-style: none;
   display: flex;
@@ -461,7 +453,6 @@ h1 span {
   color: var(--dim);
 }
 
-/* ADMIN BUTTON */
 .admin-btn {
   position: fixed;
   bottom: 20px;
@@ -483,7 +474,6 @@ h1 span {
   color: var(--accent);
 }
 
-/* FOOTER */
 .footer {
   margin-top: 80px;
   padding-top: 20px;
@@ -497,7 +487,6 @@ h1 span {
   text-transform: uppercase;
 }
 
-/* RESPONSIVE */
 @media (max-width: 600px) {
   .page { padding: 30px 16px 60px; }
   .grid-2, .grid-3 { grid-template-columns: 1fr; }
@@ -511,7 +500,6 @@ h1 span {
 <body>
 <div class="page">
 
-  <!-- HEADER -->
   <div class="header">
     <div class="header-sys">
       <span class="status-dot"></span>
@@ -529,10 +517,8 @@ h1 span {
     </div>
   </div>
 
-  <!-- ДИНАМИЧЕСКИЙ КОНТЕНТ ИЗ JSON -->
   <div id="character-content"></div>
 
-  <!-- FOOTER -->
   <div class="footer">
     <span>DEL // анкета v1.0</span>
     <span>фродллер // статус: активен</span>
@@ -543,14 +529,12 @@ h1 span {
 <a href="admin.html" class="admin-btn">⚙️ ADMIN</a>
 
 <script>
-// Загрузка данных из JSON
 async function loadCharacterData() {
   try {
-    const response = await fetch('data_character.json');
+    const response = await fetch('data_character.json?' + Date.now());
     const data = await response.json();
     
     document.getElementById('character-content').innerHTML = `
-      <!-- РАЗДЕЛ 1: БАЗОВЫЕ ДАННЫЕ -->
       <div class="section-header">
         <span class="section-num">01</span>
         <h2>Базовые данные</h2>
@@ -582,7 +566,6 @@ async function loadCharacterData() {
         </div>
       </div>
 
-      <!-- РАЗДЕЛ 2: ВНЕШНОСТЬ -->
       <div class="section-header">
         <span class="section-num">02</span>
         <h2>Внешность / физическое присутствие</h2>
@@ -613,7 +596,6 @@ async function loadCharacterData() {
         </div>
       </div>
 
-      <!-- РАЗДЕЛ 3: БИОГРАФИЯ -->
       <div class="section-header">
         <span class="section-num">03</span>
         <h2>Биография</h2>
@@ -651,7 +633,6 @@ async function loadCharacterData() {
         </div>
       `).join('')}
 
-      <!-- РАЗДЕЛ 4: ХАРАКТЕР -->
       <div class="section-header">
         <span class="section-num">04</span>
         <h2>Характер</h2>
@@ -672,7 +653,6 @@ async function loadCharacterData() {
         </div>
       </div>
 
-      <!-- РАЗДЕЛ 5: НАВЫКИ -->
       <div class="section-header">
         <span class="section-num">05</span>
         <h2>Навыки</h2>
@@ -685,7 +665,6 @@ async function loadCharacterData() {
         </ul>
       </div>
 
-      <!-- РАЗДЕЛ 6: ОСОБЕННОСТИ РАСЫ -->
       <div class="section-header">
         <span class="section-num">06</span>
         <h2>Особенности расы (ИИ)</h2>
@@ -706,7 +685,6 @@ async function loadCharacterData() {
         </div>
       </div>
 
-      <!-- РАЗДЕЛ 7: ОСОБЕННОСТИ -->
       <div class="section-header">
         <span class="section-num">07</span>
         <h2>Особенности</h2>
@@ -721,7 +699,6 @@ async function loadCharacterData() {
         </div>
       `).join('')}
 
-      <!-- РАЗДЕЛ 8: СПОСОБНОСТИ -->
       <div class="section-header">
         <span class="section-num">08</span>
         <h2>Способности</h2>
@@ -747,7 +724,6 @@ async function loadCharacterData() {
         </div>
       `).join('')}
 
-      <!-- РАЗДЕЛ 9: СЛАБОСТИ -->
       <div class="section-header">
         <span class="section-num">09</span>
         <h2>Слабости</h2>
@@ -763,7 +739,6 @@ async function loadCharacterData() {
         </div>
       `).join('')}
 
-      <!-- КНОПКА ПЕРЕХОДА К ИНВЕНТАРЮ -->
       <div style="display: flex; justify-content: flex-end; margin: 40px 0 20px;">
         <a href="delamain_inventory.html" style="text-decoration: none;">
           <div style="

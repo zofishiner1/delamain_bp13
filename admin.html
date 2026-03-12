@@ -19,6 +19,7 @@
   --warn:     #b87e7e;
   --warn2:    #6e3d3d;
   --gold:     #c4a86e;
+  --gold2:    #6e5a30;
   --mono:     'Martian Mono', monospace;
   --display:  'Unbounded', sans-serif;
 }
@@ -196,12 +197,36 @@ h1 span {
   background: rgba(184,126,126,0.1);
 }
 
+.token-section {
+  background: rgba(126,184,164,0.05);
+  border: 1px solid var(--accent2);
+  border-radius: 3px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.token-section label {
+  color: var(--accent);
+}
+
+.token-input {
+  width: 100%;
+  background: #060607;
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 8px;
+  margin: 5px 0 10px;
+}
+
 .tabs {
   display: flex;
   gap: 10px;
   margin-bottom: 30px;
   border-bottom: 1px solid var(--border);
   padding-bottom: 10px;
+  flex-wrap: wrap;
 }
 
 .tab-btn {
@@ -275,6 +300,68 @@ textarea {
   resize: vertical;
 }
 
+.item-list {
+  margin-bottom: 20px;
+}
+
+.item-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 80px;
+  gap: 10px;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.item-row input {
+  padding: 8px;
+}
+
+.remove-item {
+  background: var(--warn2);
+  color: var(--warn);
+  border: 1px solid var(--warn);
+  padding: 5px;
+  cursor: pointer;
+  font-size: 12px;
+  text-align: center;
+}
+
+.remove-item:hover {
+  background: rgba(184,126,126,0.2);
+}
+
+.add-item {
+  background: var(--accent2);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 8px 15px;
+  cursor: pointer;
+  font-size: 11px;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.add-item:hover {
+  background: rgba(126,184,164,0.2);
+}
+
+.sputnik-preview {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: rgba(126,184,164,0.05);
+  border: 1px dashed var(--accent2);
+}
+
+.sputnik-preview img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
 .button-group {
   display: flex;
   gap: 10px;
@@ -306,6 +393,15 @@ textarea {
   background: rgba(126,184,164,0.1);
 }
 
+.btn-success {
+  border-color: var(--gold2);
+  color: var(--gold);
+}
+
+.btn-success:hover {
+  background: rgba(196,168,110,0.1);
+}
+
 .btn-warn {
   border-color: var(--warn2);
   color: var(--warn);
@@ -326,6 +422,11 @@ textarea {
 .status-message.error {
   border-left-color: var(--warn2);
   background: rgba(184,126,126,0.05);
+}
+
+.status-message.warning {
+  border-left-color: var(--gold2);
+  background: rgba(196,168,110,0.05);
 }
 
 .hidden {
@@ -370,9 +471,17 @@ textarea {
       <button onclick="logout()" class="logout-btn">ВЫЙТИ</button>
     </div>
 
+    <!-- Секция для GitHub токена (предзаполнена) -->
+    <div class="token-section">
+      <label>🔑 GITHUB TOKEN (для авто-публикации)</label>
+      <input type="password" id="githubToken" class="token-input" value="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">
+      <small style="color: var(--dim);">Токен уже вставлен. Не делись им ни с кем!</small>
+    </div>
+
     <div class="tabs">
       <button class="tab-btn active" onclick="switchTab('character')">АНКЕТА</button>
       <button class="tab-btn" onclick="switchTab('inventory')">ИНВЕНТАРЬ</button>
+      <button class="tab-btn" onclick="switchTab('sputnik')">СПУТНИК</button>
       <button class="tab-btn" onclick="switchTab('raw')">RAW JSON</button>
     </div>
 
@@ -489,7 +598,7 @@ textarea {
         </div>
       </div>
 
-      <div class="section-title">// ИНВЕНТАРЬ</div>
+      <div class="section-title">// ИНВЕНТАРЬ (ОСНОВНОЕ)</div>
       
       <div class="grid-2">
         <div class="form-group">
@@ -560,26 +669,69 @@ textarea {
       </div>
     </div>
 
-    <!-- Вкладка: Инвентарь (кратко) -->
+    <!-- Вкладка: Инвентарь (содержимое) -->
     <div id="inventoryTab" class="editor-section">
-      <div class="section-title">// ИНВЕНТАРЬ (ОСНОВНОЕ)</div>
-      <p style="color: var(--dim); margin-bottom: 20px;">Основные параметры (дублируются с первой вкладкой)</p>
+      <div class="section-title">// СОДЕРЖИМОЕ ИНВЕНТАРЯ</div>
+      <p style="color: var(--dim); margin-bottom: 20px;">Добавляй или удаляй предметы. У каждого предмета есть название, количество и описание.</p>
+      
+      <div id="inventoryItems" class="item-list">
+        <!-- Сюда будут добавляться предметы динамически -->
+      </div>
+      
+      <button onclick="addInventoryItem()" class="add-item">+ ДОБАВИТЬ ПРЕДМЕТ</button>
+    </div>
+
+    <!-- Вкладка: Спутник -->
+    <div id="sputnikTab" class="editor-section">
+      <div class="section-title">// СПУТНИК</div>
+      
+      <div class="sputnik-preview">
+        <img src="sputnik.png" alt="sputnik" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'64\' height=\'64\' viewBox=\'0 0 64 64\'><rect width=\'64\' height=\'64\' fill=\'%233d6e60\'/><circle cx=\'32\' cy=\'32\' r=\'12\' fill=\'%237eb8a4\'/><text x=\'32\' y=\'40\' text-anchor=\'middle\' fill=\'%2309090a\' font-size=\'10\' font-family=\'monospace\'>S</text></svg>'">
+        <span style="color: var(--dim);">sputnik.png (64x64)</span>
+      </div>
+      
+      <div class="form-group">
+        <label>Имя спутника</label>
+        <input type="text" id="sputnik_name" value="Спутник">
+      </div>
+      
+      <div class="form-group">
+        <label>Тип</label>
+        <input type="text" id="sputnik_type" value="дрон // компаньон">
+      </div>
+      
+      <div class="form-group">
+        <label>Описание</label>
+        <textarea id="sputnik_desc" rows="4">Малый разведывательный дрон, модифицированный Деламейном. Постоянно находится рядом с хозяином, ведёт запись окружения. Может выполнять простые команды: следовать, зависнуть, осветить. Невооружён, но быстр.</textarea>
+      </div>
       
       <div class="grid-2">
         <div class="form-group">
-          <label>Автопарк</label>
-          <input type="number" id="inv_autopark2" value="10">
+          <label>Статус</label>
+          <input type="text" id="sputnik_status" value="активен">
         </div>
         
         <div class="form-group">
-          <label>Защита серверной (%)</label>
-          <input type="number" id="inv_security2" value="87">
+          <label>Заряд батареи</label>
+          <input type="text" id="sputnik_battery" value="94%">
+        </div>
+      </div>
+      
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Макс. дальность</label>
+          <input type="text" id="sputnik_range" value="500 м">
         </div>
         
         <div class="form-group">
-          <label>Всего записей</label>
-          <input type="number" id="inv_records2" value="1247332">
+          <label>Время полёта</label>
+          <input type="text" id="sputnik_flight_time" value="45 мин">
         </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Особенности (через запятую)</label>
+        <input type="text" id="sputnik_features" value="запись видео, ночной режим, автовозврат, тихий режим">
       </div>
     </div>
 
@@ -595,6 +747,7 @@ textarea {
       <button onclick="loadData()" class="btn">📂 ЗАГРУЗИТЬ</button>
       <button onclick="saveData()" class="btn btn-primary">💾 СОХРАНИТЬ JSON</button>
       <button onclick="downloadBackup()" class="btn">📥 БЭКАП</button>
+      <button onclick="publishToGitHub()" class="btn btn-success">🚀 ОПУБЛИКОВАТЬ НА GITHUB</button>
     </div>
 
     <!-- Статус сообщения -->
@@ -603,13 +756,18 @@ textarea {
 </div>
 
 <script>
-// Хэш пароля (тот что ты дал)
+// Хэш пароля
 const VALID_PASSWORD_HASH = 'ae91262951b9c8361dcef140f40b51c9a041b20a41e968358e11ee48ba1ea398';
+
+// Настройки GitHub
+const GITHUB_REPO = 'zofishiner1/delamain_bp13';
+const GITHUB_BRANCH = 'main';
+const GITHUB_FILE_PATH = 'data_character.json';
 
 // Текущие данные
 let currentJsonData = null;
 
-// Функция вычисления SHA-256 (из браузера)
+// SHA-256 хэш
 async function sha256(message) {
   const msgBuffer = new TextEncoder().encode(message);
   const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
@@ -624,24 +782,19 @@ async function checkPassword() {
   const hash = await sha256(password);
   
   if (hash === VALID_PASSWORD_HASH) {
-    // Успешный вход
     document.getElementById('loginSection').classList.add('hidden');
     document.getElementById('adminSection').classList.remove('hidden');
     document.getElementById('loginError').classList.add('hidden');
     
-    // Загружаем данные
     loadData();
-    
-    // Сохраняем состояние в sessionStorage (на время сессии)
     sessionStorage.setItem('admin_authenticated', 'true');
   } else {
-    // Неверный пароль
     document.getElementById('loginError').textContent = '❌ Неверный пароль';
     document.getElementById('loginError').classList.remove('hidden');
   }
 }
 
-// Проверка при загрузке страницы
+// Проверка при загрузке
 window.onload = function() {
   if (sessionStorage.getItem('admin_authenticated') === 'true') {
     document.getElementById('loginSection').classList.add('hidden');
@@ -657,13 +810,13 @@ function logout() {
   document.getElementById('adminSection').classList.add('hidden');
 }
 
-// Загрузка данных из JSON
+// Загрузка данных
 async function loadData() {
   try {
-    const response = await fetch('data_character.json?' + Date.now()); // Кэш-бастер
+    const response = await fetch('data_character.json?' + Date.now());
     currentJsonData = await response.json();
     
-    // Заполняем форму
+    // Заполняем основные поля
     document.getElementById('char_name').value = currentJsonData.name || 'Деламейн';
     document.getElementById('char_location').value = currentJsonData.location || 'торговый район Фродллера';
     document.getElementById('char_owner').value = currentJsonData.owner || 'Деламейн';
@@ -685,14 +838,11 @@ async function loadData() {
     document.getElementById('rep_kraken').value = currentJsonData.reputation?.organizations?.['KRAKEN'] || -25;
     
     document.getElementById('inv_autopark').value = currentJsonData.inventory?.autopark || 10;
-    document.getElementById('inv_autopark2').value = currentJsonData.inventory?.autopark || 10;
     document.getElementById('inv_autopark_desc').value = currentJsonData.inventory?.autopark_desc || 'Таксомоторный парк на Мэдисон-стрит. Все машины на ходу, заряжены, готовы к выезду.';
     document.getElementById('inv_security').value = currentJsonData.inventory?.security || 87;
-    document.getElementById('inv_security2').value = currentJsonData.inventory?.security || 87;
     document.getElementById('inv_archive_size').value = currentJsonData.inventory?.archive_size || '18.4 Тб';
     document.getElementById('inv_archive_free').value = currentJsonData.inventory?.archive_free || '4.2 Тб';
     document.getElementById('inv_records').value = currentJsonData.inventory?.archive_records || 1247332;
-    document.getElementById('inv_records2').value = currentJsonData.inventory?.archive_records || 1247332;
     document.getElementById('inv_trips').value = currentJsonData.inventory?.trips || 842104;
     document.getElementById('inv_conversations').value = currentJsonData.inventory?.conversations || 324891;
     document.getElementById('inv_logs').value = currentJsonData.inventory?.logs || 80337;
@@ -700,6 +850,19 @@ async function loadData() {
     document.getElementById('inv_note').value = currentJsonData.inventory?.note || 'Инвентарь ведётся автоматически с момента захвата управления.';
     document.getElementById('last_updated').value = currentJsonData.last_updated || '12.03.2026';
     document.getElementById('last_updated_time').value = currentJsonData.last_updated_time || '04:17:22';
+    
+    // Заполняем спутник
+    document.getElementById('sputnik_name').value = currentJsonData.sputnik?.name || 'Спутник';
+    document.getElementById('sputnik_type').value = currentJsonData.sputnik?.type || 'дрон // компаньон';
+    document.getElementById('sputnik_desc').value = currentJsonData.sputnik?.description || 'Малый разведывательный дрон, модифицированный Деламейном.';
+    document.getElementById('sputnik_status').value = currentJsonData.sputnik?.status || 'активен';
+    document.getElementById('sputnik_battery').value = currentJsonData.sputnik?.battery || '94%';
+    document.getElementById('sputnik_range').value = currentJsonData.sputnik?.range || '500 м';
+    document.getElementById('sputnik_flight_time').value = currentJsonData.sputnik?.flight_time || '45 мин';
+    document.getElementById('sputnik_features').value = (currentJsonData.sputnik?.features || ['запись видео', 'ночной режим', 'автовозврат', 'тихий режим']).join(', ');
+    
+    // Заполняем инвентарь
+    renderInventoryItems(currentJsonData.inventory?.items || []);
     
     // Raw JSON
     document.getElementById('rawJson').value = JSON.stringify(currentJsonData, null, 2);
@@ -710,9 +873,69 @@ async function loadData() {
   }
 }
 
+// Отрисовка предметов инвентаря
+function renderInventoryItems(items) {
+  const container = document.getElementById('inventoryItems');
+  container.innerHTML = '';
+  
+  items.forEach((item, index) => {
+    const row = document.createElement('div');
+    row.className = 'item-row';
+    row.innerHTML = `
+      <input type="text" class="item-name" placeholder="Название" value="${item.name || ''}">
+      <input type="text" class="item-quantity" placeholder="Кол-во" value="${item.quantity || ''}">
+      <div class="remove-item" onclick="removeInventoryItem(${index})">✕</div>
+      <textarea class="item-desc" placeholder="Описание" style="grid-column: span 3; margin-top: 5px;">${item.description || ''}</textarea>
+    `;
+    container.appendChild(row);
+  });
+}
+
+// Добавление предмета
+function addInventoryItem() {
+  const container = document.getElementById('inventoryItems');
+  const index = container.children.length;
+  const row = document.createElement('div');
+  row.className = 'item-row';
+  row.innerHTML = `
+    <input type="text" class="item-name" placeholder="Название" value="Новый предмет">
+    <input type="text" class="item-quantity" placeholder="Кол-во" value="1">
+    <div class="remove-item" onclick="removeInventoryItem(${index})">✕</div>
+    <textarea class="item-desc" placeholder="Описание" style="grid-column: span 3; margin-top: 5px;"></textarea>
+  `;
+  container.appendChild(row);
+}
+
+// Удаление предмета
+function removeInventoryItem(index) {
+  const container = document.getElementById('inventoryItems');
+  if (container.children.length > 0) {
+    container.removeChild(container.children[index]);
+    // Обновляем индексы в onclick
+    Array.from(container.children).forEach((child, i) => {
+      const removeBtn = child.querySelector('.remove-item');
+      removeBtn.setAttribute('onclick', `removeInventoryItem(${i})`);
+    });
+  }
+}
+
 // Сбор данных из формы
 function collectFormData() {
-  // Базовая структура с сохранением всех остальных данных
+  // Собираем предметы инвентаря
+  const items = [];
+  const itemRows = document.querySelectorAll('#inventoryItems .item-row');
+  itemRows.forEach(row => {
+    const name = row.querySelector('.item-name')?.value || '';
+    const quantity = row.querySelector('.item-quantity')?.value || '';
+    const description = row.querySelector('.item-desc')?.value || '';
+    if (name) {
+      items.push({ name, quantity, description });
+    }
+  });
+  
+  // Собираем особенности спутника
+  const sputnikFeatures = document.getElementById('sputnik_features').value.split(',').map(s => s.trim()).filter(s => s);
+  
   const baseData = currentJsonData || {};
   
   return {
@@ -754,12 +977,25 @@ function collectFormData() {
       conversations: parseInt(document.getElementById('inv_conversations').value),
       logs: parseInt(document.getElementById('inv_logs').value),
       priority_logs: document.getElementById('inv_priority').value.split(',').map(s => s.trim()),
-      note: document.getElementById('inv_note').value
+      note: document.getElementById('inv_note').value,
+      items: items
+    },
+    
+    sputnik: {
+      name: document.getElementById('sputnik_name').value,
+      type: document.getElementById('sputnik_type').value,
+      description: document.getElementById('sputnik_desc').value,
+      status: document.getElementById('sputnik_status').value,
+      battery: document.getElementById('sputnik_battery').value,
+      range: document.getElementById('sputnik_range').value,
+      flight_time: document.getElementById('sputnik_flight_time').value,
+      features: sputnikFeatures,
+      image: 'sputnik.png'
     }
   };
 }
 
-// Сохранение (скачивание файла)
+// Сохранение локально
 function saveData() {
   const jsonData = collectFormData();
   currentJsonData = jsonData;
@@ -775,7 +1011,7 @@ function saveData() {
   showMessage('✅ JSON сохранён на компьютер', 'success');
 }
 
-// Скачать бэкап
+// Бэкап
 function downloadBackup() {
   const jsonData = collectFormData();
   const date = new Date().toISOString().slice(0,10);
@@ -790,6 +1026,61 @@ function downloadBackup() {
   showMessage('📥 Бэкап сохранён', 'success');
 }
 
+// Публикация на GitHub
+async function publishToGitHub() {
+  const token = document.getElementById('githubToken').value;
+  if (!token) {
+    showMessage('❌ Введите GitHub token', 'error');
+    return;
+  }
+  
+  try {
+    showMessage('🔄 Публикация на GitHub...', 'warning');
+    
+    const jsonData = collectFormData();
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(jsonData, null, 2))));
+    
+    // Получаем текущий SHA файла
+    const shaResponse = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${GITHUB_FILE_PATH}?ref=${GITHUB_BRANCH}`, {
+      headers: {
+        'Authorization': `token ${token}`,
+        'Accept': 'application/vnd.github.v3+json'
+      }
+    });
+    
+    let sha = null;
+    if (shaResponse.ok) {
+      const fileData = await shaResponse.json();
+      sha = fileData.sha;
+    }
+    
+    // Отправляем изменения
+    const commitResponse = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${GITHUB_FILE_PATH}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `token ${token}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/vnd.github.v3+json'
+      },
+      body: JSON.stringify({
+        message: 'Update character data via admin panel',
+        content: content,
+        sha: sha,
+        branch: GITHUB_BRANCH
+      })
+    });
+    
+    if (!commitResponse.ok) {
+      const error = await commitResponse.json();
+      throw new Error(error.message || 'Failed to commit');
+    }
+    
+    showMessage('✅ Данные опубликованы на GitHub! Обновятся через минуту.', 'success');
+  } catch (error) {
+    showMessage('❌ Ошибка публикации: ' + error.message, 'error');
+  }
+}
+
 // Переключение вкладок
 function switchTab(tab) {
   document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -801,16 +1092,13 @@ function switchTab(tab) {
   } else if (tab === 'inventory') {
     document.querySelectorAll('.tab-btn')[1].classList.add('active');
     document.getElementById('inventoryTab').classList.add('active');
-    
-    // Синхронизация значений
-    document.getElementById('inv_autopark2').value = document.getElementById('inv_autopark').value;
-    document.getElementById('inv_security2').value = document.getElementById('inv_security').value;
-    document.getElementById('inv_records2').value = document.getElementById('inv_records').value;
-  } else if (tab === 'raw') {
+  } else if (tab === 'sputnik') {
     document.querySelectorAll('.tab-btn')[2].classList.add('active');
+    document.getElementById('sputnikTab').classList.add('active');
+  } else if (tab === 'raw') {
+    document.querySelectorAll('.tab-btn')[3].classList.add('active');
     document.getElementById('rawTab').classList.add('active');
     
-    // Обновляем raw редактор
     if (currentJsonData) {
       document.getElementById('rawJson').value = JSON.stringify(currentJsonData, null, 2);
     }
@@ -824,6 +1112,8 @@ function showMessage(text, type) {
   msg.className = 'status-message';
   if (type === 'error') {
     msg.classList.add('error');
+  } else if (type === 'warning') {
+    msg.classList.add('warning');
   }
   msg.classList.remove('hidden');
   
@@ -831,19 +1121,6 @@ function showMessage(text, type) {
     msg.classList.add('hidden');
   }, 5000);
 }
-
-// Синхронизация полей при изменении
-document.addEventListener('input', function(e) {
-  if (e.id === 'inv_autopark') {
-    document.getElementById('inv_autopark2').value = e.target.value;
-  }
-  if (e.id === 'inv_security') {
-    document.getElementById('inv_security2').value = e.target.value;
-  }
-  if (e.id === 'inv_records') {
-    document.getElementById('inv_records2').value = e.target.value;
-  }
-});
 </script>
 </body>
 </html>

@@ -356,6 +356,10 @@ h1 span {
   border-left: 2px solid var(--gold2);
 }
 
+.item-card.warn {
+  border-left: 2px solid var(--warn2);
+}
+
 .item-header {
   display: flex;
   justify-content: space-between;
@@ -432,6 +436,26 @@ h1 span {
 .c-dim  { color: var(--dim); }
 .c-warn { color: var(--warn); }
 
+.badge {
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 2px;
+}
+
+.badge-ai { color: var(--accent); background: rgba(126,184,164,0.1); border: 1px solid var(--accent2); }
+.badge-act { color: var(--gold); background: rgba(196,168,110,0.1); border: 1px solid var(--gold2); }
+
+.stat-label {
+  font-size: 8px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--dim);
+  display: block;
+  margin-bottom: 3px;
+}
+
 .admin-btn {
   position: fixed;
   bottom: 20px;
@@ -500,7 +524,7 @@ h1 span {
 <script>
 async function loadInventoryData() {
   try {
-    const response = await fetch('data_character.json');
+    const response = await fetch('data_character.json?' + Date.now());
     const data = await response.json();
     
     document.getElementById('update-date').textContent = data.last_updated || '12.03.2026';
@@ -597,10 +621,56 @@ async function loadInventoryData() {
 
       <div class="section-header">
         <span class="section-num">02</span>
-        <h2>Архив и данные</h2>
+        <h2>Содержимое</h2>
       </div>
 
-      <div class="terminal">
+      <div id="inventoryItemsContainer" class="inventory-grid">
+        ${data.inventory.items && data.inventory.items.length > 0 
+          ? data.inventory.items.map(item => `
+              <div class="item-card accent">
+                <div class="item-header">
+                  <div class="item-name">${item.name}</div>
+                  <div class="item-quantity">${item.quantity}</div>
+                </div>
+                <div class="item-type">предмет</div>
+                <div class="item-desc">${item.description}</div>
+              </div>
+            `).join('')
+          : '<div class="item-card"><div class="item-desc">Пусто</div></div>'
+        }
+      </div>
+
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2>Спутник</h2>
+      </div>
+
+      <div id="sputnikContainer" class="card gold-left">
+        <div style="display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap;">
+          <img src="${data.sputnik.image}" alt="sputnik" style="width: 80px; height: 80px; image-rendering: pixelated;" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'80\' viewBox=\'0 0 80 80\'><rect width=\'80\' height=\'80\' fill=\'%233d6e60\'/><circle cx=\'40\' cy=\'40\' r=\'16\' fill=\'%237eb8a4\'/><text x=\'40\' y=\'50\' text-anchor=\'middle\' fill=\'%2309090a\' font-size=\'14\' font-family=\'monospace\'>S</text></svg>'">
+          <div style="flex: 1;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
+              <span style="font-size: 18px; color: #d4d0dc; font-family: var(--display);">${data.sputnik.name}</span>
+              <span class="badge badge-ai">${data.sputnik.type}</span>
+              <span class="badge badge-act">${data.sputnik.status}</span>
+            </div>
+            <div style="margin-bottom: 15px; color: var(--text);">${data.sputnik.description}</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; background: rgba(0,0,0,0.2); padding: 10px;">
+              <div><span class="stat-label">Батарея</span><div style="color: var(--accent);">${data.sputnik.battery}</div></div>
+              <div><span class="stat-label">Дальность</span><div style="color: var(--accent);">${data.sputnik.range}</div></div>
+              <div><span class="stat-label">Время полёта</span><div style="color: var(--accent);">${data.sputnik.flight_time}</div></div>
+            </div>
+            <div style="margin-top: 10px;">
+              <span class="stat-label">Особенности</span>
+              <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px;">
+                ${(data.sputnik.features || []).map(f => `<span class="badge badge-ai" style="font-size: 9px;">${f}</span>`).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="terminal" style="margin-top: 32px;">
         <div class="t-bar">
           <div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div>
           <div class="t-title">АРХИВ ЗАПИСЕЙ</div>
