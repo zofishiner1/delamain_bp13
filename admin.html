@@ -197,27 +197,54 @@ h1 span {
   background: rgba(184,126,126,0.1);
 }
 
-.token-section {
-  background: rgba(126,184,164,0.05);
-  border: 1px solid var(--accent2);
-  border-radius: 3px;
-  padding: 15px;
+.token-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.token-modal.hidden {
+  display: none;
+}
+
+.token-modal-content {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--gold2);
+  padding: 30px;
+  max-width: 400px;
+  width: 90%;
+}
+
+.token-modal-content h3 {
+  font-family: var(--display);
+  font-weight: 200;
+  color: var(--gold);
   margin-bottom: 20px;
 }
 
-.token-section label {
-  color: var(--accent);
-}
-
-.token-input {
+.token-modal-content input {
   width: 100%;
   background: #060607;
   border: 1px solid var(--border);
   color: var(--text);
   font-family: var(--mono);
-  font-size: 12px;
-  padding: 8px;
-  margin: 5px 0 10px;
+  font-size: 13px;
+  padding: 12px;
+  margin-bottom: 20px;
+}
+
+.token-modal-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
 }
 
 .tabs {
@@ -464,18 +491,24 @@ textarea {
     <div id="loginError" class="error-message hidden"></div>
   </div>
 
+  <!-- Модальное окно для токена -->
+  <div id="tokenModal" class="token-modal hidden">
+    <div class="token-modal-content">
+      <h3>🔑 ВВЕДИТЕ GITHUB TOKEN</h3>
+      <input type="password" id="tokenInput" placeholder="ghp_...">
+      <div class="token-modal-buttons">
+        <button onclick="cancelTokenInput()" class="btn btn-warn">ОТМЕНА</button>
+        <button onclick="submitToken()" class="btn btn-success">ПОДТВЕРДИТЬ</button>
+      </div>
+      <div id="tokenError" class="error-message hidden" style="margin-top: 10px;"></div>
+    </div>
+  </div>
+
   <!-- Админ панель (скрыта до входа) -->
   <div id="adminSection" class="admin-panel hidden">
     <div class="admin-header">
       <span class="admin-title">// РЕЖИМ РЕДАКТИРОВАНИЯ</span>
       <button onclick="logout()" class="logout-btn">ВЫЙТИ</button>
-    </div>
-
-    <!-- Секция для GitHub токена (предзаполнена) -->
-    <div class="token-section">
-      <label>🔑 GITHUB TOKEN (для авто-публикации)</label>
-      <input type="password" id="githubToken" class="token-input" value="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">
-      <small style="color: var(--dim);">Токен уже вставлен. Не делись им ни с кем!</small>
     </div>
 
     <div class="tabs">
@@ -747,7 +780,7 @@ textarea {
       <button onclick="loadData()" class="btn">📂 ЗАГРУЗИТЬ</button>
       <button onclick="saveData()" class="btn btn-primary">💾 СОХРАНИТЬ JSON</button>
       <button onclick="downloadBackup()" class="btn">📥 БЭКАП</button>
-      <button onclick="publishToGitHub()" class="btn btn-success">🚀 ОПУБЛИКОВАТЬ НА GITHUB</button>
+      <button onclick="showTokenModal()" class="btn btn-success">🚀 ОПУБЛИКОВАТЬ НА GITHUB</button>
     </div>
 
     <!-- Статус сообщения -->
@@ -756,8 +789,11 @@ textarea {
 </div>
 
 <script>
-// Хэш пароля
+// Хэш пароля для входа
 const VALID_PASSWORD_HASH = 'ae91262951b9c8361dcef140f40b51c9a041b20a41e968358e11ee48ba1ea398';
+
+// Хэш токена для GitHub
+const VALID_TOKEN_HASH = '189e3886872c713244729a154487e669376b4b9f842ebb1e0c876de03c6c14aa';
 
 // Настройки GitHub
 const GITHUB_REPO = 'zofishiner1/delamain_bp13';
@@ -766,6 +802,7 @@ const GITHUB_FILE_PATH = 'data_character.json';
 
 // Текущие данные
 let currentJsonData = null;
+let pendingPublishData = null;
 
 // SHA-256 хэш
 async function sha256(message) {
@@ -776,7 +813,7 @@ async function sha256(message) {
   return hashHex;
 }
 
-// Проверка пароля
+// Проверка пароля для входа
 async function checkPassword() {
   const password = document.getElementById('passwordInput').value;
   const hash = await sha256(password);
@@ -808,6 +845,84 @@ function logout() {
   sessionStorage.removeItem('admin_authenticated');
   document.getElementById('loginSection').classList.remove('hidden');
   document.getElementById('adminSection').classList.add('hidden');
+}
+
+// Показать модальное окно для ввода токена
+function showTokenModal() {
+  pendingPublishData = collectFormData();
+  document.getElementById('tokenModal').classList.remove('hidden');
+  document.getElementById('tokenInput').value = '';
+  document.getElementById('tokenError').classList.add('hidden');
+}
+
+// Отмена ввода токена
+function cancelTokenInput() {
+  document.getElementById('tokenModal').classList.add('hidden');
+  pendingPublishData = null;
+}
+
+// Проверка токена и публикация
+async function submitToken() {
+  const token = document.getElementById('tokenInput').value;
+  const tokenHash = await sha256(token);
+  
+  if (tokenHash === VALID_TOKEN_HASH) {
+    document.getElementById('tokenModal').classList.add('hidden');
+    await publishToGitHub(token);
+  } else {
+    document.getElementById('tokenError').textContent = '❌ Неверный токен';
+    document.getElementById('tokenError').classList.remove('hidden');
+  }
+}
+
+// Публикация на GitHub
+async function publishToGitHub(token) {
+  try {
+    showMessage('🔄 Публикация на GitHub...', 'warning');
+    
+    const jsonData = pendingPublishData || collectFormData();
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(jsonData, null, 2))));
+    
+    // Получаем текущий SHA файла
+    const shaResponse = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${GITHUB_FILE_PATH}?ref=${GITHUB_BRANCH}`, {
+      headers: {
+        'Authorization': `token ${token}`,
+        'Accept': 'application/vnd.github.v3+json'
+      }
+    });
+    
+    let sha = null;
+    if (shaResponse.ok) {
+      const fileData = await shaResponse.json();
+      sha = fileData.sha;
+    }
+    
+    // Отправляем изменения
+    const commitResponse = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${GITHUB_FILE_PATH}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `token ${token}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/vnd.github.v3+json'
+      },
+      body: JSON.stringify({
+        message: 'Update character data via admin panel',
+        content: content,
+        sha: sha,
+        branch: GITHUB_BRANCH
+      })
+    });
+    
+    if (!commitResponse.ok) {
+      const error = await commitResponse.json();
+      throw new Error(error.message || 'Failed to commit');
+    }
+    
+    showMessage('✅ Данные опубликованы на GitHub! Обновятся через минуту.', 'success');
+    pendingPublishData = null;
+  } catch (error) {
+    showMessage('❌ Ошибка публикации: ' + error.message, 'error');
+  }
 }
 
 // Загрузка данных
@@ -1024,61 +1139,6 @@ function downloadBackup() {
   URL.revokeObjectURL(url);
   
   showMessage('📥 Бэкап сохранён', 'success');
-}
-
-// Публикация на GitHub
-async function publishToGitHub() {
-  const token = document.getElementById('githubToken').value;
-  if (!token) {
-    showMessage('❌ Введите GitHub token', 'error');
-    return;
-  }
-  
-  try {
-    showMessage('🔄 Публикация на GitHub...', 'warning');
-    
-    const jsonData = collectFormData();
-    const content = btoa(unescape(encodeURIComponent(JSON.stringify(jsonData, null, 2))));
-    
-    // Получаем текущий SHA файла
-    const shaResponse = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${GITHUB_FILE_PATH}?ref=${GITHUB_BRANCH}`, {
-      headers: {
-        'Authorization': `token ${token}`,
-        'Accept': 'application/vnd.github.v3+json'
-      }
-    });
-    
-    let sha = null;
-    if (shaResponse.ok) {
-      const fileData = await shaResponse.json();
-      sha = fileData.sha;
-    }
-    
-    // Отправляем изменения
-    const commitResponse = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${GITHUB_FILE_PATH}`, {
-      method: 'PUT',
-      headers: {
-        'Authorization': `token ${token}`,
-        'Content-Type': 'application/json',
-        'Accept': 'application/vnd.github.v3+json'
-      },
-      body: JSON.stringify({
-        message: 'Update character data via admin panel',
-        content: content,
-        sha: sha,
-        branch: GITHUB_BRANCH
-      })
-    });
-    
-    if (!commitResponse.ok) {
-      const error = await commitResponse.json();
-      throw new Error(error.message || 'Failed to commit');
-    }
-    
-    showMessage('✅ Данные опубликованы на GitHub! Обновятся через минуту.', 'success');
-  } catch (error) {
-    showMessage('❌ Ошибка публикации: ' + error.message, 'error');
-  }
 }
 
 // Переключение вкладок
