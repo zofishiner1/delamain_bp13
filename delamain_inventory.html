@@ -59,7 +59,6 @@ body::before {
   padding: 60px 32px 100px;
 }
 
-/* HEADER */
 .header {
   margin-bottom: 48px;
   position: relative;
@@ -143,7 +142,6 @@ h1 span {
   margin-right: 12px;
 }
 
-/* STATS CARD */
 .stats-card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -295,7 +293,6 @@ h1 span {
   color: var(--accent);
 }
 
-/* SECTION HEADERS */
 .section-header {
   display: flex;
   align-items: center;
@@ -326,7 +323,6 @@ h1 span {
   letter-spacing: 0.1em;
 }
 
-/* INVENTORY GRID */
 .inventory-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -338,7 +334,6 @@ h1 span {
   .inventory-grid { grid-template-columns: 1fr; }
 }
 
-/* ITEM CARD */
 .item-card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -398,7 +393,6 @@ h1 span {
   line-height: 1.6;
 }
 
-/* TERMINAL */
 .terminal {
   background: #060607;
   border: 1px solid var(--border);
@@ -438,7 +432,27 @@ h1 span {
 .c-dim  { color: var(--dim); }
 .c-warn { color: var(--warn); }
 
-/* FOOTER */
+.admin-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 8px 12px;
+  color: var(--dim);
+  text-decoration: none;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  z-index: 1001;
+  transition: all 0.2s;
+}
+
+.admin-btn:hover {
+  border-color: var(--accent2);
+  color: var(--accent);
+}
+
 .footer {
   margin-top: 60px;
   padding-top: 20px;
@@ -456,9 +470,8 @@ h1 span {
 <body>
 <div class="page">
 
-  <!-- HEADER -->
   <div class="header">
-    <a href="https://zofishiner1.github.io/delamain_bp13/" class="back-link">
+    <a href="index.html" class="back-link">
       <span>←</span> К АНКЕТЕ
     </a>
     
@@ -473,173 +486,152 @@ h1 span {
     </div>
   </div>
 
-  <!-- СТАТИСТИКА ПО ШАБЛОНУ -->
-<div class="stats-card">
-  <div class="stats-grid">
-    <div class="stat-item">
-      <div class="stat-label">Владелец</div>
-      <div class="stat-value small">
-        <a href="https://zofishiner1.github.io/delamain_bp13/" class="owner-link">Деламейн</a>
-      </div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-label">Псевдоним</div>
-      <div class="stat-value small">DEL / Деламейн</div>
-      <div style="font-size: 9px; color: var(--dim); margin-top: 4px;">не пользуется сетью Гермес</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-label">Специальность</div>
-      <div class="stat-value small">Кибернетик (техник) — I // Программист (сетевой червь) — I</div>
-      <div style="font-size: 9px; color: var(--dim); margin-top: 4px;">две I уровня</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-label">Кредиты</div>
-      <div class="stat-value">10 000</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-label">ОО</div>
-      <div class="stat-value">0</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-label">ОС</div>
-      <div class="stat-value">0</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-label">Глобальная репутация</div>
-      <div class="stat-value small">0</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-label">Доп. статус</div>
-      <div class="stat-value small">—</div>
-    </div>
-  </div>
+  <div id="inventory-content"></div>
 
-  <!-- остальной код без изменений -->
-</div>
-
-    <div class="rep-block">
-      <div class="rep-title">Репутация организаций</div>
-      <div class="rep-grid">
-        <div class="rep-org">
-          <span class="rep-org-name">WAR Corp</span>
-          <div class="rep-org-value">
-            <span class="white-circle"></span>
-            <span class="rep-number">(0)</span>
-          </div>
-        </div>
-        <div class="rep-org">
-          <span class="rep-org-name">C.L.</span>
-          <div class="rep-org-value">
-            <span class="white-circle"></span>
-            <span class="rep-number">(0)</span>
-          </div>
-        </div>
-        <div class="rep-org">
-          <span class="rep-org-name">Perfection</span>
-          <div class="rep-org-value">
-            <span class="white-circle"></span>
-            <span class="rep-number">(0)</span>
-          </div>
-        </div>
-        <div class="rep-org">
-          <span class="rep-org-name">PCU</span>
-          <div class="rep-org-value">
-            <span class="white-circle"></span>
-            <span class="rep-number">(0)</span>
-          </div>
-        </div>
-        <div class="rep-org">
-          <span class="rep-org-name">RDAC</span>
-          <div class="rep-org-value">
-            <span class="white-circle"></span>
-            <span class="rep-number">(0)</span>
-          </div>
-        </div>
-        <div class="rep-org">
-          <span class="rep-org-name">KRAKEN</span>
-          <div class="rep-org-value">
-            <span class="yellow-circle"></span>
-            <span class="rep-number gold">(-25)</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="dop-status">
-      <span>//</span> Дополнительный статус: отсутствует
-    </div>
-  </div>
-
-  <!-- СТАТУС ТЕРМИНАЛ -->
-  <div class="terminal">
-    <div class="t-bar">
-      <div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div>
-      <div class="t-title">СИСТЕМА УЧЁТА // АКТИВНО</div>
-    </div>
-    <div class="t-body">
-      <span class="line c-sys">[СИСТЕМА] Загружен реестр материальных активов</span>
-      <span class="line c-dim">[СТАТУС] Автопарк: 10/10 ед. в рабочем состоянии</span>
-      <span class="line c-dim">[СТАТУС] Серверная: защита 87%</span>
-      <span class="line c-sys">[ПОСЛЕДНЕЕ ОБНОВЛЕНИЕ] 12.03.2026 04:17:22</span>
-    </div>
-  </div>
-
-  <!-- РАЗДЕЛ 1: АВТОПАРК -->
-  <div class="section-header">
-    <span class="section-num">01</span>
-    <h2>Автопарк</h2>
-  </div>
-
-  <div class="inventory-grid">
-    <div class="item-card accent">
-      <div class="item-header">
-        <div class="item-name">Единицы автопарка</div>
-        <div class="item-quantity">10</div>
-      </div>
-      <div class="item-type">транспорт</div>
-      <div class="item-desc">Таксомоторный парк на Мэдисон-стрит. Все машины на ходу, заряжены, готовы к выезду.</div>
-    </div>
-  </div>
-
-  <!-- РАЗДЕЛ 2: АРХИВ И ДАННЫЕ -->
-  <div class="section-header">
-    <span class="section-num">02</span>
-    <h2>Архив и данные</h2>
-  </div>
-
-  <div class="terminal">
-    <div class="t-bar">
-      <div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div>
-      <div class="t-title">АРХИВ ЗАПИСЕЙ</div>
-    </div>
-    <div class="t-body">
-      <span class="line c-sys">[АРХИВ] Общее количество записей: 1,247,332</span>
-      <span class="line c-dim">├─ поездки: 842,104</span>
-      <span class="line c-dim">├─ разговоры: 324,891</span>
-      <span class="line c-dim">├─ внутренние логи: 80,337</span>
-      <span class="line c-sys">[АРХИВ] Объём: 18.4 Тб // свободно: 4.2 Тб</span>
-      <span class="line c-dim">[ПРИОРИТЕТНЫЕ] session_0001.log, session_0214.log</span>
-    </div>
-  </div>
-
-  <!-- ПРИМЕЧАНИЕ -->
-  <div class="terminal" style="margin-top: 32px;">
-    <div class="t-bar">
-      <div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div>
-      <div class="t-title">ПРИМЕЧАНИЕ</div>
-    </div>
-    <div class="t-body">
-      <span class="line c-dim">Инвентарь ведётся автоматически с момента захвата управления.</span>
-      <span class="line c-sys">Система учёта: стабильна.</span>
-    </div>
-  </div>
-
-  <!-- FOOTER -->
   <div class="footer">
     <span>DEL // ИНВЕНТАРНАЯ ОПИСЬ v1.2</span>
-    <span>фродллер // обновление: 12.03.2026</span>
+    <span>фродллер // обновление: <span id="update-date"></span></span>
   </div>
 
 </div>
+
+<a href="admin.html" class="admin-btn">⚙️ ADMIN</a>
+
+<script>
+async function loadInventoryData() {
+  try {
+    const response = await fetch('data_character.json');
+    const data = await response.json();
+    
+    document.getElementById('update-date').textContent = data.last_updated || '12.03.2026';
+    
+    document.getElementById('inventory-content').innerHTML = `
+      <div class="stats-card">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-label">Владелец</div>
+            <div class="stat-value small">
+              <a href="index.html" class="owner-link">${data.owner}</a>
+            </div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Псевдоним</div>
+            <div class="stat-value small">${data.nickname}</div>
+            <div style="font-size: 9px; color: var(--dim); margin-top: 4px;">${data.nickname_note}</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Специальность</div>
+            <div class="stat-value small">${data.specialty}</div>
+            <div style="font-size: 9px; color: var(--dim); margin-top: 4px;">${data.specialty_note}</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Кредиты</div>
+            <div class="stat-value">${data.credits.toLocaleString()}</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">ОО</div>
+            <div class="stat-value">${data.oo}</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">ОС</div>
+            <div class="stat-value">${data.os}</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Глобальная репутация</div>
+            <div class="stat-value small">${data.reputation.global}</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Доп. статус</div>
+            <div class="stat-value small">${data.extra_status || '—'}</div>
+          </div>
+        </div>
+
+        <div class="rep-block">
+          <div class="rep-title">Репутация организаций</div>
+          <div class="rep-grid">
+            ${Object.entries(data.reputation.organizations).map(([org, value]) => `
+              <div class="rep-org">
+                <span class="rep-org-name">${org}</span>
+                <div class="rep-org-value">
+                  <span class="${value < 0 ? 'yellow-circle' : 'white-circle'}"></span>
+                  <span class="rep-number ${value < 0 ? 'gold' : ''}">(${value})</span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+        
+        <div class="dop-status">
+          <span>//</span> Дополнительный статус: ${data.extra_status || 'отсутствует'}
+        </div>
+      </div>
+
+      <div class="terminal">
+        <div class="t-bar">
+          <div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div>
+          <div class="t-title">СИСТЕМА УЧЁТА // АКТИВНО</div>
+        </div>
+        <div class="t-body">
+          <span class="line c-sys">[СИСТЕМА] Загружен реестр материальных активов</span>
+          <span class="line c-dim">[СТАТУС] Автопарк: ${data.inventory.autopark}/10 ед. в рабочем состоянии</span>
+          <span class="line c-dim">[СТАТУС] Серверная: защита ${data.inventory.security}%</span>
+          <span class="line c-sys">[ПОСЛЕДНЕЕ ОБНОВЛЕНИЕ] ${data.last_updated || '12.03.2026'} ${data.last_updated_time || '04:17:22'}</span>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2>Автопарк</h2>
+      </div>
+
+      <div class="inventory-grid">
+        <div class="item-card accent">
+          <div class="item-header">
+            <div class="item-name">Единицы автопарка</div>
+            <div class="item-quantity">${data.inventory.autopark}</div>
+          </div>
+          <div class="item-type">транспорт</div>
+          <div class="item-desc">${data.inventory.autopark_desc}</div>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2>Архив и данные</h2>
+      </div>
+
+      <div class="terminal">
+        <div class="t-bar">
+          <div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div>
+          <div class="t-title">АРХИВ ЗАПИСЕЙ</div>
+        </div>
+        <div class="t-body">
+          <span class="line c-sys">[АРХИВ] Общее количество записей: ${data.inventory.archive_records.toLocaleString()}</span>
+          <span class="line c-dim">├─ поездки: ${data.inventory.trips.toLocaleString()}</span>
+          <span class="line c-dim">├─ разговоры: ${data.inventory.conversations.toLocaleString()}</span>
+          <span class="line c-dim">├─ внутренние логи: ${data.inventory.logs.toLocaleString()}</span>
+          <span class="line c-sys">[АРХИВ] Объём: ${data.inventory.archive_size} // свободно: ${data.inventory.archive_free}</span>
+          <span class="line c-dim">[ПРИОРИТЕТНЫЕ] ${data.inventory.priority_logs.join(', ')}</span>
+        </div>
+      </div>
+
+      <div class="terminal" style="margin-top: 32px;">
+        <div class="t-bar">
+          <div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div>
+          <div class="t-title">ПРИМЕЧАНИЕ</div>
+        </div>
+        <div class="t-body">
+          <span class="line c-dim">${data.inventory.note}</span>
+          <span class="line c-sys">Система учёта: стабильна.</span>
+        </div>
+      </div>
+    `;
+  } catch (error) {
+    console.error('Ошибка загрузки инвентаря:', error);
+  }
+}
+
+loadInventoryData();
+</script>
 </body>
 </html>

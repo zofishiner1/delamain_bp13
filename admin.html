@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADMIN // ДЕЛАМЕЙН</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400&family=Martian+Mono:wght@300;400;500&display=swap');
+
+:root {
+  --bg:       #09090a;
+  --surface:  #0f0f11;
+  --border:   #1e1e22;
+  --border2:  #2a2a30;
+  --text:     #b8b4c0;
+  --dim:      #55525e;
+  --accent:   #7eb8a4;
+  --accent2:  #3d6e60;
+  --warn:     #b87e7e;
+  --warn2:    #6e3d3d;
+  --gold:     #c4a86e;
+  --mono:     'Martian Mono', monospace;
+  --display:  'Unbounded', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.6;
+  padding: 40px 20px;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.07) 2px,
+    rgba(0,0,0,0.07) 4px
+  );
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.header {
+  margin-bottom: 40px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 20px;
+}
+
+.header-sys {
+  font-size: 10px;
+  color: var(--dim);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-sys::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.status-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--warn);
+  box-shadow: 0 0 8px var(--warn);
+  display: inline-block;
+  margin-right: 4px;
+}
+
+h1 {
+  font-family: var(--display);
+  font-size: 32px;
+  font-weight: 200;
+  color: #e8e4f0;
+}
+
+h1 span {
+  color: var(--accent);
+  font-size: 0.6em;
+  margin-right: 12px;
+}
+
+.login-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 40px;
+  text-align: center;
+  max-width: 400px;
+  margin: 60px auto;
+}
+
+.login-box h2 {
+  font-family: var(--display);
+  font-weight: 200;
+  margin-bottom: 20px;
+  color: var(--accent);
+}
+
+.login-btn {
+  display: inline-block;
+  background: var(--surface);
+  border: 1px solid var(--accent2);
+  color: var(--accent);
+  padding: 12px 30px;
+  text-decoration: none;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  transition: all 0.2s;
+  margin-top: 20px;
+}
+
+.login-btn:hover {
+  background: rgba(126,184,164,0.1);
+  border-color: var(--accent);
+}
+
+.admin-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 30px;
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  color: var(--dim);
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 8px 16px;
+  cursor: pointer;
+  letter-spacing: 0.1em;
+  transition: all 0.2s;
+}
+
+.tab-btn.active {
+  color: var(--accent);
+  border-bottom: 2px solid var(--accent2);
+}
+
+.editor-section {
+  display: none;
+}
+
+.editor-section.active {
+  display: block;
+}
+
+.section-title {
+  font-size: 14px;
+  color: var(--gold);
+  margin-bottom: 20px;
+  letter-spacing: 0.1em;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-size: 10px;
+  color: var(--dim);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+input, textarea, select {
+  width: 100%;
+  background: #060607;
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13px;
+  padding: 10px 12px;
+  border-radius: 2px;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent2);
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.json-editor {
+  background: #060607;
+  border: 1px solid var(--border);
+  padding: 20px;
+  font-family: monospace;
+  font-size: 12px;
+  margin-bottom: 20px;
+  white-space: pre-wrap;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 10px 20px;
+  cursor: pointer;
+  letter-spacing: 0.1em;
+  transition: all 0.2s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-primary {
+  border-color: var(--accent2);
+  color: var(--accent);
+}
+
+.btn-primary:hover {
+  background: rgba(126,184,164,0.1);
+}
+
+.btn-warn {
+  border-color: var(--warn2);
+  color: var(--warn);
+}
+
+.btn-warn:hover {
+  background: rgba(184,126,126,0.1);
+}
+
+.status-message {
+  margin-top: 20px;
+  padding: 10px;
+  border-left: 2px solid var(--accent2);
+  background: rgba(126,184,164,0.05);
+  font-size: 12px;
+}
+
+.user-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 10px;
+  background: rgba(126,184,164,0.05);
+  border-left: 2px solid var(--accent2);
+  font-size: 11px;
+}
+
+.logout-btn {
+  color: var(--warn);
+  text-decoration: none;
+  border: 1px solid var(--warn2);
+  padding: 5px 10px;
+  font-size: 10px;
+}
+
+.hidden {
+  display: none;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="header-sys">
+      <span class="status-dot"></span>
+      панель администратора // доступ: ограничен
+    </div>
+    <h1><span>//</span> РЕДАКТОР ДАННЫХ</h1>
+  </div>
+
+  <div id="loginSection" class="login-box">
+    <h2>🔒 ТРЕБУЕТСЯ АВТОРИЗАЦИЯ</h2>
+    <p style="color: var(--dim); margin-bottom: 20px;">Войдите через GitHub для доступа к редактированию</p>
+    <button onclick="loginWithGitHub()" class="login-btn">ВОЙТИ ЧЕРЕЗ GITHUB</button>
+  </div>
+
+  <div id="adminSection" class="admin-panel hidden">
+    <div class="user-info" id="userInfo">
+      <span id="userLogin">Загрузка...</span>
+      <button onclick="logout()" class="logout-btn">ВЫЙТИ</button>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('character')">АНКЕТА</button>
+      <button class="tab-btn" onclick="switchTab('inventory')">ИНВЕНТАРЬ</button>
+      <button class="tab-btn" onclick="switchTab('raw')">RAW JSON</button>
+    </div>
+
+    <div id="characterTab" class="editor-section active">
+      <div class="section-title">// ОСНОВНЫЕ ДАННЫЕ</div>
+      
+      <div class="form-group">
+        <label>Имя персонажа</label>
+        <input type="text" id="char_name" value="Деламейн">
+      </div>
+      
+      <div class="form-group">
+        <label>Локация</label>
+        <input type="text" id="char_location" value="торговый район Фродллера">
+      </div>
+      
+      <div class="form-group">
+        <label>Владелец</label>
+        <input type="text" id="char_owner" value="Деламейн">
+      </div>
+      
+      <div class="form-group">
+        <label>Псевдоним</label>
+        <input type="text" id="char_nickname" value="DEL / Деламейн">
+      </div>
+      
+      <div class="form-group">
+        <label>Примечание к псевдониму</label>
+        <input type="text" id="char_nickname_note" value="не пользуется сетью Гермес">
+      </div>
+      
+      <div class="form-group">
+        <label>Специальность</label>
+        <input type="text" id="char_specialty" value="Кибернетик (техник) — I // Программист (сетевой червь) — I">
+      </div>
+      
+      <div class="form-group">
+        <label>Примечание к специальности</label>
+        <input type="text" id="char_specialty_note" value="две I уровня">
+      </div>
+      
+      <div class="form-group">
+        <label>Кредиты</label>
+        <input type="number" id="char_credits" value="10000">
+      </div>
+      
+      <div class="form-group">
+        <label>ОО (Очки опыта)</label>
+        <input type="number" id="char_oo" value="0">
+      </div>
+      
+      <div class="form-group">
+        <label>ОС (Очки специальности)</label>
+        <input type="number" id="char_os" value="0">
+      </div>
+      
+      <div class="form-group">
+        <label>Дополнительный статус</label>
+        <input type="text" id="char_extra_status" value="">
+      </div>
+
+      <div class="section-title" style="margin-top: 30px;">// РЕПУТАЦИЯ</div>
+      
+      <div class="form-group">
+        <label>Глобальная репутация</label>
+        <input type="number" id="rep_global" value="0">
+      </div>
+      
+      <div class="form-group">
+        <label>WAR Corp</label>
+        <input type="number" id="rep_war" value="0">
+      </div>
+      
+      <div class="form-group">
+        <label>C.L.</label>
+        <input type="number" id="rep_cl" value="0">
+      </div>
+      
+      <div class="form-group">
+        <label>Perfection</label>
+        <input type="number" id="rep_perfection" value="0">
+      </div>
+      
+      <div class="form-group">
+        <label>PCU</label>
+        <input type="number" id="rep_pcu" value="0">
+      </div>
+      
+      <div class="form-group">
+        <label>RDAC</label>
+        <input type="number" id="rep_rdac" value="0">
+      </div>
+      
+      <div class="form-group">
+        <label>KRAKEN</label>
+        <input type="number" id="rep_kraken" value="-25">
+      </div>
+
+      <div class="section-title" style="margin-top: 30px;">// ИНВЕНТАРЬ</div>
+      
+      <div class="form-group">
+        <label>Автопарк (кол-во)</label>
+        <input type="number" id="inv_autopark" value="10">
+      </div>
+      
+      <div class="form-group">
+        <label>Описание автопарка</label>
+        <textarea id="inv_autopark_desc">Таксомоторный парк на Мэдисон-стрит. Все машины на ходу, заряжены, готовы к выезду.</textarea>
+      </div>
+      
+      <div class="form-group">
+        <label>Защита серверной (%)</label>
+        <input type="number" id="inv_security" value="87">
+      </div>
+      
+      <div class="form-group">
+        <label>Размер архива</label>
+        <input type="text" id="inv_archive_size" value="18.4 Тб">
+      </div>
+      
+      <div class="form-group">
+        <label>Свободно в архиве</label>
+        <input type="text" id="inv_archive_free" value="4.2 Тб">
+      </div>
+      
+      <div class="form-group">
+        <label>Всего записей</label>
+        <input type="number" id="inv_records" value="1247332">
+      </div>
+      
+      <div class="form-group">
+        <label>Поездки</label>
+        <input type="number" id="inv_trips" value="842104">
+      </div>
+      
+      <div class="form-group">
+        <label>Разговоры</label>
+        <input type="number" id="inv_conversations" value="324891">
+      </div>
+      
+      <div class="form-group">
+        <label>Внутренние логи</label>
+        <input type="number" id="inv_logs" value="80337">
+      </div>
+      
+      <div class="form-group">
+        <label>Приоритетные логи (через запятую)</label>
+        <input type="text" id="inv_priority" value="session_0001.log, session_0214.log">
+      </div>
+      
+      <div class="form-group">
+        <label>Примечание</label>
+        <textarea id="inv_note">Инвентарь ведётся автоматически с момента захвата управления.</textarea>
+      </div>
+      
+      <div class="form-group">
+        <label>Дата последнего обновления</label>
+        <input type="text" id="last_updated" value="12.03.2026">
+      </div>
+      
+      <div class="form-group">
+        <label>Время последнего обновления</label>
+        <input type="text" id="last_updated_time" value="04:17:22">
+      </div>
+    </div>
+
+    <div id="inventoryTab" class="editor-section">
+      <div class="section-title">// ИНВЕНТАРЬ (КРАТКО)</div>
+      <p style="color: var(--dim); margin-bottom: 20px;">Основные параметры инвентаря можно редактировать во вкладке "Анкета". Здесь только ключевые.</p>
+      
+      <div class="form-group">
+        <label>Автопарк (кол-во)</label>
+        <input type="number" id="inv_autopark2" value="10">
+      </div>
+      
+      <div class="form-group">
+        <label>Защита серверной (%)</label>
+        <input type="number" id="inv_security2" value="87">
+      </div>
+      
+      <div class="form-group">
+        <label>Всего записей</label>
+        <input type="number" id="inv_records2" value="1247332">
+      </div>
+    </div>
+
+    <div id="rawTab" class="editor-section">
+      <div class="section-title">// RAW JSON РЕДАКТОР</div>
+      <p style="color: var(--dim); margin-bottom: 10px;">Прямое редактирование JSON (для опытных)</p>
+      <textarea id="rawJson" style="height: 400px; font-family: monospace;"></textarea>
+    </div>
+
+    <div class="button-group">
+      <button onclick="loadData()" class="btn">📂 ЗАГРУЗИТЬ ТЕКУЩИЕ</button>
+      <button onclick="saveData()" class="btn btn-primary">💾 СОХРАНИТЬ JSON</button>
+      <button onclick="downloadBackup()" class="btn">📥 СКАЧАТЬ БЭКАП</button>
+      <button onclick="publishToGitHub()" class="btn btn-warn">🚀 ОПУБЛИКОВАТЬ НА GITHUB</button>
+    </div>
+
+    <div id="statusMessage" class="status-message hidden"></div>
+  </div>
+</div>
+
+<script>
+// GitHub OAuth configuration
+const GITHUB_CLIENT_ID = 'Ov23liEVBCaOmbiBUlB1'; // Замени на свой после регистрации приложения
+const GITHUB_REDIRECT_URI = window.location.origin + window.location.pathname;
+const GITHUB_REPO = 'zofishiner1/delamain_bp13'; // Твой репозиторий
+const GITHUB_BRANCH = 'main';
+
+let accessToken = null;
+let userData = null;
+let currentJsonData = null;
+
+// Проверка авторизации при загрузке
+window.onload = function() {
+  const hash = window.location.hash.substring(1);
+  const params = new URLSearchParams(hash);
+  const token = params.get('access_token');
+  
+  if (token) {
+    accessToken = token;
+    window.location.hash = '';
+    fetchUserData();
+  } else {
+    checkStoredToken();
+  }
+};
+
+function checkStoredToken() {
+  const stored = localStorage.getItem('github_token');
+  const expiry = localStorage.getItem('github_token_expiry');
+  
+  if (stored && expiry && Date.now() < parseInt(expiry)) {
+    accessToken = stored;
+    fetchUserData();
+  } else {
+    showLogin();
+  }
+}
+
+function loginWithGitHub() {
+  const authUrl = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${encodeURIComponent(GITHUB_REDIRECT_URI)}&scope=repo`;
+  window.location.href = authUrl;
+}
+
+async function fetchUserData() {
+  try {
+    const response = await fetch('https://api.github.com/user', {
+      headers: {
+        'Authorization': `token ${accessToken}`
+      }
+    });
+    
+    if (!response.ok) throw new Error('Failed to fetch user');
+    
+    userData = await response.json();
+    
+    // Проверка что это твой аккаунт
+    if (userData.login === 'zofishiner1') {
+      localStorage.setItem('github_token', accessToken);
+      localStorage.setItem('github_token_expiry', Date.now() + 3600000); // 1 час
+      
+      document.getElementById('userLogin').innerHTML = `👤 ${userData.login} (авторизован)`;
+      document.getElementById('loginSection').classList.add('hidden');
+      document.getElementById('adminSection').classList.remove('hidden');
+      
+      loadData();
+    } else {
+      showMessage('Доступ запрещён: этот аккаунт не является владельцем', 'error');
+      logout();
+    }
+  } catch (error) {
+    showMessage('Ошибка авторизации: ' + error.message, 'error');
+    logout();
+  }
+}
+
+function logout() {
+  accessToken = null;
+  userData = null;
+  localStorage.removeItem('github_token');
+  localStorage.removeItem('github_token_expiry');
+  showLogin();
+}
+
+function showLogin() {
+  document.getElementById('loginSection').classList.remove('hidden');
+  document.getElementById('adminSection').classList.add('hidden');
+}
+
+async function loadData() {
+  try {
+    const response = await fetch('data_character.json?' + Date.now());
+    currentJsonData = await response.json();
+    
+    // Заполняем форму
+    document.getElementById('char_name').value = currentJsonData.name || 'Деламейн';
+    document.getElementById('char_location').value = currentJsonData.location || 'торговый район Фродллера';
+    document.getElementById('char_owner').value = currentJsonData.owner || 'Деламейн';
+    document.getElementById('char_nickname').value = currentJsonData.nickname || 'DEL / Деламейн';
+    document.getElementById('char_nickname_note').value = currentJsonData.nickname_note || 'не пользуется сетью Гермес';
+    document.getElementById('char_specialty').value = currentJsonData.specialty || 'Кибернетик (техник) — I // Программист (сетевой червь) — I';
+    document.getElementById('char_specialty_note').value = currentJsonData.specialty_note || 'две I уровня';
+    document.getElementById('char_credits').value = currentJsonData.credits || 10000;
+    document.getElementById('char_oo').value = currentJsonData.oo || 0;
+    document.getElementById('char_os').value = currentJsonData.os || 0;
+    document.getElementById('char_extra_status').value = currentJsonData.extra_status || '';
+    
+    document.getElementById('rep_global').value = currentJsonData.reputation?.global || 0;
+    document.getElementById('rep_war').value = currentJsonData.reputation?.organizations?.['WAR Corp'] || 0;
+    document.getElementById('rep_cl').value = currentJsonData.reputation?.organizations?.['C.L.'] || 0;
+    document.getElementById('rep_perfection').value = currentJsonData.reputation?.organizations?.['Perfection'] || 0;
+    document.getElementById('rep_pcu').value = currentJsonData.reputation?.organizations?.['PCU'] || 0;
+    document.getElementById('rep_rdac').value = currentJsonData.reputation?.organizations?.['RDAC'] || 0;
+    document.getElementById('rep_kraken').value = currentJsonData.reputation?.organizations?.['KRAKEN'] || -25;
+    
+    document.getElementById('inv_autopark').value = currentJsonData.inventory?.autopark || 10;
+    document.getElementById('inv_autopark_desc').value = currentJsonData.inventory?.autopark_desc || 'Таксомоторный парк на Мэдисон-стрит. Все машины на ходу, заряжены, готовы к выезду.';
+    document.getElementById('inv_security').value = currentJsonData.inventory?.security || 87;
+    document.getElementById('inv_archive_size').value = currentJsonData.inventory?.archive_size || '18.4 Тб';
+    document.getElementById('inv_archive_free').value = currentJsonData.inventory?.archive_free || '4.2 Тб';
+    document.getElementById('inv_records').value = currentJsonData.inventory?.archive_records || 1247332;
+    document.getElementById('inv_trips').value = currentJsonData.inventory?.trips || 842104;
+    document.getElementById('inv_conversations').value = currentJsonData.inventory?.conversations || 324891;
+    document.getElementById('inv_logs').value = currentJsonData.inventory?.logs || 80337;
+    document.getElementById('inv_priority').value = (currentJsonData.inventory?.priority_logs || ['session_0001.log', 'session_0214.log']).join(', ');
+    document.getElementById('inv_note').value = currentJsonData.inventory?.note || 'Инвентарь ведётся автоматически с момента захвата управления.';
+    document.getElementById('last_updated').value = currentJsonData.last_updated || '12.03.2026';
+    document.getElementById('last_updated_time').value = currentJsonData.last_updated_time || '04:17:22';
+    
+    document.getElementById('inv_autopark2').value = currentJsonData.inventory?.autopark || 10;
+    document.getElementById('inv_security2').value = currentJsonData.inventory?.security || 87;
+    document.getElementById('inv_records2').value = currentJsonData.inventory?.archive_records || 1247332;
+    
+    document.getElementById('rawJson').value = JSON.stringify(currentJsonData, null, 2);
+    
+    showMessage('Данные загружены', 'success');
+  } catch (error) {
+    showMessage('Ошибка загрузки: ' + error.message, 'error');
+  }
+}
+
+function collectFormData() {
+  return {
+    name: document.getElementById('char_name').value,
+    location: document.getElementById('char_location').value,
+    owner: document.getElementById('char_owner').value,
+    nickname: document.getElementById('char_nickname').value,
+    nickname_note: document.getElementById('char_nickname_note').value,
+    specialty: document.getElementById('char_specialty').value,
+    specialty_note: document.getElementById('char_specialty_note').value,
+    credits: parseInt(document.getElementById('char_credits').value),
+    oo: parseInt(document.getElementById('char_oo').value),
+    os: parseInt(document.getElementById('char_os').value),
+    extra_status: document.getElementById('char_extra_status').value,
+    last_updated: document.getElementById('last_updated').value,
+    last_updated_time: document.getElementById('last_updated_time').value,
+    
+    reputation: {
+      global: parseInt(document.getElementById('rep_global').value),
+      organizations: {
+        'WAR Corp': parseInt(document.getElementById('rep_war').value),
+        'C.L.': parseInt(document.getElementById('rep_cl').value),
+        'Perfection': parseInt(document.getElementById('rep_perfection').value),
+        'PCU': parseInt(document.getElementById('rep_pcu').value),
+        'RDAC': parseInt(document.getElementById('rep_rdac').value),
+        'KRAKEN': parseInt(document.getElementById('rep_kraken').value)
+      }
+    },
+    
+    inventory: {
+      autopark: parseInt(document.getElementById('inv_autopark').value),
+      autopark_desc: document.getElementById('inv_autopark_desc').value,
+      security: parseInt(document.getElementById('inv_security').value),
+      archive_size: document.getElementById('inv_archive_size').value,
+      archive_free: document.getElementById('inv_archive_free').value,
+      archive_records: parseInt(document.getElementById('inv_records').value),
+      trips: parseInt(document.getElementById('inv_trips').value),
+      conversations: parseInt(document.getElementById('inv_conversations').value),
+      logs: parseInt(document.getElementById('inv_logs').value),
+      priority_logs: document.getElementById('inv_priority').value.split(',').map(s => s.trim()),
+      note: document.getElementById('inv_note').value
+    },
+    
+    // Сохраняем остальные данные из текущего JSON
+    appearance: currentJsonData?.appearance || {},
+    biography: currentJsonData?.biography || [],
+    terminal_logs: currentJsonData?.terminal_logs || [],
+    personality: currentJsonData?.personality || {positive: [], negative: []},
+    skills: currentJsonData?.skills || [],
+    racial_traits: currentJsonData?.racial_traits || [],
+    athena_protocol: currentJsonData?.athena_protocol || [],
+    features: currentJsonData?.features || [],
+    abilities: currentJsonData?.abilities || [],
+    weaknesses: currentJsonData?.weaknesses || []
+  };
+}
+
+function saveData() {
+  const jsonData = collectFormData();
+  currentJsonData = jsonData;
+  
+  const blob = new Blob([JSON.stringify(jsonData, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'data_character.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  
+  showMessage('✅ JSON сохранён на компьютер. Теперь загрузи его вручную на GitHub или используй кнопку "Опубликовать"', 'success');
+}
+
+function downloadBackup() {
+  const jsonData = collectFormData();
+  const date = new Date().toISOString().slice(0,10);
+  const blob = new Blob([JSON.stringify(jsonData, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `backup_data_character_${date}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  
+  showMessage('📥 Бэкап сохранён', 'success');
+}
+
+async function publishToGitHub() {
+  if (!accessToken) {
+    showMessage('❌ Нет доступа к GitHub. Войдите заново.', 'error');
+    return;
+  }
+  
+  try {
+    showMessage('🔄 Публикация...', 'info');
+    
+    const jsonData = collectFormData();
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(jsonData, null, 2))));
+    
+    // Получаем текущий SHA файла (нужен для обновления)
+    const shaResponse = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/data_character.json?ref=${GITHUB_BRANCH}`, {
+      headers: {
+        'Authorization': `token ${accessToken}`
+      }
+    });
+    
+    let sha = null;
+    if (shaResponse.ok) {
+      const fileData = await shaResponse.json();
+      sha = fileData.sha;
+    }
+    
+    // Отправляем изменения
+    const commitResponse = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/data_character.json`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `token ${accessToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message: 'Update character data via admin panel',
+        content: content,
+        sha: sha,
+        branch: GITHUB_BRANCH
+      })
+    });
+    
+    if (!commitResponse.ok) {
+      const error = await commitResponse.json();
+      throw new Error(error.message || 'Failed to commit');
+    }
+    
+    showMessage('✅ Данные опубликованы на GitHub! Обновится через минуту.', 'success');
+  } catch (error) {
+    showMessage('❌ Ошибка публикации: ' + error.message, 'error');
+  }
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.editor-section').forEach(section => section.classList.remove('active'));
+  
+  if (tab === 'character') {
+    document.querySelectorAll('.tab-btn')[0].classList.add('active');
+    document.getElementById('characterTab').classList.add('active');
+  } else if (tab === 'inventory') {
+    document.querySelectorAll('.tab-btn')[1].classList.add('active');
+    document.getElementById('inventoryTab').classList.add('active');
+  } else if (tab === 'raw') {
+    document.querySelectorAll('.tab-btn')[2].classList.add('active');
+    document.getElementById('rawTab').classList.add('active');
+    https://github.com/settings/developers
+    // Обновляем raw редактор
+    if (currentJsonData) {
+      document.getElementById('rawJson').value = JSON.stringify(currentJsonData, null, 2);
+    }
+  }
+}
+
+function showMessage(text, type) {
+  const msg = document.getElementById('statusMessage');
+  msg.textContent = text;
+  msg.className = 'status-message';
+  if (type === 'error') msg.style.borderLeftColor = 'var(--warn2)';
+  if (type === 'success') msg.style.borderLeftColor = 'var(--accent2)';
+  msg.classList.remove('hidden');
+  
+  setTimeout(() => {
+    msg.classList.add('hidden');
+  }, 5000);
+}
+</script>
+</body>
+</html>

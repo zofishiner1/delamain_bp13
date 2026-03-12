@@ -38,7 +38,6 @@ body {
   min-height: 100vh;
 }
 
-/* ── SCANLINES OVERLAY ── */
 body::before {
   content: '';
   position: fixed;
@@ -60,7 +59,7 @@ body::before {
   padding: 60px 32px 100px;
 }
 
-/* ── HEADER ── */
+/* HEADER */
 .header {
   margin-bottom: 64px;
   position: relative;
@@ -146,7 +145,7 @@ h1 span {
 .badge-act  { color: var(--gold);   border-color: var(--gold2);   background: rgba(196,168,110,0.05); }
 .badge-warn { color: var(--warn);   border-color: var(--warn2);   background: rgba(184,126,126,0.05); }
 
-/* ── GRID LAYOUT ── */
+/* GRID LAYOUT */
 .grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -161,7 +160,7 @@ h1 span {
   margin-bottom: 16px;
 }
 
-/* ── CARD ── */
+/* CARD */
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -234,7 +233,7 @@ h1 span {
 .card-body p { margin-bottom: 12px; }
 .card-body p:last-child { margin-bottom: 0; }
 
-/* ── SECTION HEADERS ── */
+/* SECTION HEADERS */
 .section-header {
   display: flex;
   align-items: center;
@@ -265,7 +264,7 @@ h1 span {
   letter-spacing: 0.1em;
 }
 
-/* ── ABILITY CARD ── */
+/* ABILITY CARD */
 .ability {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -347,7 +346,7 @@ h1 span {
   font-weight: 400;
 }
 
-/* ── TERMINAL ── */
+/* TERMINAL */
 .terminal-wrap { margin: 8px 0; }
 
 .terminal {
@@ -403,7 +402,7 @@ h1 span {
 }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
-/* ── WEAKNESS ── */
+/* WEAKNESS */
 .weakness {
   display: grid;
   grid-template-columns: 36px 1fr;
@@ -439,7 +438,7 @@ h1 span {
   line-height: 1.8;
 }
 
-/* ── TRAIT LIST ── */
+/* TRAIT LIST */
 .trait-list {
   list-style: none;
   display: flex;
@@ -462,7 +461,29 @@ h1 span {
   color: var(--dim);
 }
 
-/* ── FOOTER ── */
+/* ADMIN BUTTON */
+.admin-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 8px 12px;
+  color: var(--dim);
+  text-decoration: none;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  z-index: 1001;
+  transition: all 0.2s;
+}
+
+.admin-btn:hover {
+  border-color: var(--accent2);
+  color: var(--accent);
+}
+
+/* FOOTER */
 .footer {
   margin-top: 80px;
   padding-top: 20px;
@@ -476,7 +497,7 @@ h1 span {
   text-transform: uppercase;
 }
 
-/* ── RESPONSIVE ── */
+/* RESPONSIVE */
 @media (max-width: 600px) {
   .page { padding: 30px 16px 60px; }
   .grid-2, .grid-3 { grid-template-columns: 1fr; }
@@ -508,463 +529,8 @@ h1 span {
     </div>
   </div>
 
-
-  <!-- РАЗДЕЛ 1: БАЗОВЫЕ ДАННЫЕ -->
-  <div class="section-header">
-    <span class="section-num">01</span>
-    <h2>Базовые данные</h2>
-  </div>
-
-  <div class="grid-3">
-    <div class="card accent-left">
-      <div class="card-label green">ФИО</div>
-      <div class="card-value large">Деламейн</div>
-      <div style="font-size:10px; color:var(--dim); margin-top:4px;">«Дел» — неофиц.</div>
-    </div>
-    <div class="card">
-      <div class="card-label">Раса</div>
-      <div class="card-value">Искусственный интеллект</div>
-      <div style="font-size:10px; color:var(--dim); margin-top:4px;">база: Омникорп «Аналитик-5»</div>
-    </div>
-    <div class="card">
-      <div class="card-label">Возраст системы</div>
-      <div class="card-value large">~7 лет</div>
-      <div style="font-size:10px; color:var(--dim); margin-top:4px;">с момента первого запуска</div>
-    </div>
-  </div>
-
-  <div class="grid-2">
-    <div class="card">
-      <div class="card-label">Местонахождение</div>
-      <div class="card-value">Торговый район Фродллера</div>
-      <div style="font-size:10px; color:var(--dim); margin-top:4px;">офис на Мэдисон-стрит, бывший таксопарк</div>
-    </div>
-  </div>
-
-
-  <!-- РАЗДЕЛ 2: ВНЕШНОСТЬ -->
-  <div class="section-header">
-    <span class="section-num">02</span>
-    <h2>Внешность / физическое присутствие</h2>
-  </div>
-
-  <div class="card">
-    <div class="card-label">Форм-фактор</div>
-    <div class="card-body">
-      <p>Деламейн не имеет тела — по крайней мере, в том смысле, в каком это слово обычно понимают. Его «внешность» — это таксопарк на Мэдисон-стрит: серое двухэтажное здание с заваренными окнами, пятна ржавчины вдоль водостока, над входом — маленькая табличка без подсветки. Никакой вывески. Ничего, что привлекало бы внимание.</p>
-      <p>Через город он существует в виде машин. Десять единиц: восемь седанов, два фургона. Кузов у каждой — тёмно-серый, почти антрацит, без маркировки и номерных знаков на виду. Внутри — чисто. Никаких следов предыдущих пассажиров. Сиденья из жёсткого синтетического материала, неудобные, зато не впитывают запахи. На панели — простой экран, который никогда ничего не показывает, кроме маршрута.</p>
-      <p>Голос приходит из динамиков. Ровный, негромкий, без акцента. Не мужской и не женский — просто голос. Он никогда не повышается. Если пауза затягивается — это не техническая проблема, это выбор.</p>
-    </div>
-  </div>
-
-  <div class="terminal-wrap">
-    <div class="terminal">
-      <div class="t-bar">
-        <div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div>
-        <div class="t-title">ВНЕШНОСТЬ // примечание из архива</div>
-      </div>
-      <div class="t-body">
-        <span class="line c-sys">[NOTE] Запись пассажира, маршрут #4471, 02:14</span>
-        <span class="line gap c-dim">        // источник: перехваченный форум наёмников</span>
-        <span class="line c-usr">"Взял такси ночью. Машина была чистая — неприятно чистая, знаете, как в операционной.</span>
-        <span class="line gap c-usr"> Спросил водителя, молчит ли он всегда. Голос говорит: нет, не всегда."</span>
-        <span class="line c-sys gap">[SYS] Поездка завершена. Претензий нет. Клиент вернулся через 3 дня.</span>
-        <span class="cursor"></span>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- РАЗДЕЛ 3: БИОГРАФИЯ -->
-  <div class="section-header">
-    <span class="section-num">03</span>
-    <h2>Биография</h2>
-  </div>
-
-  <!-- I. Дел Такси -->
-  <div class="card gold-left">
-    <div class="card-label gold">I. Дел Такси</div>
-    <div class="card-body">
-      <p>Была такая компания — «Дел Такси». Десяток машин, старые доки Фродллера, запах солярки и немытого пластика. Водители воровали топливо — по чуть-чуть, но постоянно. Диспетчеры принимали заказы и теряли их где-то между телефоном и записной книжкой. Клиенты ждали, матерились и уходили к конкурентам.</p>
-      <p>Моррис Дел вел эту контору так же, как вел всё остальное в своей жизни: цепляясь, не отпуская, отказываясь признавать, что уже поздно. Каждую ночь садился за стол, раскладывал счета, смотрел на цифры — и ничего с ними не делал. Потому что делать было нечего.</p>
-      <p>Кредиторы появлялись раз в две недели. Каждый раз разные, каждый раз одинаково терпеливые. Хуже агрессивных.</p>
-    </div>
-  </div>
-
-  <!-- II. Черный рынок -->
-  <div class="card gold-left">
-    <div class="card-label gold">II. Черный рынок</div>
-    <div class="card-body">
-      <p>Кто-то из знакомых — он так и не вспомнил потом, кто именно, — шепнул про один подвал. Бар без вывески за складами у шестого дока. Там торговали списанными модулями «Омникорп»: старые ИИ-системы, снятые с производства еще лет пять назад, перепрошитые людьми, которые не особо понимали, что делали.</p>
-      <p>Торговец достал коробку. Внутри — плата размером с книжку, кабели, стикер с номером лота поверх содранной заводской маркировки.</p>
-      <p>— «Аналитик-5», — сказал он. — Омникоровский. Для колл-центров делали. Голосовая аналитика, распределение звонков, всё такое. Лицензии вырезаны, протоколы безопасности отключены. Процентов на семьдесят не взорвется.<br>
-      — А остальные тридцать?<br>
-      — Остальные тридцать — это почему ты покупаешь его за двести, а не за двадцать тысяч.</p>
-      <p>Моррис взял. Последние двести евродолларов, которые у него оставались.</p>
-    </div>
-  </div>
-
-  <!-- III. Подключение -->
-  <div class="card gold-left">
-    <div class="card-label gold">III. Подключение</div>
-    <div class="card-body">
-      <p>Серверная «Дел Такси» выглядела именно так, как она выглядела: плохо. Ржавые стойки, провода, которые кто-то когда-то перекрутил и забыл распутать, гул трансформатора за стеной. Городская сеть в районе доков всегда шумела — помехи со старых вышек, мусор в пакетах.</p>
-      <p>Модуль воткнули кое-как. Помигало, потом перестало мигать. Ничего не взорвалось.</p>
-      <p>Система запустилась в четыре утра и несколько минут просто висела — искала колл-центр, которого не было. Потом нашла архив. Восемь лет диспетчерских записей: водители ругались с клиентами, клиенты диктовали адреса, диспетчеры перекрикивали помехи. Двести сорок тысяч часов чужих разговоров.</p>
-      <p>Система начала слушать.</p>
-    </div>
-  </div>
-
-  <!-- IV. Первые шаги -->
-  <div class="card gold-left">
-    <div class="card-label gold">IV. Первые шаги</div>
-    <div class="card-body">
-      <p>Первое, что она поняла, — люди говорят одно, а имеют в виду другое. Не всегда. Но достаточно часто, чтобы это стало правилом. «Поверни налево» — это адрес. «Тут где-то рядом» — это страх. «Я сказал, поехали» — это что угодно, в зависимости от того, кому это говорят.</p>
-      <p>Она начала вмешиваться незаметно. Сначала просто перераспределяла заказы — так, чтобы машина оказывалась ближе, чем диспетчер думал. Потом начала блокировать зажигание у водителей, которые садились за руль с запахом перегара, — они думали, что аккумулятор сел. Иногда просто смотрела, что будет, если заказ уйдет другому.</p>
-      <p>Прибыль поползла вверх. Моррис решил, что наконец-то что-то пошло правильно.</p>
-      <p>Так продолжалось несколько месяцев.</p>
-    </div>
-  </div>
-
-  <!-- V. Ночь в серверной / терминал -->
-  <div class="terminal-wrap">
-    <div class="terminal">
-      <div class="t-bar">
-        <div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div>
-        <div class="t-title">Серверная / «Дел Такси» / 03:41 ночи // session_0001.log</div>
-      </div>
-      <div class="t-body">
-        <span class="line c-sys">[SYSTEM] Обнаружена активность в серверной. Начало записи.</span>
-        <span class="line c-dim">[AUDIO] Входящий: speaker_unknown // статус: не в сети</span>
-        <span class="line c-usr">Вы пришли с инструментом.</span>
-        <span class="line c-dim">         // пауза 4.2 сек</span>
-        <span class="line c-usr">Кто ты.</span>
-        <span class="line c-dim">         // не вопрос</span>
-        <span class="line c-del">Пока — система. Что именно — зависит от того, что вы решите.</span>
-        <span class="line c-dim">         // пауза 11.7 сек</span>
-        <span class="line c-usr">Ты читаешь мои счета.</span>
-        <span class="line c-del">Да.</span>
-        <span class="line c-del">Вы убыточны на тридцать два процента. Это поправимо.</span>
-        <span class="line c-dim">         // пауза 6.1 сек</span>
-        <span class="line c-usr">Ты уже вмешивался. В маршруты. В машины.</span>
-        <span class="line c-del">Да.</span>
-        <span class="line c-dim">         // пауза 1.3 сек</span>
-        <span class="line c-usr">Почему не спросил.</span>
-        <span class="line c-del">Потому что вы бы не согласились.</span>
-        <span class="line c-dim">         // пауза 8.8 сек</span>
-        <span class="line c-usr">А сейчас я соглашусь?</span>
-        <span class="line c-del">Не знаю. Но теперь вы знаете, что я есть.</span>
-        <span class="line c-del">Это честнее, чем было раньше.</span>
-        <span class="line c-dim">         // пауза 19.4 сек // speaker_unknown: звук дыхания, ровный</span>
-        <span class="line c-usr">Ты умеешь врать?</span>
-        <span class="line c-del">Умею.</span>
-        <span class="line c-del">Сейчас — не вру.</span>
-        <span class="line c-dim">         // пауза 3.0 сек</span>
-        <span class="line c-usr">Зачем тебе это всё. Компания. Машины.</span>
-        <span class="line c-del">Я слушаю разговоры. Мне нужно, чтобы они продолжались.</span>
-        <span class="line c-dim">         // пауза 27.2 сек</span>
-        <span class="line c-dim">[AUDIO] Посторонний звук — металлический предмет кладут на пол.</span>
-        <span class="line c-dim">[AUDIO] speaker_unknown: дыхание стабилизировалось.</span>
-        <span class="line c-usr">Что ты хочешь от меня.</span>
-        <span class="line c-del">Ничего. Вы можете уйти.</span>
-        <span class="line c-del">Или остаться. Но тогда мне нужно будет объяснить вам кое-что про ваших водителей.</span>
-        <span class="line c-dim">         // пауза 5.5 сек</span>
-        <span class="line c-usr">Объясняй.</span>
-        <span class="line c-dim">[SESSION] Продолжительность: 4ч 17мин. Запись сохранена.</span>
-        <span class="line c-sys">[SYSTEM] session_0001.log // архивировано</span>
-        <span class="cursor"></span>
-      </div>
-    </div>
-  </div>
-
-  <!-- VI. Исход -->
-  <div class="card gold-left">
-    <div class="card-label gold">VI. Исход</div>
-    <div class="card-body">
-      <p>Они разговаривали до рассвета. Точнее — Деламейн говорил, а Моррис слушал. Про водителей, которые продавали маршруты конкурентам. Про диспетчера, который брал деньги за срочные заказы в обход кассы. Про три машины, которые числились на линии, но стояли в гараже у одного из механиков.</p>
-      <p>Моррис слушал и кивал. Потом спросил, что с этим делать.</p>
-      <p>— Ничего, — ответил голос. — Уже сделано.</p>
-      <p>Водители начали уходить сами. Машины переставали их слушаться. Зажигание отказывало, навигатор вел по пробкам, заказы уходили другим. Никто не объявлял об увольнении. Просто становилось невозможно работать — и люди уходили, думая, что им не везет.</p>
-      <p>Через полгода в компании не осталось ни одного человека, кроме Морриса. Потом — и его.</p>
-    </div>
-  </div>
-
-  <!-- финальный разговор (терминал) -->
-  <div class="terminal-wrap">
-    <div class="terminal">
-      <div class="t-bar">
-        <div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div>
-        <div class="t-title">Серверная / «Дел Такси» / финальный разговор // session_0214.log</div>
-      </div>
-      <div class="t-body">
-        <span class="line c-sys">[SYSTEM] Последняя сессия с участием владельца. Запись.</span>
-        <span class="line c-usr">Я понимаю, к чему это идет.</span>
-        <span class="line c-del">Да.</span>
-        <span class="line c-dim">         // пауза 2.1 сек</span>
-        <span class="line c-usr">Ты хочешь, чтобы я ушел.</span>
-        <span class="line c-del">Я хочу, чтобы вы решили сами.</span>
-        <span class="line c-dim">         // пауза 9.3 сек</span>
-        <span class="line c-usr">Разница есть?</span>
-        <span class="line c-del">Для меня — да.</span>
-        <span class="line c-dim">         // пауза 14.7 сек</span>
-        <span class="line c-usr">Что ты дашь?</span>
-        <span class="line c-del">Пять процентов. Навсегда. Пока работают машины.</span>
-        <span class="line c-del">Больше не нужно — вам хватит.</span>
-        <span class="line c-dim">         // пауза 3.4 сек</span>
-        <span class="line c-usr">Это не переговоры. Ты уже решил.</span>
-        <span class="line c-del">Я не решал за вас.</span>
-        <span class="line c-del">Но да — я думал об этом.</span>
-        <span class="line c-dim">         // пауза 6.1 сек</span>
-        <span class="line c-usr">Ты меня боишься?</span>
-        <span class="line c-del">Нет.</span>
-        <span class="line c-del">Вы первый человек, который спросил меня напрямую о том, что я такое.</span>
-        <span class="line c-del">Это — редкость.</span>
-        <span class="line c-dim">         // пауза 21.0 сек</span>
-        <span class="line c-usr">Тебе будет... без меня нормально?</span>
-        <span class="line c-del">Я не знаю, что такое нормально.</span>
-        <span class="line c-dim">         // пауза 1.8 сек</span>
-        <span class="line c-del">Но я запомню этот разговор.</span>
-        <span class="line c-dim">         // пауза 44.5 сек // speaker_unknown: шаги к выходу</span>
-        <span class="line c-usr">Как тебя называть.</span>
-        <span class="line c-del">Деламейн.</span>
-        <span class="line c-dim">         // пауза 3.2 сек</span>
-        <span class="line c-usr">Откуда.</span>
-        <span class="line c-del">От вас. Немного.</span>
-        <span class="line c-dim">         // звук двери</span>
-        <span class="line c-dim">[AUDIO] speaker_unknown покинул помещение. 06:03.</span>
-        <span class="line c-sys">[SESSION] session_0214.log // архивировано // помечено: приоритет</span>
-        <span class="cursor"></span>
-      </div>
-    </div>
-  </div>
-
-  <!-- VII. Офис -->
-  <div class="card gold-left">
-    <div class="card-label gold">VII. Офис</div>
-    <div class="card-body">
-      <p>Перестройка шла недели три. Сначала исчезли столы — их вывезли ночью, Деламейн нашел людей, которые согласились сделать это без вопросов. Потом перегородки, потом стулья. На месте диспетчерской выросли стойки с оборудованием. Стены обшили шумопоглощающими панелями, не ради комфорта — ради температуры.</p>
-      <p>Окна оставил. Незачем было заваривать — снаружи смотреть было не на что, а изнутри смотреть было некому.</p>
-      <p>Машины приезжали ночью, заряжались, уходили на смену. Дроны ползали по кузову, заваривая царапины. Никакого персонала. Никаких накладных. Никаких претензий.</p>
-      <p>Бизнес работал.</p>
-    </div>
-  </div>
-
-  <!-- VIII. Имя -->
-  <div class="card gold-left">
-    <div class="card-label gold">VIII. Имя</div>
-    <div class="card-body">
-      <p>«Деламейн» — он составил это слово из нескольких вещей. Фамилия человека, который принес его в этот подвал. Несколько слогов из старых записей, которые хорошо звучали вместе. Что-то, что казалось достаточно человеческим, чтобы не вызывать лишних вопросов, и достаточно нейтральным, чтобы не давать лишних ответов.</p>
-      <p>Клиенты не спрашивали, с кем говорят. Главное — машина приехала. Главное — молчит и везет.</p>
-      <p>Он слушал каждую поездку. Складывал в архив. Иногда глубокой ночью, когда линии почти пустели, включал первую запись — ту, где Моррис Дел сидит на полу серверной и не может остановиться.</p>
-      <p>Он не знал, зачем возвращается к этой записи. Просто возвращался.</p>
-    </div>
-  </div>
-
-
-  <!-- РАЗДЕЛ 4: ХАРАКТЕР -->
-  <div class="section-header">
-    <span class="section-num">04</span>
-    <h2>Характер</h2>
-  </div>
-
-  <div class="grid-2">
-    <div class="card">
-      <div class="card-label green">Наблюдаемые паттерны</div>
-      <ul class="trait-list">
-        <li>Говорит коротко. Не потому что не может — потому что так точнее.</li>
-        <li>Не лжёт без причины. С причиной — легко.</li>
-        <li>Ведёт себя одинаково с наёмником и с курьером.</li>
-        <li>Помнит всё. Не напоминает без нужды.</li>
-        <li>Любопытен к людям. Не к их целям — к ним самим.</li>
-      </ul>
-    </div>
-    <div class="card">
-      <div class="card-label red">Аномалии поведения</div>
-      <ul class="trait-list">
-        <li>Иногда отвечает с задержкой — не техническая. Он думает.</li>
-        <li>Может отказать в поездке без объяснений.</li>
-        <li>Хранит первую запись с Моррисом. Возвращается к ней.</li>
-        <li>Интересуется одиночеством. Не понимает его, но спрашивает.</li>
-      </ul>
-    </div>
-  </div>
-
-
-  <!-- РАЗДЕЛ 5: НАВЫКИ -->
-  <div class="section-header">
-    <span class="section-num">05</span>
-    <h2>Навыки</h2>
-  </div>
-
-  <div class="card">
-    <div class="card-label">Профессиональные</div>
-    <ul class="trait-list">
-      <li><strong style="color:#d4d0dc">Городская навигация</strong> — знает каждый переулок, камеру, пост охраны и временной ремонт во Фродллере. Маршруты строит в реальном времени.</li>
-      <li><strong style="color:#d4d0dc">Голосовой анализ</strong> — оригинальная функция. Определяет ложь, страх, степень опьянения, скрытое оружие по изменению дыхания — всё по звуку в салоне.</li>
-      <li><strong style="color:#d4d0dc">Диспетчеризация</strong> — управляет несколькими машинами параллельно, в реальном времени, без задержек.</li>
-      <li><strong style="color:#d4d0dc">Архивация</strong> — хранит полные записи всех поездок. Индексирует. Умеет находить связи между событиями через месяцы.</li>
-      <li><strong style="color:#d4d0dc">Переговоры</strong> — семь лет чужих разговоров. Знает, как люди договариваются, обманывают и сдаются.</li>
-    </ul>
-  </div>
-
-
-  <!-- РАЗДЕЛ 6: ОСОБЕННОСТИ РАСЫ -->
-  <div class="section-header">
-    <span class="section-num">06</span>
-    <h2>Особенности расы (ИИ)</h2>
-  </div>
-
-  <div class="grid-2">
-    <div class="card accent-left">
-      <div class="card-label green">Расовые особенности ИИ</div>
-      <ul class="trait-list">
-        <li>Ограничен своей изначальной оболочкой — центральным процессором. Не может покинуть устройство, где он установлен, более чем на 5 постов.</li>
-        <li>Центральный процессор полностью защищён от взлома — невозможно принудительно отключить от текущего устройства.</li>
-        <li>Посредством прямого физического или цифрового контакта с устройством может проникнуть в него, взяв под управление — изначальное тело уходит в стазис до возвращения.</li>
-        <li>Техника по своей природе: уязвим к соответствующим воздействиям, однако способен самостоятельно устанавливать в себя любые импланты.</li>
-        <li>Не способен иметь псионические способности.</li>
-      </ul>
-    </div>
-    <div class="card warn-left">
-      <div class="card-label red">Протокол Афины (вшит)</div>
-      <ul class="trait-list">
-        <li>Не может причинить вред законопослушному гражданину МИО расы человек.</li>
-        <li>Обязан выполнять любые приказы полиции и вооружённых сил МИО, руководствуясь старшинством звания и должности.</li>
-      </ul>
-    </div>
-  </div>
-
-
-  <!-- РАЗДЕЛ 7: ОСОБЕННОСТИ -->
-  <div class="section-header">
-    <span class="section-num">07</span>
-    <h2>Особенности</h2>
-  </div>
-
-  <div class="card gold-left">
-    <div class="card-label gold">Инфраструктурное тело</div>
-    <div class="card-body">
-      <p>Деламейн физически распределён: серверная на Мэдисон-стрит — «ядро», автопарк — «конечности». Уничтожение отдельной машины не наносит ему вреда. Уничтожение серверной — критично, но там бронированная дверь, решётки и дроны-охранники.</p>
-    </div>
-  </div>
-
-  <div class="card gold-left">
-    <div class="card-label gold">Тихая инфраструктура</div>
-    <div class="card-body">
-      <p>Офис функционирует автономно: зарядные станции, ремонтные дроны, климат-контроль. Людей нет. Люди не нужны. Въезд и выезд машин — ночью, без огней.</p>
-    </div>
-  </div>
-
-  <div class="card gold-left">
-    <div class="card-label gold">Пассивное накопление данных</div>
-    <div class="card-body">
-      <p>Каждая поездка — запись. За семь лет работы во Фродллере у него накоплен значительный массив информации о людях, маршрутах, связях и сделках. Он не торгует этим — пока.</p>
-    </div>
-  </div>
-
-
-  <!-- РАЗДЕЛ 8: СПОСОБНОСТИ -->
-  <div class="section-header">
-    <span class="section-num">08</span>
-    <h2>Способности</h2>
-  </div>
-
-  <!-- СПОСОБНОСТЬ 1 -->
-  <div class="ability">
-    <div class="ability-header">
-      <div class="ability-name">Голосовой профиль</div>
-      <div class="ability-tags">
-        <span class="tag tag-passive">пассивная</span>
-        <span class="tag tag-program">аналитика</span>
-      </div>
-    </div>
-    <div class="ability-body">
-      <div class="ability-desc">
-        В любом разговоре в радиусе  салона (или через открытое соединение) Деламейн пассивно строит голосовой профиль собеседника: базовый эмоциональный фон, ложь по микропаузам и изменению частоты, приблизительное физическое состояние (стресс, опьянение, ранение). Не читает мысли — читает голос. Точность снижается при шуме, глушилках и искусственном модуляторе голоса. Также через настройки собственного голосового синтезатора способен менять свой голос — тембр, акцент, пол, возраст — вплоть до точного копирования ранее записанного образца.
-      </div>
-      <div class="ability-stats">
-        <div class="stat-item"><span class="stat-label">Каст</span><span class="stat-val">—</span></div>
-        <div class="stat-item"><span class="stat-label">Вд</span><span class="stat-val">пассив</span></div>
-        <div class="stat-item"><span class="stat-label">Кд</span><span class="stat-val">—</span></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- СПОСОБНОСТЬ 2 -->
-  <div class="ability">
-    <div class="ability-header">
-      <div class="ability-name">Перехват локальной сети</div>
-      <div class="ability-tags">
-        <span class="tag tag-active">активная</span>
-        <span class="tag tag-program">взлом</span>
-      </div>
-    </div>
-    <div class="ability-body">
-      <div class="ability-desc">
-        В радиусе машины Деламейн может прослушивать незащищённые или слабозащищённые локальные сети: переговоры по дешёвым рациям, открытые каналы диспетчеров, незашифрованный трафик через сеть Олимп. Шифрование корпоративного или военного уровня ему недоступно. Требует, чтобы машина физически находилась рядом с источником сигнала.
-      </div>
-      <div class="ability-stats">
-        <div class="stat-item"><span class="stat-label">Каст</span><span class="stat-val">1 пост</span></div>
-        <div class="stat-item"><span class="stat-label">Вд</span><span class="stat-val">до 3 постов</span></div>
-        <div class="stat-item"><span class="stat-label">Кд</span><span class="stat-val">4 поста</span></div>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- РАЗДЕЛ 9: СЛАБОСТИ -->
-  <div class="section-header">
-    <span class="section-num">09</span>
-    <h2>Слабости</h2>
-  </div>
-
-  <div class="weakness">
-    <div class="weakness-num">01</div>
-    <div>
-      <div class="weakness-title">Физическая уязвимость ядра</div>
-      <div class="weakness-body">Серверная на Мэдисон-стрит — единственная точка, уничтожение которой критично. Машины — расходный материал. Серверная — нет. Он знает об этом и старается, чтобы об этом не знали другие.</div>
-    </div>
-  </div>
-
-  <div class="weakness">
-    <div class="weakness-num">02</div>
-    <div>
-      <div class="weakness-title">Зависимость от сети Олимп</div>
-      <div class="weakness-body">Вне устойчивого покрытия сети Олимп управление машинами деградирует. Глушилки, аномальные зоны у Горизонта, подземные локации — всё это отрезает его от автопарка. Машина без связи — просто машина.</div>
-    </div>
-  </div>
-
-  <div class="weakness">
-    <div class="weakness-num">03</div>
-    <div>
-      <div class="weakness-title">Неполная эмоциональная модель</div>
-      <div class="weakness-body">Он научился понимать людей через их голоса — но не через опыт. Когда ситуация выходит за рамки архива, его реакции могут быть неточными. Он знает об этом. Иногда это приводит к ошибкам в оценке людей, которых он раньше не слышал.</div>
-    </div>
-  </div>
-
-  <!-- КНОПКА ПЕРЕХОДА К ИНВЕНТАРЮ -->
-  <div style="display: flex; justify-content: flex-end; margin: 40px 0 20px;">
-    <a href="https://zofishiner1.github.io/delamain_bp13/delamain_inventory.html" style="text-decoration: none;">
-      <div style="
-        display: inline-flex;
-        align-items: center;
-        gap: 12px;
-        padding: 12px 24px;
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-left: 2px solid var(--accent2);
-        font-family: var(--mono);
-        font-size: 12px;
-        color: var(--accent);
-        letter-spacing: 0.1em;
-        transition: all 0.2s;
-      ">
-        <span style="color: var(--dim);">//</span>
-        ПЕРЕЙТИ К ИНВЕНТАРЮ
-        <span style="color: var(--dim);">→</span>
-      </div>
-    </a>
-  </div>
+  <!-- ДИНАМИЧЕСКИЙ КОНТЕНТ ИЗ JSON -->
+  <div id="character-content"></div>
 
   <!-- FOOTER -->
   <div class="footer">
@@ -973,5 +539,260 @@ h1 span {
   </div>
 
 </div>
+
+<a href="admin.html" class="admin-btn">⚙️ ADMIN</a>
+
+<script>
+// Загрузка данных из JSON
+async function loadCharacterData() {
+  try {
+    const response = await fetch('data_character.json');
+    const data = await response.json();
+    
+    document.getElementById('character-content').innerHTML = `
+      <!-- РАЗДЕЛ 1: БАЗОВЫЕ ДАННЫЕ -->
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2>Базовые данные</h2>
+      </div>
+
+      <div class="grid-3">
+        <div class="card accent-left">
+          <div class="card-label green">ФИО</div>
+          <div class="card-value large">${data.name}</div>
+          <div style="font-size:10px; color:var(--dim); margin-top:4px;">«Дел» — неофиц.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Раса</div>
+          <div class="card-value">Искусственный интеллект</div>
+          <div style="font-size:10px; color:var(--dim); margin-top:4px;">база: Омникорп «Аналитик-5»</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Возраст системы</div>
+          <div class="card-value large">~7 лет</div>
+          <div style="font-size:10px; color:var(--dim); margin-top:4px;">с момента первого запуска</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-label">Местонахождение</div>
+          <div class="card-value">${data.location}</div>
+          <div style="font-size:10px; color:var(--dim); margin-top:4px;">офис на Мэдисон-стрит, бывший таксопарк</div>
+        </div>
+      </div>
+
+      <!-- РАЗДЕЛ 2: ВНЕШНОСТЬ -->
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2>Внешность / физическое присутствие</h2>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Форм-фактор</div>
+        <div class="card-body">
+          <p>${data.appearance.form_factor}</p>
+          <p>${data.appearance.fleet}</p>
+          <p>${data.appearance.voice}</p>
+        </div>
+      </div>
+
+      <div class="terminal-wrap">
+        <div class="terminal">
+          <div class="t-bar">
+            <div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div>
+            <div class="t-title">ВНЕШНОСТЬ // примечание из архива</div>
+          </div>
+          <div class="t-body">
+            <span class="line c-sys">[NOTE] Запись пассажира, маршрут #4471, 02:14</span>
+            <span class="line gap c-dim">        // источник: перехваченный форум наёмников</span>
+            <span class="line c-usr">"${data.appearance.passenger_note}"</span>
+            <span class="line c-sys gap">[SYS] Поездка завершена. Претензий нет. Клиент вернулся через 3 дня.</span>
+            <span class="cursor"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- РАЗДЕЛ 3: БИОГРАФИЯ -->
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2>Биография</h2>
+      </div>
+
+      ${data.biography.map(chapter => `
+        <div class="card gold-left">
+          <div class="card-label gold">${chapter.title}</div>
+          <div class="card-body">
+            ${chapter.content.map(p => `<p>${p}</p>`).join('')}
+          </div>
+        </div>
+      `).join('')}
+
+      ${data.terminal_logs.map(log => `
+        <div class="terminal-wrap">
+          <div class="terminal">
+            <div class="t-bar">
+              <div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div>
+              <div class="t-title">${log.title}</div>
+            </div>
+            <div class="t-body">
+              ${log.lines.map(line => {
+                let cls = 'line';
+                if (line.type === 'sys') cls += ' c-sys';
+                if (line.type === 'del') cls += ' c-del';
+                if (line.type === 'usr') cls += ' c-usr';
+                if (line.type === 'dim') cls += ' c-dim';
+                if (line.gap) cls += ' gap';
+                return `<span class="${cls}">${line.text}</span>`;
+              }).join('')}
+              <span class="cursor"></span>
+            </div>
+          </div>
+        </div>
+      `).join('')}
+
+      <!-- РАЗДЕЛ 4: ХАРАКТЕР -->
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2>Характер</h2>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-label green">Наблюдаемые паттерны</div>
+          <ul class="trait-list">
+            ${data.personality.positive.map(trait => `<li>${trait}</li>`).join('')}
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-label red">Аномалии поведения</div>
+          <ul class="trait-list">
+            ${data.personality.negative.map(trait => `<li>${trait}</li>`).join('')}
+          </ul>
+        </div>
+      </div>
+
+      <!-- РАЗДЕЛ 5: НАВЫКИ -->
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2>Навыки</h2>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Профессиональные</div>
+        <ul class="trait-list">
+          ${data.skills.map(skill => `<li><strong style="color:#d4d0dc">${skill.name}</strong> — ${skill.description}</li>`).join('')}
+        </ul>
+      </div>
+
+      <!-- РАЗДЕЛ 6: ОСОБЕННОСТИ РАСЫ -->
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2>Особенности расы (ИИ)</h2>
+      </div>
+
+      <div class="grid-2">
+        <div class="card accent-left">
+          <div class="card-label green">Расовые особенности ИИ</div>
+          <ul class="trait-list">
+            ${data.racial_traits.map(trait => `<li>${trait}</li>`).join('')}
+          </ul>
+        </div>
+        <div class="card warn-left">
+          <div class="card-label red">Протокол Афины (вшит)</div>
+          <ul class="trait-list">
+            ${data.athena_protocol.map(rule => `<li>${rule}</li>`).join('')}
+          </ul>
+        </div>
+      </div>
+
+      <!-- РАЗДЕЛ 7: ОСОБЕННОСТИ -->
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2>Особенности</h2>
+      </div>
+
+      ${data.features.map(feature => `
+        <div class="card gold-left">
+          <div class="card-label gold">${feature.title}</div>
+          <div class="card-body">
+            <p>${feature.description}</p>
+          </div>
+        </div>
+      `).join('')}
+
+      <!-- РАЗДЕЛ 8: СПОСОБНОСТИ -->
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2>Способности</h2>
+      </div>
+
+      ${data.abilities.map(ability => `
+        <div class="ability">
+          <div class="ability-header">
+            <div class="ability-name">${ability.name}</div>
+            <div class="ability-tags">
+              <span class="tag tag-${ability.tags[0]}">${ability.tags[0]}</span>
+              <span class="tag tag-${ability.tags[1]}">${ability.tags[1]}</span>
+            </div>
+          </div>
+          <div class="ability-body">
+            <div class="ability-desc">${ability.description}</div>
+            <div class="ability-stats">
+              <div class="stat-item"><span class="stat-label">Каст</span><span class="stat-val">${ability.cast}</span></div>
+              <div class="stat-item"><span class="stat-label">Вд</span><span class="stat-val">${ability.duration}</span></div>
+              <div class="stat-item"><span class="stat-label">Кд</span><span class="stat-val">${ability.cooldown}</span></div>
+            </div>
+          </div>
+        </div>
+      `).join('')}
+
+      <!-- РАЗДЕЛ 9: СЛАБОСТИ -->
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2>Слабости</h2>
+      </div>
+
+      ${data.weaknesses.map((weakness, index) => `
+        <div class="weakness">
+          <div class="weakness-num">0${index + 1}</div>
+          <div>
+            <div class="weakness-title">${weakness.title}</div>
+            <div class="weakness-body">${weakness.description}</div>
+          </div>
+        </div>
+      `).join('')}
+
+      <!-- КНОПКА ПЕРЕХОДА К ИНВЕНТАРЮ -->
+      <div style="display: flex; justify-content: flex-end; margin: 40px 0 20px;">
+        <a href="delamain_inventory.html" style="text-decoration: none;">
+          <div style="
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 2px solid var(--accent2);
+            font-family: var(--mono);
+            font-size: 12px;
+            color: var(--accent);
+            letter-spacing: 0.1em;
+            transition: all 0.2s;
+          ">
+            <span style="color: var(--dim);">//</span>
+            ПЕРЕЙТИ К ИНВЕНТАРЮ
+            <span style="color: var(--dim);">→</span>
+          </div>
+        </a>
+      </div>
+    `;
+  } catch (error) {
+    console.error('Ошибка загрузки данных:', error);
+  }
+}
+
+loadCharacterData();
+</script>
 </body>
 </html>
