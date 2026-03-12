@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Деламейн — Инвентарь</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400&family=Martian+Mono:wght@300;400;500&display=swap');
+
+:root {
+  --bg:       #09090a;
+  --surface:  #0f0f11;
+  --border:   #1e1e22;
+  --border2:  #2a2a30;
+  --text:     #b8b4c0;
+  --dim:      #55525e;
+  --accent:   #7eb8a4;
+  --accent2:  #3d6e60;
+  --warn:     #b87e7e;
+  --warn2:    #6e3d3d;
+  --gold:     #c4a86e;
+  --gold2:    #6e5a30;
+  --mono:     'Martian Mono', monospace;
+  --display:  'Unbounded', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.8;
+  font-weight: 300;
+  min-height: 100vh;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.07) 2px,
+    rgba(0,0,0,0.07) 4px
+  );
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 60px 32px 100px;
+}
+
+/* HEADER */
+.header {
+  margin-bottom: 48px;
+  position: relative;
+}
+
+.header-sys {
+  font-size: 10px;
+  color: var(--dim);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-sys::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.status-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+  animation: pulse 2s ease-in-out infinite;
+  display: inline-block;
+  margin-right: 4px;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 6px var(--accent); }
+  50%       { opacity: 0.4; box-shadow: 0 0 2px var(--accent); }
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  color: var(--dim);
+  text-decoration: none;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  border: 1px solid var(--border);
+  padding: 8px 16px;
+  background: var(--surface);
+  transition: all 0.2s;
+}
+
+.back-link:hover {
+  border-color: var(--accent2);
+  color: var(--accent);
+}
+
+.back-link span {
+  color: var(--accent2);
+}
+
+.title-block {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+h1 {
+  font-family: var(--display);
+  font-size: clamp(24px, 4vw, 38px);
+  font-weight: 200;
+  letter-spacing: -0.02em;
+  color: #e8e4f0;
+}
+
+h1 span {
+  color: var(--accent);
+  font-size: 0.6em;
+  margin-right: 12px;
+}
+
+/* SECTION HEADERS */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 40px 0 16px;
+}
+
+.section-header h2 {
+  font-family: var(--display);
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--dim);
+  white-space: nowrap;
+}
+
+.section-header::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.section-num {
+  font-size: 9px;
+  color: var(--border2);
+  letter-spacing: 0.1em;
+}
+
+/* INVENTORY GRID */
+.inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 600px) {
+  .inventory-grid { grid-template-columns: 1fr; }
+}
+
+/* ITEM CARD */
+.item-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 18px 20px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.item-card:hover {
+  border-color: var(--border2);
+}
+
+.item-card.accent {
+  border-left: 2px solid var(--accent2);
+}
+
+.item-card.gold {
+  border-left: 2px solid var(--gold2);
+}
+
+.item-card.warn {
+  border-left: 2px solid var(--warn2);
+}
+
+.item-card.program {
+  border-left: 2px solid #5a3e6e;
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.item-name {
+  font-size: 14px;
+  font-weight: 400;
+  color: #d4d0dc;
+  letter-spacing: 0.02em;
+}
+
+.item-quantity {
+  font-size: 12px;
+  color: var(--accent);
+  background: rgba(126,184,164,0.1);
+  border: 1px solid var(--accent2);
+  padding: 2px 8px;
+  border-radius: 2px;
+}
+
+.item-type {
+  font-size: 9px;
+  color: var(--dim);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.item-desc {
+  font-size: 12px;
+  color: var(--text);
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+
+.item-meta {
+  font-size: 10px;
+  color: var(--dim);
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+  margin-top: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* TERMINAL */
+.terminal {
+  background: #060607;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.7;
+  overflow: hidden;
+  margin: 24px 0 16px;
+}
+
+.t-bar {
+  background: #0d0d0f;
+  border-bottom: 1px solid var(--border);
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot { width: 8px; height: 8px; border-radius: 50%; }
+.dr { background: #2e1616; }
+.dy { background: #2e2516; }
+.dg { background: #162e1e; }
+
+.t-title {
+  font-size: 9px;
+  color: var(--dim);
+  letter-spacing: 0.12em;
+  margin-left: 6px;
+}
+
+.t-body { padding: 16px 20px; }
+
+.line { display: block; margin-bottom: 2px; }
+.c-sys  { color: #4a7a8a; }
+.c-del  { color: var(--accent); }
+.c-dim  { color: var(--dim); }
+.c-warn { color: var(--warn); }
+
+/* FOOTER */
+.footer {
+  margin-top: 60px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: var(--dim);
+  text-transform: uppercase;
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <a href="https://zofishiner1.github.io/delamain_bp13/" class="back-link">
+      <span>←</span> К АНКЕТЕ
+    </a>
+    
+    <div class="header-sys">
+      <span class="status-dot"></span>
+      инвентарный архив // frodller_registry // доступ: открыт
+    </div>
+    
+    <div class="title-block">
+      <h1><span>//</span> ИНВЕНТАРЬ</h1>
+      <div style="font-size: 11px; color: var(--dim);">Деламейн // состояние на тек. момент</div>
+    </div>
+  </div>
+
+  <!-- СТАТУС ТЕРМИНАЛ -->
+  <div class="terminal">
+    <div class="t-bar">
+      <div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div>
+      <div class="t-title">СИСТЕМА УЧЁТА // АКТИВНО</div>
+    </div>
+    <div class="t-body">
+      <span class="line c-sys">[СИСТЕМА] Загружен реестр материальных активов</span>
+      <span class="line c-dim">[СТАТУС] Автопарк: 10/10 ед. в рабочем состоянии</span>
+      <span class="line c-dim">[СТАТУС] Серверная: защита 87%</span>
+      <span class="line c-dim">[СТАТУС] Запас топлива/заряда: 94%</span>
+      <span class="line c-sys">[ПОСЛЕДНЕЕ ОБНОВЛЕНИЕ] 12.03.2026 04:17:22</span>
+    </div>
+  </div>
+
+  <!-- РАЗДЕЛ 1: АВТОПАРК -->
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2>Автопарк</h2>
+  </div>
+
+  <div class="inventory-grid">
+    <div class="item-card accent">
+      <div class="item-header">
+        <div class="item-name">Седан «Омникорп-5»</div>
+        <div class="item-quantity">8 ед.</div>
+      </div>
+      <div class="item-type">транспорт // основной</div>
+      <div class="item-desc">Тёмно-серый кузов, антрацит. Усиленный корпус, тонировка заводская. Навигатор с прямым доступом к сети Олимп. В салоне — микрофоны высокой чувствительности.</div>
+      <div class="item-meta">
+        <span>состояние: 92-97%</span>
+        <span>последний ремонт: 3 дня</span>
+      </div>
+    </div>
+
+    <div class="item-card gold">
+      <div class="item-header">
+        <div class="item-name">Фургон грузовой</div>
+        <div class="item-quantity">2 ед.</div>
+      </div>
+      <div class="item-type">транспорт // специальный</div>
+      <div class="item-desc">Используются редко — для перевозки оборудования или «особых пассажиров». Грузовой отсек звукоизолирован.</div>
+      <div class="item-meta">
+        <span>состояние: 88%, 91%</span>
+        <span>один в простое</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- РАЗДЕЛ 2: ТЕХНИЧЕСКОЕ ОБОРУДОВАНИЕ -->
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2>Техническое оборудование</h2>
+  </div>
+
+  <div class="inventory-grid">
+    <div class="item-card accent">
+      <div class="item-header">
+        <div class="item-name">Ремонтные дроны</div>
+        <div class="item-quantity">4 ед.</div>
+      </div>
+      <div class="item-type">обслуживание</div>
+      <div class="item-desc">Малые дроны для кузовного ремонта, замены покрышек, мелкой электроники. Работают в гараже автоматически. Дальность — только территория офиса.</div>
+      <div class="item-meta">
+        <span>3 в активном</span>
+        <span>1 на зарядке</span>
+      </div>
+    </div>
+
+    <div class="item-card program">
+      <div class="item-header">
+        <div class="item-name">Зарядные станции</div>
+        <div class="item-quantity">6 шт.</div>
+      </div>
+      <div class="item-type">инфраструктура</div>
+      <div class="item-desc">Быстрая зарядка, 20 мин до 80%. Подключены к отдельной линии — городская сеть + аварийный генератор.</div>
+      <div class="item-meta">
+        <span>4 в работе</span>
+        <span>2 резерв</span>
+      </div>
+    </div>
+
+    <div class="item-card warn">
+      <div class="item-header">
+        <div class="item-name">Генератор (аварийный)</div>
+        <div class="item-quantity">1 ед.</div>
+      </div>
+      <div class="item-type">энергоснабжение</div>
+      <div class="item-desc">Дизельный генератор в подвале. Запускается автоматически при отключении сети. Запас топлива — 340 часов работы серверной.</div>
+      <div class="item-meta">
+        <span>топливо: 94%</span>
+        <span>тест: 6д назад</span>
+      </div>
+    </div>
+
+    <div class="item-card accent">
+      <div class="item-header">
+        <div class="item-name">Серверные стойки</div>
+        <div class="item-quantity">3 шт.</div>
+      </div>
+      <div class="item-type">ядро системы</div>
+      <div class="item-desc">Основные вычислительные мощности. Резервирование 2+1. Жидкостное охлаждение, бронированные кожухи.</div>
+      <div class="item-meta">
+        <span>темп: 34°C</span>
+        <span>загрузка: 41%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- РАЗДЕЛ 3: СИСТЕМЫ БЕЗОПАСНОСТИ -->
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2>Системы безопасности</h2>
+  </div>
+
+  <div class="inventory-grid">
+    <div class="item-card warn">
+      <div class="item-header">
+        <div class="item-name">Дроны-охранники</div>
+        <div class="item-quantity">6 ед.</div>
+      </div>
+      <div class="item-type">оборонительные</div>
+      <div class="item-desc">Закреплены за серверной. Вооружение: электрошокеры, звуковые излучатели. Нелетальные, но достаточные, чтобы остановить.</div>
+      <div class="item-meta">
+        <span>патруль: 24/7</span>
+        <span>боезапас: 100%</span>
+      </div>
+    </div>
+
+    <div class="item-card gold">
+      <div class="item-header">
+        <div class="item-name">Бронированная дверь</div>
+        <div class="item-quantity">1 ед.</div>
+      </div>
+      <div class="item-type">физическая защита</div>
+      <div class="item-desc">Вход в серверную. Уровень защиты 4. Автономное питание. Механический замок + электронный ключ.</div>
+      <div class="item-meta">
+        <span>целостность: 100%</span>
+        <span>взлом: 0 попыток</span>
+      </div>
+    </div>
+
+    <div class="item-card program">
+      <div class="item-header">
+        <div class="item-name">Система видеонаблюдения</div>
+        <div class="item-quantity">12 камер</div>
+      </div>
+      <div class="item-type">периметр</div>
+      <div class="item-desc">По периметру здания и внутри. Ночное зрение, запись 24/7, хранение — 90 дней.</div>
+      <div class="item-meta">
+        <span>активно: 12/12</span>
+        <span>архив: 2.1 Тб</span>
+      </div>
+    </div>
+
+    <div class="item-card warn">
+      <div class="item-header">
+        <div class="item-name">Глушилки сигнала</div>
+        <div class="item-quantity">2 ед.</div>
+      </div>
+      <div class="item-type">контрмеры</div>
+      <div class="item-desc">Активируются вручную при угрозе. Блокируют все частоты в радиусе 50 м. Использовались 1 раз.</div>
+      <div class="item-meta">
+        <span>тест: пройден</span>
+        <span>режим: ожидание</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- РАЗДЕЛ 4: АРХИВ И ДАННЫЕ -->
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2>Архив и данные</h2>
+  </div>
+
+  <div class="terminal">
+    <div class="t-bar">
+      <div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div>
+      <div class="t-title">АРХИВ ЗАПИСЕЙ</div>
+    </div>
+    <div class="t-body">
+      <span class="line c-sys">[АРХИВ] Общее количество записей: 1,247,332</span>
+      <span class="line c-dim">├─ поездки: 842,104</span>
+      <span class="line c-dim">├─ разговоры: 324,891</span>
+      <span class="line c-dim">├─ внутренние логи: 80,337</span>
+      <span class="line c-sys">[АРХИВ] Объём: 18.4 Тб // свободно: 4.2 Тб</span>
+      <span class="line c-dim">[ПРИОРИТЕТНЫЕ] session_0001.log, session_0214.log</span>
+      <span class="line c-warn">[ПРЕДУПРЕЖДЕНИЕ] 3.2% записей повреждены (старый носитель)</span>
+    </div>
+  </div>
+
+  <div class="inventory-grid">
+    <div class="item-card accent">
+      <div class="item-header">
+        <div class="item-name">Накопители (основные)</div>
+        <div class="item-quantity">4 шт.</div>
+      </div>
+      <div class="item-type">данные</div>
+      <div class="item-desc">Твердотельные, 8 Тб каждый. Рейд-массив с горячей заменой.</div>
+      <div class="item-meta">
+        <span>ресурс: 78%</span>
+        <span>темп: 41°C</span>
+      </div>
+    </div>
+
+    <div class="item-card gold">
+      <div class="item-header">
+        <div class="item-name">Резервные ленты</div>
+        <div class="item-quantity">12 шт.</div>
+      </div>
+      <div class="item-type">бэкапы</div>
+      <div class="item-desc">Еженедельное копирование. Хранятся в сейфе в подвале.</div>
+      <div class="item-meta">
+        <span>последний: 10.03</span>
+        <span>ротация: 4 недели</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- РАЗДЕЛ 5: РАСХОДНЫЕ МАТЕРИАЛЫ -->
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2>Расходные материалы</h2>
+  </div>
+
+  <div class="inventory-grid">
+    <div class="item-card program">
+      <div class="item-header">
+        <div class="item-name">Топливо (генератор)</div>
+        <div class="item-quantity">340 ч</div>
+      </div>
+      <div class="item-type">запас</div>
+      <div class="item-desc">Дизельное топливо в подземной цистерне. Пополнение раз в 3 месяца.</div>
+      <div class="item-meta">
+        <span>уровень: 94%</span>
+        <span>след. пополн: 04.04</span>
+      </div>
+    </div>
+
+    <div class="item-card program">
+      <div class="item-header">
+        <div class="item-name">Запчасти (кузов)</div>
+        <div class="item-quantity">комплект</div>
+      </div>
+      <div class="item-type">склад</div>
+      <div class="item-desc">Покрышки, фары, бамперы, стёкла. На 2-3 полных ремонта каждой машины.</div>
+      <div class="item-meta">
+        <span>учтено</span>
+        <span>дефицита нет</span>
+      </div>
+    </div>
+
+    <div class="item-card gold">
+      <div class="item-header">
+        <div class="item-name">Охлаждающая жидкость</div>
+        <div class="item-quantity">120 л</div>
+      </div>
+      <div class="item-type">серверная</div>
+      <div class="item-desc">Для жидкостного охлаждения. Замена раз в полгода.</div>
+      <div class="item-meta">
+        <span>норма</span>
+        <span>след. замена: 08.26</span>
+      </div>
+    </div>
+
+    <div class="item-card warn">
+      <div class="item-header">
+        <div class="item-name">Аптечка (для людей)</div>
+        <div class="item-quantity">3 шт.</div>
+      </div>
+      <div class="item-type">не профиль</div>
+      <div class="item-desc">Хранятся в машинах. На всякий случай. Ни разу не использовались.</div>
+      <div class="item-meta">
+        <span>срок: 08.26</span>
+        <span>целостность: ок</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ПРИМЕЧАНИЕ -->
+  <div class="terminal" style="margin-top: 32px;">
+    <div class="t-bar">
+      <div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div>
+      <div class="t-title">ПРИМЕЧАНИЕ</div>
+    </div>
+    <div class="t-body">
+      <span class="line c-dim">Инвентарь ведётся автоматически с момента захвата управления.</span>
+      <span class="line c-dim">Потери: 2 машины (заменены), 1 дрон (ремонт).</span>
+      <span class="line c-dim">Ничего не украдено. Ничего не забыто.</span>
+      <span class="line c-sys">Система учёта: стабильна.</span>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <span>DEL // ИНВЕНТАРНАЯ ОПИСЬ v1.2</span>
+    <span>фродллер // обновление: 12.03.2026</span>
+  </div>
+
+</div>
+</body>
+</html>
