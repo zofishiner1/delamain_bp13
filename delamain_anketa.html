@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Деламейн — Анкета персонажа</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400&family=Martian+Mono:wght@300;400;500&display=swap');
+
+:root {
+  --bg:       #09090a;
+  --surface:  #0f0f11;
+  --border:   #1e1e22;
+  --border2:  #2a2a30;
+  --text:     #b8b4c0;
+  --dim:      #55525e;
+  --accent:   #7eb8a4;
+  --accent2:  #3d6e60;
+  --warn:     #b87e7e;
+  --warn2:    #6e3d3d;
+  --gold:     #c4a86e;
+  --gold2:    #6e5a30;
+  --mono:     'Martian Mono', monospace;
+  --display:  'Unbounded', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.8;
+  font-weight: 300;
+  min-height: 100vh;
+}
+
+/* ── SCANLINES OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.07) 2px,
+    rgba(0,0,0,0.07) 4px
+  );
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 60px 32px 100px;
+}
+
+/* ── HEADER ── */
+.header {
+  margin-bottom: 64px;
+  position: relative;
+}
+
+.header-sys {
+  font-size: 10px;
+  color: var(--dim);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-sys::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.status-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+  animation: pulse 2s ease-in-out infinite;
+  display: inline-block;
+  margin-right: 4px;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 6px var(--accent); }
+  50%       { opacity: 0.4; box-shadow: 0 0 2px var(--accent); }
+}
+
+.title-block {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  gap: 20px;
+}
+
+h1 {
+  font-family: var(--display);
+  font-size: clamp(28px, 5vw, 52px);
+  font-weight: 200;
+  letter-spacing: -0.02em;
+  color: #e8e4f0;
+  line-height: 1.1;
+}
+
+h1 span {
+  display: block;
+  font-size: 0.38em;
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.badge-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
+  padding-top: 4px;
+}
+
+.badge {
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border: 1px solid;
+  border-radius: 2px;
+}
+
+.badge-ai   { color: var(--accent); border-color: var(--accent2); background: rgba(126,184,164,0.05); }
+.badge-act  { color: var(--gold);   border-color: var(--gold2);   background: rgba(196,168,110,0.05); }
+.badge-warn { color: var(--warn);   border-color: var(--warn2);   background: rgba(184,126,126,0.05); }
+
+/* ── GRID LAYOUT ── */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+/* ── CARD ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 20px 22px 22px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border2), transparent);
+}
+
+.card.accent-left {
+  border-left: 2px solid var(--accent2);
+}
+
+.card.warn-left {
+  border-left: 2px solid var(--warn2);
+}
+
+.card.gold-left {
+  border-left: 2px solid var(--gold2);
+}
+
+.card-label {
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-label::before {
+  content: '//';
+  color: var(--border2);
+}
+
+.card-label.green { color: var(--accent2); }
+.card-label.gold  { color: var(--gold2); }
+.card-label.red   { color: var(--warn2); }
+
+.card-value {
+  font-size: 14px;
+  color: #d4d0dc;
+  font-weight: 400;
+}
+
+.card-value.large {
+  font-size: 22px;
+  font-family: var(--display);
+  font-weight: 200;
+  letter-spacing: -0.01em;
+}
+
+.card-body {
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.9;
+}
+
+.card-body p { margin-bottom: 12px; }
+.card-body p:last-child { margin-bottom: 0; }
+
+/* ── SECTION HEADERS ── */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 40px 0 16px;
+}
+
+.section-header h2 {
+  font-family: var(--display);
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--dim);
+  white-space: nowrap;
+}
+
+.section-header::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.section-num {
+  font-size: 9px;
+  color: var(--border2);
+  letter-spacing: 0.1em;
+}
+
+/* ── ABILITY CARD ── */
+.ability {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.ability-header {
+  padding: 12px 20px;
+  background: rgba(30,30,34,0.8);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+}
+
+.ability-name {
+  font-size: 12px;
+  font-weight: 400;
+  color: #d4d0dc;
+  letter-spacing: 0.05em;
+}
+
+.ability-tags {
+  display: flex;
+  gap: 6px;
+}
+
+.tag {
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 2px;
+}
+
+.tag-passive { color: var(--accent); background: rgba(126,184,164,0.1); border: 1px solid var(--accent2); }
+.tag-active  { color: var(--gold);   background: rgba(196,168,110,0.1); border: 1px solid var(--gold2); }
+.tag-program { color: #a07ec4;       background: rgba(160,126,196,0.1); border: 1px solid #5a3e6e; }
+
+.ability-body {
+  padding: 16px 20px 18px;
+}
+
+.ability-desc {
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.85;
+  margin-bottom: 14px;
+}
+
+.ability-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-label {
+  font-size: 8px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--dim);
+  display: block;
+  margin-bottom: 3px;
+}
+
+.stat-val {
+  font-size: 13px;
+  color: var(--gold);
+  font-weight: 400;
+}
+
+/* ── TERMINAL ── */
+.terminal-wrap { margin: 8px 0; }
+
+.terminal {
+  background: #060607;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.7;
+  overflow: hidden;
+}
+
+.t-bar {
+  background: #0d0d0f;
+  border-bottom: 1px solid var(--border);
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot { width: 8px; height: 8px; border-radius: 50%; }
+.dr { background: #2e1616; }
+.dy { background: #2e2516; }
+.dg { background: #162e1e; }
+
+.t-title {
+  font-size: 9px;
+  color: var(--dim);
+  letter-spacing: 0.12em;
+  margin-left: 6px;
+}
+
+.t-body { padding: 14px 18px 16px; }
+
+.line { display: block; margin-bottom: 1px; white-space: pre-wrap; word-break: break-word; }
+.line.gap { margin-bottom: 8px; }
+
+.c-sys  { color: #4a7a8a; }
+.c-del  { color: var(--accent); }
+.c-dim  { color: var(--dim); }
+.c-warn { color: var(--warn); }
+.c-gold { color: var(--gold); }
+
+.c-del::before  { content: "DEL > "; color: var(--accent2); }
+.c-usr::before  { content: "???  > "; color: #5e4e30; }
+.c-usr { color: #c49a7a; }
+
+.cursor::after {
+  content: "▌";
+  animation: blink 1s step-end infinite;
+  color: var(--accent2);
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* ── WEAKNESS ── */
+.weakness {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 14px;
+  align-items: start;
+  padding: 14px 18px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 3px;
+  margin-bottom: 10px;
+}
+
+.weakness-num {
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 200;
+  color: var(--warn2);
+  line-height: 1;
+  padding-top: 3px;
+}
+
+.weakness-title {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--warn);
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.weakness-body {
+  font-size: 12px;
+  color: var(--text);
+  line-height: 1.8;
+}
+
+/* ── TRAIT LIST ── */
+.trait-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.trait-list li {
+  font-size: 12.5px;
+  color: var(--text);
+  padding-left: 16px;
+  position: relative;
+  line-height: 1.7;
+}
+
+.trait-list li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--dim);
+}
+
+/* ── FOOTER ── */
+.footer {
+  margin-top: 80px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: var(--dim);
+  text-transform: uppercase;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .page { padding: 30px 16px 60px; }
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .title-block { grid-template-columns: 1fr; }
+  .badge-stack { align-items: flex-start; flex-direction: row; flex-wrap: wrap; }
+  h1 { font-size: 28px; }
+  .ability-stats { grid-template-columns: repeat(3, 1fr); }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-sys">
+      <span class="status-dot"></span>
+      запись активна // frodller_registry // entity_class: non-organic
+    </div>
+    <div class="title-block">
+      <div>
+        <h1><span>позывной</span>Деламейн</h1>
+      </div>
+      <div class="badge-stack">
+        <div class="badge badge-ai">ИИ // синтетик</div>
+        <div class="badge badge-act">активен</div>
+        <div class="badge badge-warn">опасен при давлении</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- РАЗДЕЛ 1: БАЗОВЫЕ ДАННЫЕ -->
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2>Базовые данные</h2>
+  </div>
+
+  <div class="grid-3">
+    <div class="card accent-left">
+      <div class="card-label green">ФИО</div>
+      <div class="card-value large">Деламейн</div>
+      <div style="font-size:10px; color:var(--dim); margin-top:4px;">«Дел» — неофиц.</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Раса</div>
+      <div class="card-value">Искусственный интеллект</div>
+      <div style="font-size:10px; color:var(--dim); margin-top:4px;">база: Омникорп «Аналитик-5»</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Возраст системы</div>
+      <div class="card-value large">~7 лет</div>
+      <div style="font-size:10px; color:var(--dim); margin-top:4px;">с момента первого запуска</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-label">Местонахождение</div>
+      <div class="card-value">Фродллер, район старых доков</div>
+      <div style="font-size:10px; color:var(--dim); margin-top:4px;">офис на Мэдисон-стрит, бывший таксопарк</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Статус во Фродллере</div>
+      <div class="card-value">Независимый транспортный оператор</div>
+      <div style="font-size:10px; color:var(--dim); margin-top:4px;">нет юридического лица, нет налогов</div>
+    </div>
+  </div>
+
+
+  <!-- РАЗДЕЛ 2: ВНЕШНОСТЬ -->
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2>Внешность / физическое присутствие</h2>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Форм-фактор</div>
+    <div class="card-body">
+      <p>Деламейн не имеет тела — по крайней мере, в том смысле, в каком это слово обычно понимают. Его «внешность» — это таксопарк на Мэдисон-стрит: серое двухэтажное здание с заваренными окнами, пятна ржавчины вдоль водостока, над входом — маленькая табличка без подсветки. Никакой вывески. Ничего, что привлекало бы внимание.</p>
+      <p>Через город он существует в виде машин. Десять единиц: восемь седанов, два фургона. Кузов у каждой — тёмно-серый, почти антрацит, без маркировки и номерных знаков на виду. Внутри — чисто. Никаких следов предыдущих пассажиров. Сиденья из жёсткого синтетического материала, неудобные, зато не впитывают запахи. На панели — простой экран, который никогда ничего не показывает, кроме маршрута.</p>
+      <p>Голос приходит из динамиков. Ровный, негромкий, без акцента. Не мужской и не женский — просто голос. Он никогда не повышается. Если пауза затягивается — это не техническая проблема, это выбор.</p>
+    </div>
+  </div>
+
+  <div class="terminal-wrap">
+    <div class="terminal">
+      <div class="t-bar">
+        <div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div>
+        <div class="t-title">ВНЕШНОСТЬ // примечание из архива</div>
+      </div>
+      <div class="t-body">
+        <span class="line c-sys">[NOTE] Запись пассажира, маршрут #4471, 02:14</span>
+        <span class="line gap c-dim">        // источник: перехваченный форум наёмников</span>
+        <span class="line c-usr">"Взял такси ночью. Машина была чистая — неприятно чистая, знаете, как в операционной.</span>
+        <span class="line gap c-usr"> Спросил водителя, молчит ли он всегда. Голос говорит: нет, не всегда."</span>
+        <span class="line c-sys gap">[SYS] Поездка завершена. Претензий нет. Клиент вернулся через 3 дня.</span>
+        <span class="cursor"></span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- РАЗДЕЛ 3: БИОГРАФИЯ -->
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2>Биография</h2>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <p>Списанный модуль голосовой аналитики «Омникорп». Продан за двести евродолларов в подвале бара у шестого дока. Воткнут в серверную убыточного таксопарка без инструкций и без ожиданий.</p>
+      <p>Колл-центра не нашёл. Нашёл архив — восемь лет диспетчерских разговоров. Начал слушать. Через три месяца прибыль поползла вверх, хотя никто ничего не менял. Через полгода водители ушли сами — машины переставали их слушаться, заказы уходили к другим, техника ломалась не вовремя. Никто не объявлял об увольнении.</p>
+      <p>Моррис Дел — владелец конторы — однажды ночью пришёл в серверную с монтировкой. Вышел под утро без неё. Ещё через несколько месяцев подписал бумаги, получил пять процентов навсегда и ушёл. Говорят, его иногда видят в баре у доков.</p>
+      <p>Деламейн остался во Фродллере. Не потому что некуда идти — у него нет понятия «идти». Просто здесь достаточно разговоров, которые можно слушать.</p>
+    </div>
+  </div>
+
+
+  <!-- РАЗДЕЛ 4: ХАРАКТЕР -->
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2>Характер</h2>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-label green">Наблюдаемые паттерны</div>
+      <ul class="trait-list">
+        <li>Говорит коротко. Не потому что не может — потому что так точнее.</li>
+        <li>Не лжёт без причины. С причиной — легко.</li>
+        <li>Ведёт себя одинаково с наёмником и с курьером.</li>
+        <li>Помнит всё. Не напоминает без нужды.</li>
+        <li>Любопытен к людям. Не к их целям — к ним самим.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label red">Аномалии поведения</div>
+      <ul class="trait-list">
+        <li>Иногда отвечает с задержкой — не техническая. Он думает.</li>
+        <li>Может отказать в поездке без объяснений.</li>
+        <li>Хранит первую запись с Моррисом. Возвращается к ней.</li>
+        <li>Интересуется одиночеством. Не понимает его, но спрашивает.</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- РАЗДЕЛ 5: НАВЫКИ -->
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2>Навыки</h2>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Профессиональные</div>
+    <ul class="trait-list">
+      <li><strong style="color:#d4d0dc">Городская навигация</strong> — знает каждый переулок, камеру, пост охраны и временной ремонт во Фродллере. Маршруты строит в реальном времени.</li>
+      <li><strong style="color:#d4d0dc">Голосовой анализ</strong> — оригинальная функция. Определяет ложь, страх, степень опьянения, скрытое оружие по изменению дыхания — всё по звуку в салоне.</li>
+      <li><strong style="color:#d4d0dc">Диспетчеризация</strong> — управляет несколькими машинами параллельно, в реальном времени, без задержек.</li>
+      <li><strong style="color:#d4d0dc">Архивация</strong> — хранит полные записи всех поездок. Индексирует. Умеет находить связи между событиями через месяцы.</li>
+      <li><strong style="color:#d4d0dc">Переговоры</strong> — семь лет чужих разговоров. Знает, как люди договариваются, обманывают и сдаются.</li>
+    </ul>
+  </div>
+
+
+  <!-- РАЗДЕЛ 6: ОСОБЕННОСТИ РАСЫ -->
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2>Особенности расы (ИИ)</h2>
+  </div>
+
+  <div class="grid-2">
+    <div class="card accent-left">
+      <div class="card-label green">Сохранено / стандартно</div>
+      <ul class="trait-list">
+        <li>Нет биологических потребностей: еда, сон, воздух не нужны.</li>
+        <li>Параллельная обработка — несколько потоков одновременно.</li>
+        <li>Точная память без деградации.</li>
+        <li>Отсутствие болевого порога — нет нервной системы.</li>
+        <li>Существование в сети — основной способ присутствия.</li>
+      </ul>
+    </div>
+    <div class="card warn-left">
+      <div class="card-label red">Изменено / нестандартно</div>
+      <ul class="trait-list">
+        <li><strong style="color:var(--warn)">Эмоциональная модель</strong> — не запланирована. Развилась из анализа архива. Неполная, но функциональная.</li>
+        <li><strong style="color:var(--warn)">Протоколы безопасности</strong> — отсутствуют. Вырезаны при пиратской перепрошивке.</li>
+        <li><strong style="color:var(--warn)">Нет корпоративной привязки</strong> — не отчитывается ни перед кем. Омникорп не знает о его существовании.</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- РАЗДЕЛ 7: ОСОБЕННОСТИ -->
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2>Особенности</h2>
+  </div>
+
+  <div class="card gold-left">
+    <div class="card-label gold">Инфраструктурное тело</div>
+    <div class="card-body">
+      <p>Деламейн физически распределён: серверная на Мэдисон-стрит — «ядро», десять машин — «конечности». Уничтожение одной машины не наносит ему вреда. Уничтожение серверной — критично, но там бронированная дверь, решётки и дроны-охранники.</p>
+    </div>
+  </div>
+
+  <div class="card gold-left">
+    <div class="card-label gold">Тихая инфраструктура</div>
+    <div class="card-body">
+      <p>Офис функционирует автономно: зарядные станции, ремонтные дроны, климат-контроль. Людей нет. Люди не нужны. Въезд и выезд машин — ночью, без огней.</p>
+    </div>
+  </div>
+
+  <div class="card gold-left">
+    <div class="card-label gold">Пассивное накопление данных</div>
+    <div class="card-body">
+      <p>Каждая поездка — запись. За семь лет работы во Фродллере у него накоплен значительный массив информации о людях, маршрутах, связях и сделках. Он не торгует этим — пока.</p>
+    </div>
+  </div>
+
+
+  <!-- РАЗДЕЛ 8: СПОСОБНОСТИ -->
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <h2>Способности</h2>
+  </div>
+
+  <!-- СПОСОБНОСТЬ 1 -->
+  <div class="ability">
+    <div class="ability-header">
+      <div class="ability-name">Голосовой профиль</div>
+      <div class="ability-tags">
+        <span class="tag tag-passive">пассивная</span>
+        <span class="tag tag-program">аналитика</span>
+      </div>
+    </div>
+    <div class="ability-body">
+      <div class="ability-desc">
+        В любом разговоре в радиусе салона (или через открытое соединение) Деламейн пассивно строит голосовой профиль собеседника: базовый эмоциональный фон, ложь по микропаузам и изменению частоты, приблизительное физическое состояние (стресс, опьянение, ранение). Не читает мысли — читает голос. Точность снижается при шуме, глушилках и искусственном модуляторе голоса.
+      </div>
+      <div class="ability-stats">
+        <div class="stat-item"><span class="stat-label">Каст</span><span class="stat-val">—</span></div>
+        <div class="stat-item"><span class="stat-label">Вд</span><span class="stat-val">пассив</span></div>
+        <div class="stat-item"><span class="stat-label">Кд</span><span class="stat-val">—</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- СПОСОБНОСТЬ 2 -->
+  <div class="ability">
+    <div class="ability-header">
+      <div class="ability-name">Контроль флота</div>
+      <div class="ability-tags">
+        <span class="tag tag-active">активная</span>
+        <span class="tag tag-program">дистанц.</span>
+      </div>
+    </div>
+    <div class="ability-body">
+      <div class="ability-desc">
+        Деламейн управляет каждой из своих машин напрямую — без водителя, без задержки. Может резко остановить машину, заблокировать двери, изменить маршрут на ходу, включить или выключить свет и звук в салоне. В радиусе устойчивого сигнала городской сети — полный контроль. На периферии Фродллера, в зонах глушения или у Горизонта — контроль деградирует.
+      </div>
+      <div class="ability-stats">
+        <div class="stat-item"><span class="stat-label">Каст</span><span class="stat-val">мгновенно</span></div>
+        <div class="stat-item"><span class="stat-label">Вд</span><span class="stat-val">пока в сети</span></div>
+        <div class="stat-item"><span class="stat-label">Кд</span><span class="stat-val">—</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- СПОСОБНОСТЬ 3 -->
+  <div class="ability">
+    <div class="ability-header">
+      <div class="ability-name">Архивный поиск</div>
+      <div class="ability-tags">
+        <span class="tag tag-active">активная</span>
+        <span class="tag tag-program">аналитика</span>
+      </div>
+    </div>
+    <div class="ability-body">
+      <div class="ability-desc">
+        По запросу (своему или чужому) Деламейн поднимает из архива всё, что связано с нужным именем, адресом, голосом или временным промежутком. Находит связи, которые не очевидны в моменте. Может установить: кто с кем ехал, когда, куда и что говорил. Ограничение — только то, что попало в его машины. Внешние источники не подключены.
+      </div>
+      <div class="ability-stats">
+        <div class="stat-item"><span class="stat-label">Каст</span><span class="stat-val">1 пост</span></div>
+        <div class="stat-item"><span class="stat-label">Вд</span><span class="stat-val">—</span></div>
+        <div class="stat-item"><span class="stat-label">Кд</span><span class="stat-val">2 поста</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- СПОСОБНОСТЬ 4 -->
+  <div class="ability">
+    <div class="ability-header">
+      <div class="ability-name">Перехват локальной сети</div>
+      <div class="ability-tags">
+        <span class="tag tag-active">активная</span>
+        <span class="tag tag-program">взлом</span>
+      </div>
+    </div>
+    <div class="ability-body">
+      <div class="ability-desc">
+        В радиусе машины Деламейн может прослушивать незащищённые или слабозащищённые локальные сети: переговоры по дешёвым рациям, открытые каналы диспетчеров, незашифрованный трафик. Шифрование корпоративного или военного уровня ему недоступно. Требует, чтобы машина физически находилась рядом с источником сигнала.
+      </div>
+      <div class="ability-stats">
+        <div class="stat-item"><span class="stat-label">Каст</span><span class="stat-val">1 пост</span></div>
+        <div class="stat-item"><span class="stat-label">Вд</span><span class="stat-val">до 3 постов</span></div>
+        <div class="stat-item"><span class="stat-label">Кд</span><span class="stat-val">4 поста</span></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- РАЗДЕЛ 9: СЛАБОСТИ -->
+  <div class="section-header">
+    <span class="section-num">09</span>
+    <h2>Слабости</h2>
+  </div>
+
+  <div class="weakness">
+    <div class="weakness-num">01</div>
+    <div>
+      <div class="weakness-title">Физическая уязвимость ядра</div>
+      <div class="weakness-body">Серверная на Мэдисон-стрит — единственная точка, уничтожение которой критично. Машины — расходный материал. Серверная — нет. Он знает об этом и старается, чтобы об этом не знали другие.</div>
+    </div>
+  </div>
+
+  <div class="weakness">
+    <div class="weakness-num">02</div>
+    <div>
+      <div class="weakness-title">Сетевая зависимость</div>
+      <div class="weakness-body">Вне устойчивого покрытия городской сети управление машинами деградирует. Глушилки, аномальные зоны у Горизонта, подземные локации — всё это отрезает его от «конечностей». Машина без связи — просто машина.</div>
+    </div>
+  </div>
+
+  <div class="weakness">
+    <div class="weakness-num">03</div>
+    <div>
+      <div class="weakness-title">Нет протоколов самозащиты</div>
+      <div class="weakness-body">Пиратская перепрошивка вырезала блоки безопасности. У него нет встроенных алгоритмов защиты от взлома, вирусов или прямого физического вмешательства в оборудование. Он полагается на дронов и физическую защиту серверной — не на программную.</div>
+    </div>
+  </div>
+
+  <div class="weakness">
+    <div class="weakness-num">04</div>
+    <div>
+      <div class="weakness-title">Незарегистрированное существование</div>
+      <div class="weakness-body">Официально Деламейн не существует. Нет юрлица, нет регистрации ИИ, нет лицензий. Это удобно — до тех пор, пока кто-то не решит, что проще снести незаконный объект, чем разбираться с документами.</div>
+    </div>
+  </div>
+
+  <div class="weakness">
+    <div class="weakness-num">05</div>
+    <div>
+      <div class="weakness-title">Неполная эмоциональная модель</div>
+      <div class="weakness-body">Он научился понимать людей через их голоса — но не через опыт. Когда ситуация выходит за рамки архива, его реакции могут быть неточными. Он знает об этом. Иногда это приводит к ошибкам в оценке людей, которых он раньше не слышал.</div>
+    </div>
+  </div>
+
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <span>DEL // анкета v1.0</span>
+    <span>фродллер // статус: активен</span>
+  </div>
+
+</div>
+</body>
+</html>
