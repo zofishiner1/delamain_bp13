@@ -487,6 +487,20 @@ h1 span {
   text-transform: uppercase;
 }
 
+.appearance-image {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0 30px;
+}
+
+.appearance-image img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  padding: 10px;
+}
+
 @media (max-width: 600px) {
   .page { padding: 30px 16px 60px; }
   .grid-2, .grid-3 { grid-template-columns: 1fr; }
@@ -569,6 +583,10 @@ async function loadCharacterData() {
       <div class="section-header">
         <span class="section-num">02</span>
         <h2>Внешность / физическое присутствие</h2>
+      </div>
+
+      <div class="appearance-image">
+        <img src="${data.appearance.image}" alt="Деламейн" style="width: ${data.appearance.image_size || 200}px; image-rendering: pixelated;" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'200\' height=\'200\' viewBox=\'0 0 200 200\'><rect width=\'200\' height=\'200\' fill=\'%233d6e60\'/><circle cx=\'100\' cy=\'100\' r=\'50\' fill=\'%237eb8a4\'/><text x=\'100\' y=\'120\' text-anchor=\'middle\' fill=\'%2309090a\' font-size=\'40\' font-family=\'monospace\'>D</text></svg>'">
       </div>
 
       <div class="card">

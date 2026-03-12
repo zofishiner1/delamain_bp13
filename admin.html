@@ -372,21 +372,42 @@ textarea {
   background: rgba(126,184,164,0.2);
 }
 
-.sputnik-preview {
+.sputnik-preview, .appearance-preview {
   display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 20px;
-  padding: 15px;
+  gap: 30px;
+  margin-bottom: 25px;
+  padding: 20px;
   background: rgba(126,184,164,0.05);
   border: 1px dashed var(--accent2);
+  border-radius: 3px;
+  align-items: flex-start;
 }
 
-.sputnik-preview img {
-  width: 64px;
-  height: 64px;
-  object-fit: contain;
-  image-rendering: pixelated;
+.sputnik-preview input[type=range], .appearance-preview input[type=range] {
+  width: 100%;
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  -webkit-appearance: none;
+}
+
+.sputnik-preview input[type=range]::-webkit-slider-thumb, .appearance-preview input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  background: var(--accent);
+  border: 1px solid var(--accent2);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.sputnik-preview input[type=range]::-moz-range-thumb, .appearance-preview input[type=range]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: var(--accent);
+  border: 1px solid var(--accent2);
+  border-radius: 50%;
+  cursor: pointer;
 }
 
 .button-group {
@@ -631,6 +652,47 @@ textarea {
         </div>
       </div>
 
+      <div class="section-title">// ВНЕШНОСТЬ (ИЗОБРАЖЕНИЕ)</div>
+      
+      <div class="appearance-preview">
+        <div style="text-align: center;">
+          <img src="delamain.png" id="appearancePreviewImage" alt="Деламейн" style="width: 200px; height: auto; object-fit: contain; image-rendering: pixelated; border: 1px solid var(--border2); padding: 10px; background: var(--surface); margin-bottom: 10px;" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'200\' height=\'200\' viewBox=\'0 0 200 200\'><rect width=\'200\' height=\'200\' fill=\'%233d6e60\'/><circle cx=\'100\' cy=\'100\' r=\'50\' fill=\'%237eb8a4\'/><text x=\'100\' y=\'120\' text-anchor=\'middle\' fill=\'%2309090a\' font-size=\'40\' font-family=\'monospace\'>D</text></svg>'">
+          <div style="color: var(--dim); font-size: 10px;">delamain.png</div>
+        </div>
+        <div style="flex: 1;">
+          <div class="form-group" style="margin-bottom: 15px;">
+            <label>Размер изображения (px)</label>
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <input type="range" id="appearance_image_size" min="100" max="400" value="200" step="10" style="flex: 1;" oninput="updateAppearanceImageSize(this.value)">
+              <input type="number" id="appearance_image_size_input" min="100" max="400" value="200" step="10" style="width: 80px;" onchange="updateAppearanceImageSizeFromInput(this.value)">
+              <span style="color: var(--dim); font-size: 11px;">px</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Форм-фактор (текст 1)</label>
+        <textarea id="appearance_form_factor" rows="3">Деламейн не имеет тела — по крайней мере, в том смысле, в каком это слово обычно понимают. Его «внешность» — это таксопарк на Мэдисон-стрит: серое двухэтажное здание с заваренными окнами, пятна ржавчины вдоль водостока, над входом — маленькая табличка без подсветки. Никакой вывески. Ничего, что привлекало бы внимание.</textarea>
+      </div>
+      
+      <div class="form-group">
+        <label>Автопарк (текст 2)</label>
+        <textarea id="appearance_fleet" rows="3">Через город он существует в виде машин. Десять единиц: восемь седанов, два фургона. Кузов у каждой — тёмно-серый, почти антрацит, без маркировки и номерных знаков на виду. Внутри — чисто. Никаких следов предыдущих пассажиров. Сиденья из жёсткого синтетического материала, неудобные, зато не впитывают запахи. На панели — простой экран, который никогда ничего не показывает, кроме маршрута.</textarea>
+      </div>
+      
+      <div class="form-group">
+        <label>Голос (текст 3)</label>
+        <textarea id="appearance_voice" rows="3">Голос приходит из динамиков. Ровный, негромкий, без акцента. Не мужской и не женский — просто голос. Он никогда не повышается. Если пауза затягивается — это не техническая проблема, это выбор.</textarea>
+      </div>
+      
+      <div class="form-group">
+        <label>Заметка пассажира</label>
+        <textarea id="appearance_passenger_note" rows="2">Взял такси ночью. Машина была чистая — неприятно чистая, знаете, как в операционной. Спросил водителя, молчит ли он всегда. Голос говорит: нет, не всегда.</textarea>
+      </div>
+      
+      <input type="hidden" id="appearance_image_size_value" value="200">
+
       <div class="section-title">// ИНВЕНТАРЬ (ОСНОВНОЕ)</div>
       
       <div class="grid-2">
@@ -719,13 +781,24 @@ textarea {
       <div class="section-title">// СПУТНИК</div>
       
       <div class="sputnik-preview">
-      <img src="sputnik.png" alt="sputnik" style="width: 160px; height: 160px; object-fit: contain; image-rendering: pixelated; border: 1px solid var(--border2); padding: 10px; background: var(--surface);" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'160\' height=\'160\' viewBox=\'0 0 160 160\'><rect width=\'160\' height=\'160\' fill=\'%233d6e60\'/><circle cx=\'80\' cy=\'80\' r=\'40\' fill=\'%237eb8a4\'/><text x=\'80\' y=\'100\' text-anchor=\'middle\' fill=\'%2309090a\' font-size=\'30\' font-family=\'monospace\'>S</text></svg>'">
-  <span style="color: var(--dim);">sputnik.png (160x160)</span>
-</div>
-      
-      <div class="form-group">
-        <label>Имя спутника</label>
-        <input type="text" id="sputnik_name" value="Спутник">
+        <div style="text-align: center;">
+          <img src="sputnik.png" id="sputnikPreviewImage" alt="sputnik" style="width: 160px; height: 160px; object-fit: contain; image-rendering: pixelated; border: 1px solid var(--border2); padding: 10px; background: var(--surface); margin-bottom: 10px;" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'160\' height=\'160\' viewBox=\'0 0 160 160\'><rect width=\'160\' height=\'160\' fill=\'%233d6e60\'/><circle cx=\'80\' cy=\'80\' r=\'40\' fill=\'%237eb8a4\'/><text x=\'80\' y=\'100\' text-anchor=\'middle\' fill=\'%2309090a\' font-size=\'30\' font-family=\'monospace\'>S</text></svg>'">
+          <div style="color: var(--dim); font-size: 10px;">sputnik.png</div>
+        </div>
+        <div style="flex: 1;">
+          <div class="form-group" style="margin-bottom: 15px;">
+            <label>Размер изображения (px)</label>
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <input type="range" id="sputnik_image_size" min="80" max="300" value="160" step="10" style="flex: 1;" oninput="updateSputnikImageSize(this.value)">
+              <input type="number" id="sputnik_image_size_input" min="80" max="300" value="160" step="10" style="width: 80px;" onchange="updateSputnikImageSizeFromInput(this.value)">
+              <span style="color: var(--dim); font-size: 11px;">px</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Имя спутника</label>
+            <input type="text" id="sputnik_name" value="Спутник">
+          </div>
+        </div>
       </div>
       
       <div class="form-group">
@@ -752,11 +825,6 @@ textarea {
       
       <div class="grid-2">
         <div class="form-group">
-          <label>Макс. дальность</label>
-          <input type="text" id="sputnik_range" value="500 м">
-        </div>
-        
-        <div class="form-group">
           <label>Время полёта</label>
           <input type="text" id="sputnik_flight_time" value="45 мин">
         </div>
@@ -766,6 +834,8 @@ textarea {
         <label>Особенности (через запятую)</label>
         <input type="text" id="sputnik_features" value="запись видео, ночной режим, автовозврат, тихий режим">
       </div>
+      
+      <input type="hidden" id="sputnik_image_size_value" value="160">
     </div>
 
     <!-- Вкладка: Raw JSON -->
@@ -925,6 +995,42 @@ async function publishToGitHub(token) {
   }
 }
 
+// Обновление размера изображения спутника
+function updateSputnikImageSize(size) {
+  size = parseInt(size);
+  document.getElementById('sputnikPreviewImage').style.width = size + 'px';
+  document.getElementById('sputnikPreviewImage').style.height = size + 'px';
+  document.getElementById('sputnik_image_size_input').value = size;
+  document.getElementById('sputnik_image_size_value').value = size;
+}
+
+function updateSputnikImageSizeFromInput(size) {
+  size = parseInt(size);
+  if (size < 80) size = 80;
+  if (size > 300) size = 300;
+  document.getElementById('sputnikPreviewImage').style.width = size + 'px';
+  document.getElementById('sputnikPreviewImage').style.height = size + 'px';
+  document.getElementById('sputnik_image_size').value = size;
+  document.getElementById('sputnik_image_size_value').value = size;
+}
+
+// Обновление размера изображения внешности
+function updateAppearanceImageSize(size) {
+  size = parseInt(size);
+  document.getElementById('appearancePreviewImage').style.width = size + 'px';
+  document.getElementById('appearance_image_size_input').value = size;
+  document.getElementById('appearance_image_size_value').value = size;
+}
+
+function updateAppearanceImageSizeFromInput(size) {
+  size = parseInt(size);
+  if (size < 100) size = 100;
+  if (size > 400) size = 400;
+  document.getElementById('appearancePreviewImage').style.width = size + 'px';
+  document.getElementById('appearance_image_size').value = size;
+  document.getElementById('appearance_image_size_value').value = size;
+}
+
 // Загрузка данных
 async function loadData() {
   try {
@@ -952,8 +1058,20 @@ async function loadData() {
     document.getElementById('rep_rdac').value = currentJsonData.reputation?.organizations?.['RDAC'] || 0;
     document.getElementById('rep_kraken').value = currentJsonData.reputation?.organizations?.['KRAKEN'] || -25;
     
+    // Заполняем внешность
+    document.getElementById('appearance_form_factor').value = currentJsonData.appearance?.form_factor || '';
+    document.getElementById('appearance_fleet').value = currentJsonData.appearance?.fleet || '';
+    document.getElementById('appearance_voice').value = currentJsonData.appearance?.voice || '';
+    document.getElementById('appearance_passenger_note').value = currentJsonData.appearance?.passenger_note || '';
+    
+    const appearanceSize = currentJsonData.appearance?.image_size || 200;
+    document.getElementById('appearance_image_size').value = appearanceSize;
+    document.getElementById('appearance_image_size_input').value = appearanceSize;
+    document.getElementById('appearance_image_size_value').value = appearanceSize;
+    document.getElementById('appearancePreviewImage').style.width = appearanceSize + 'px';
+    
     document.getElementById('inv_autopark').value = currentJsonData.inventory?.autopark || 10;
-    document.getElementById('inv_autopark_desc').value = currentJsonData.inventory?.autopark_desc || 'Таксомоторный парк на Мэдисон-стрит. Все машины на ходу, заряжены, готовы к выезду.';
+    document.getElementById('inv_autopark_desc').value = currentJsonData.inventory?.autopark_desc || '';
     document.getElementById('inv_security').value = currentJsonData.inventory?.security || 87;
     document.getElementById('inv_archive_size').value = currentJsonData.inventory?.archive_size || '18.4 Тб';
     document.getElementById('inv_archive_free').value = currentJsonData.inventory?.archive_free || '4.2 Тб';
@@ -962,19 +1080,25 @@ async function loadData() {
     document.getElementById('inv_conversations').value = currentJsonData.inventory?.conversations || 324891;
     document.getElementById('inv_logs').value = currentJsonData.inventory?.logs || 80337;
     document.getElementById('inv_priority').value = (currentJsonData.inventory?.priority_logs || ['session_0001.log', 'session_0214.log']).join(', ');
-    document.getElementById('inv_note').value = currentJsonData.inventory?.note || 'Инвентарь ведётся автоматически с момента захвата управления.';
+    document.getElementById('inv_note').value = currentJsonData.inventory?.note || '';
     document.getElementById('last_updated').value = currentJsonData.last_updated || '12.03.2026';
     document.getElementById('last_updated_time').value = currentJsonData.last_updated_time || '04:17:22';
     
     // Заполняем спутник
     document.getElementById('sputnik_name').value = currentJsonData.sputnik?.name || 'Спутник';
     document.getElementById('sputnik_type').value = currentJsonData.sputnik?.type || 'дрон // компаньон';
-    document.getElementById('sputnik_desc').value = currentJsonData.sputnik?.description || 'Малый разведывательный дрон, модифицированный Деламейном.';
+    document.getElementById('sputnik_desc').value = currentJsonData.sputnik?.description || '';
     document.getElementById('sputnik_status').value = currentJsonData.sputnik?.status || 'активен';
     document.getElementById('sputnik_battery').value = currentJsonData.sputnik?.battery || '94%';
-    document.getElementById('sputnik_range').value = currentJsonData.sputnik?.range || '500 м';
     document.getElementById('sputnik_flight_time').value = currentJsonData.sputnik?.flight_time || '45 мин';
     document.getElementById('sputnik_features').value = (currentJsonData.sputnik?.features || ['запись видео', 'ночной режим', 'автовозврат', 'тихий режим']).join(', ');
+    
+    const sputnikSize = currentJsonData.sputnik?.image_size || 160;
+    document.getElementById('sputnik_image_size').value = sputnikSize;
+    document.getElementById('sputnik_image_size_input').value = sputnikSize;
+    document.getElementById('sputnik_image_size_value').value = sputnikSize;
+    document.getElementById('sputnikPreviewImage').style.width = sputnikSize + 'px';
+    document.getElementById('sputnikPreviewImage').style.height = sputnikSize + 'px';
     
     // Заполняем инвентарь
     renderInventoryItems(currentJsonData.inventory?.items || []);
@@ -1081,6 +1205,15 @@ function collectFormData() {
       }
     },
     
+    appearance: {
+      form_factor: document.getElementById('appearance_form_factor').value,
+      fleet: document.getElementById('appearance_fleet').value,
+      voice: document.getElementById('appearance_voice').value,
+      passenger_note: document.getElementById('appearance_passenger_note').value,
+      image: 'delamain.png',
+      image_size: parseInt(document.getElementById('appearance_image_size_value').value) || 200
+    },
+    
     inventory: {
       autopark: parseInt(document.getElementById('inv_autopark').value),
       autopark_desc: document.getElementById('inv_autopark_desc').value,
@@ -1102,10 +1235,10 @@ function collectFormData() {
       description: document.getElementById('sputnik_desc').value,
       status: document.getElementById('sputnik_status').value,
       battery: document.getElementById('sputnik_battery').value,
-      range: document.getElementById('sputnik_range').value,
       flight_time: document.getElementById('sputnik_flight_time').value,
       features: sputnikFeatures,
-      image: 'sputnik.png'
+      image: 'sputnik.png',
+      image_size: parseInt(document.getElementById('sputnik_image_size_value').value) || 160
     }
   };
 }

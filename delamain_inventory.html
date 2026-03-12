@@ -641,34 +641,37 @@ async function loadInventoryData() {
       </div>
 
       <div class="section-header">
-  <span class="section-num">03</span>
-  <h2>Спутник</h2>
-</div>
+        <span class="section-num">03</span>
+        <h2>Спутник</h2>
+      </div>
 
-<div id="sputnikContainer" class="card gold-left">
-  <div style="display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap;">
-    <img src="${data.sputnik.image}" alt="sputnik" style="width: 160px; height: 160px; object-fit: contain; image-rendering: pixelated; border: 1px solid var(--border2); padding: 10px; background: var(--surface);" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'160\' height=\'160\' viewBox=\'0 0 160 160\'><rect width=\'160\' height=\'160\' fill=\'%233d6e60\'/><circle cx=\'80\' cy=\'80\' r=\'40\' fill=\'%237eb8a4\'/><text x=\'80\' y=\'100\' text-anchor=\'middle\' fill=\'%2309090a\' font-size=\'30\' font-family=\'monospace\'>S</text></svg>'">
-    <div style="flex: 1;">
-      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
-        <span style="font-size: 22px; color: #d4d0dc; font-family: var(--display);">${data.sputnik.name}</span>
-        <span class="badge badge-ai" style="font-size: 10px; padding: 4px 10px;">${data.sputnik.type}</span>
-        <span class="badge badge-act" style="font-size: 10px; padding: 4px 10px;">${data.sputnik.status}</span>
-      </div>
-      <div style="margin-bottom: 20px; color: var(--text); font-size: 13px; line-height: 1.8;">${data.sputnik.description}</div>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 3px;">
-        <div><span class="stat-label" style="font-size: 9px;">Батарея</span><div style="color: var(--accent); font-size: 16px;">${data.sputnik.battery}</div></div>
-        <div><span class="stat-label" style="font-size: 9px;">Дальность</span><div style="color: var(--accent); font-size: 16px;">${data.sputnik.range}</div></div>
-        <div><span class="stat-label" style="font-size: 9px;">Время полёта</span><div style="color: var(--accent); font-size: 16px;">${data.sputnik.flight_time}</div></div>
-      </div>
-      <div style="margin-top: 15px;">
-        <span class="stat-label" style="font-size: 9px;">Особенности</span>
-        <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;">
-          ${(data.sputnik.features || []).map(f => `<span class="badge badge-ai" style="font-size: 10px; padding: 4px 10px;">${f}</span>`).join('')}
+      <div id="sputnikContainer" class="card gold-left">
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <div style="display: flex; align-items: center; gap: 30px; flex-wrap: wrap;">
+            <img src="${data.sputnik.image}" alt="sputnik" style="width: ${data.sputnik.image_size || 160}px; height: ${data.sputnik.image_size || 160}px; object-fit: contain; image-rendering: pixelated; border: 1px solid var(--border2); padding: 10px; background: var(--surface);" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'${data.sputnik.image_size || 160}\' height=\'${data.sputnik.image_size || 160}\' viewBox=\'0 0 160 160\'><rect width=\'160\' height=\'160\' fill=\'%233d6e60\'/><circle cx=\'80\' cy=\'80\' r=\'40\' fill=\'%237eb8a4\'/><text x=\'80\' y=\'100\' text-anchor=\'middle\' fill=\'%2309090a\' font-size=\'30\' font-family=\'monospace\'>S</text></svg>'">
+            <div style="flex: 1;">
+              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+                <span style="font-size: 22px; color: #d4d0dc; font-family: var(--display);">${data.sputnik.name}</span>
+                <span class="badge badge-ai" style="font-size: 10px; padding: 4px 10px;">${data.sputnik.type}</span>
+                <span class="badge badge-act" style="font-size: 10px; padding: 4px 10px;">${data.sputnik.status}</span>
+              </div>
+              <div style="color: var(--text); font-size: 13px; line-height: 1.8;">${data.sputnik.description}</div>
+            </div>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 3px;">
+            <div><span class="stat-label" style="font-size: 9px;">Батарея</span><div style="color: var(--accent); font-size: 16px;">${data.sputnik.battery}</div></div>
+            <div><span class="stat-label" style="font-size: 9px;">Время полёта</span><div style="color: var(--accent); font-size: 16px;">${data.sputnik.flight_time}</div></div>
+          </div>
+          
+          <div>
+            <span class="stat-label" style="font-size: 9px;">Особенности</span>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;">
+              ${(data.sputnik.features || []).map(f => `<span class="badge badge-ai" style="font-size: 10px; padding: 4px 10px;">${f}</span>`).join('')}
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
 
       <div class="terminal" style="margin-top: 32px;">
         <div class="t-bar">
