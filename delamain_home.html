@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Деламейн — Офис</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400&family=Martian+Mono:wght@300;400;500&display=swap');
+
+:root {
+  --bg:       #09090a;
+  --surface:  #0f0f11;
+  --border:   #1e1e22;
+  --border2:  #2a2a30;
+  --text:     #b8b4c0;
+  --dim:      #55525e;
+  --accent:   #7eb8a4;
+  --accent2:  #3d6e60;
+  --warn:     #b87e7e;
+  --warn2:    #6e3d3d;
+  --gold:     #c4a86e;
+  --gold2:    #6e5a30;
+  --mono:     'Martian Mono', monospace;
+  --display:  'Unbounded', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.8;
+  font-weight: 300;
+  min-height: 100vh;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.07) 2px,
+    rgba(0,0,0,0.07) 4px
+  );
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 60px 32px 100px;
+}
+
+.header {
+  margin-bottom: 48px;
+  position: relative;
+}
+
+.header-sys {
+  font-size: 10px;
+  color: var(--dim);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-sys::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.status-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+  animation: pulse 2s ease-in-out infinite;
+  display: inline-block;
+  margin-right: 4px;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 6px var(--accent); }
+  50%       { opacity: 0.4; box-shadow: 0 0 2px var(--accent); }
+}
+
+.nav-links {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--dim);
+  text-decoration: none;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  border: 1px solid var(--border);
+  padding: 8px 16px;
+  background: var(--surface);
+  transition: all 0.2s;
+}
+
+.nav-link:hover {
+  border-color: var(--accent2);
+  color: var(--accent);
+}
+
+.nav-link span {
+  color: var(--accent2);
+}
+
+.title-block {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+h1 {
+  font-family: var(--display);
+  font-size: clamp(24px, 4vw, 38px);
+  font-weight: 200;
+  letter-spacing: -0.02em;
+  color: #e8e4f0;
+}
+
+h1 span {
+  color: var(--accent);
+  font-size: 0.6em;
+  margin-right: 12px;
+}
+
+.owner-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 20px;
+  margin-bottom: 30px;
+  border-left: 2px solid var(--accent2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.owner-label {
+  font-size: 10px;
+  color: var(--dim);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.owner-value {
+  font-size: 16px;
+  color: var(--accent);
+  font-family: var(--display);
+}
+
+.description-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 22px;
+  margin-bottom: 30px;
+  border-left: 2px solid var(--gold2);
+}
+
+.description-card p {
+  margin-bottom: 15px;
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+.description-card p:last-child {
+  margin-bottom: 0;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 40px 0 16px;
+}
+
+.section-header h2 {
+  font-family: var(--display);
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--dim);
+  white-space: nowrap;
+}
+
+.section-header::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.section-num {
+  font-size: 9px;
+  color: var(--border2);
+  letter-spacing: 0.1em;
+}
+
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.item-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 18px 20px;
+  border-left: 2px solid var(--accent2);
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.item-name {
+  font-size: 14px;
+  font-weight: 400;
+  color: #d4d0dc;
+  letter-spacing: 0.02em;
+}
+
+.item-quantity {
+  font-size: 12px;
+  color: var(--accent);
+  background: rgba(126,184,164,0.1);
+  border: 1px solid var(--accent2);
+  padding: 2px 8px;
+  border-radius: 2px;
+}
+
+.item-desc {
+  font-size: 12px;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.admin-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 8px 12px;
+  color: var(--dim);
+  text-decoration: none;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  z-index: 1001;
+  transition: all 0.2s;
+}
+
+.admin-btn:hover {
+  border-color: var(--accent2);
+  color: var(--accent);
+}
+
+.footer {
+  margin-top: 60px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: var(--dim);
+  text-transform: uppercase;
+}
+
+@media (max-width: 600px) {
+  .page { padding: 30px 16px 60px; }
+  .items-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="nav-links">
+      <a href="index.html" class="nav-link"><span>←</span> К АНКЕТЕ</a>
+      <a href="delamain_inventory.html" class="nav-link"><span>//</span> ИНВЕНТАРЬ</a>
+      <a href="delamain_vehicle.html" class="nav-link"><span>🚗</span> ТРАНСПОРТ</a>
+    </div>
+    
+    <div class="header-sys">
+      <span class="status-dot"></span>
+      офисное помещение // frodller_registry // доступ: открыт
+    </div>
+    
+    <div class="title-block">
+      <h1><span>//</span> ОФИС</h1>
+      <div style="font-size: 11px; color: var(--dim);">Деламейн // Мэдисон-стрит</div>
+    </div>
+  </div>
+
+  <div id="home-content"></div>
+
+  <div class="footer">
+    <span>DEL // ОФИС v1.0</span>
+    <span>фродллер // обновление: <span id="update-date"></span></span>
+  </div>
+
+</div>
+
+<a href="admin.html" class="admin-btn">⚙️ ADMIN</a>
+
+<script>
+async function loadHomeData() {
+  try {
+    const response = await fetch('data_home.json?' + Date.now());
+    const data = await response.json();
+    
+    document.getElementById('update-date').textContent = data.last_updated || '12.03.2026';
+    
+    document.getElementById('home-content').innerHTML = `
+      <div class="owner-section">
+        <span class="owner-label">Владелец</span>
+        <span class="owner-value">${data.owner}</span>
+      </div>
+
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2>Описание</h2>
+      </div>
+
+      <div class="description-card">
+        ${data.description.map(p => `<p>${p}</p>`).join('')}
+      </div>
+
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2>Что оставлено в офисе</h2>
+      </div>
+
+      <div id="homeItemsContainer" class="items-grid">
+        ${data.items && data.items.length > 0 
+          ? data.items.map(item => `
+              <div class="item-card">
+                <div class="item-header">
+                  <div class="item-name">${item.name}</div>
+                  <div class="item-quantity">${item.quantity}</div>
+                </div>
+                <div class="item-desc">${item.description}</div>
+              </div>
+            `).join('')
+          : '<div class="item-card"><div class="item-desc">Пусто</div></div>'
+        }
+      </div>
+    `;
+  } catch (error) {
+    console.error('Ошибка загрузки данных офиса:', error);
+  }
+}
+
+loadHomeData();
+</script>
+</body>
+</html>

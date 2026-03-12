@@ -536,6 +536,8 @@ textarea {
       <button class="tab-btn active" onclick="switchTab('character')">АНКЕТА</button>
       <button class="tab-btn" onclick="switchTab('inventory')">ИНВЕНТАРЬ</button>
       <button class="tab-btn" onclick="switchTab('sputnik')">СПУТНИК</button>
+      <button class="tab-btn" onclick="switchTab('vehicle')">ТРАНСПОРТ</button>
+      <button class="tab-btn" onclick="switchTab('home')">ОФИС</button>
       <button class="tab-btn" onclick="switchTab('raw')">RAW JSON</button>
     </div>
 
@@ -825,6 +827,133 @@ textarea {
       
       <input type="hidden" id="sputnik_image_size_value" value="300">
     </div>
+
+    <!-- Вкладка: Транспорт -->
+<div id="vehicleTab" class="editor-section">
+  <div class="section-title">// ТРАНСПОРТ</div>
+  
+  <div class="appearance-preview">
+    <div style="text-align: center;">
+      <img src="delamain_vehicle.png" id="vehiclePreviewImage" alt="vehicle" style="width: 400px; height: auto; object-fit: contain; image-rendering: pixelated; border: 1px solid var(--border2); padding: 10px; background: var(--surface); margin-bottom: 10px;" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'200\' viewBox=\'0 0 400 200\'><rect width=\'400\' height=\'200\' fill=\'%233d6e60\'/><rect x=\'50\' y=\'50\' width=\'300\' height=\'100\' fill=\'%237eb8a4\'/><circle cx=\'100\' cy=\'150\' r=\'30\' fill=\'%23333\'/><circle cx=\'300\' cy=\'150\' r=\'30\' fill=\'%23333\'/></svg>'">
+      <div style="color: var(--dim); font-size: 10px;">delamain_vehicle.png</div>
+    </div>
+    <div style="flex: 1;">
+      <div class="form-group" style="margin-bottom: 15px;">
+        <label>Размер изображения (px)</label>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <input type="range" id="vehicle_image_size" min="200" max="600" value="400" step="10" style="flex: 1;" oninput="updateVehicleImageSize(this.value)">
+          <input type="number" id="vehicle_image_size_input" min="200" max="600" value="400" step="10" style="width: 80px;" onchange="updateVehicleImageSizeFromInput(this.value)">
+          <span style="color: var(--dim); font-size: 11px;">px</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="grid-2">
+    <div class="form-group">
+      <label>Название</label>
+      <input type="text" id="vehicle_name" value="V-Prototype">
+    </div>
+    <div class="form-group">
+      <label>Тип</label>
+      <input type="text" id="vehicle_type" value="личное авто // седан">
+    </div>
+  </div>
+  
+  <div class="form-group">
+    <label>Владелец</label>
+    <input type="text" id="vehicle_owner" value="Деламейн">
+  </div>
+  
+  <div class="grid-2">
+    <div class="form-group">
+      <label>Марка</label>
+      <input type="text" id="vehicle_make" value="Villefort">
+    </div>
+    <div class="form-group">
+      <label>Модель</label>
+      <input type="text" id="vehicle_model" value="Alvarado V4F">
+    </div>
+  </div>
+  
+  <div class="grid-2">
+    <div class="form-group">
+      <label>Год</label>
+      <input type="text" id="vehicle_year" value="2075">
+    </div>
+    <div class="form-group">
+      <label>Двигатель</label>
+      <input type="text" id="vehicle_engine" value="электрический // 450 л.с.">
+    </div>
+  </div>
+  
+  <div class="grid-2">
+    <div class="form-group">
+      <label>Привод</label>
+      <input type="text" id="vehicle_drivetrain" value="полный">
+    </div>
+    <div class="form-group">
+      <label>Мощность</label>
+      <input type="text" id="vehicle_power" value="330 кВт">
+    </div>
+  </div>
+  
+  <div class="form-group">
+    <label>Описание (каждый абзац с новой строки)</label>
+    <textarea id="vehicle_description" rows="6">Модифицированный Villefort Alvarado — машина, которую Деламейн оставил для себя. Внешне — почти копия таксопарковых седанов: тёмно-серый кузов, никаких опознавательных знаков, никакой агрессии в линиях. Разница только внутри и под капотом.
+
+Салон — не для пассажиров. Здесь нет второго ряда сидений — только водительское кресло и блок серверного оборудования за ним. Три охлаждаемых контейнера, прямой линк с сетью Олимп, резервный накопитель на 16 Тб. Это мобильный терминал, а не такси.
+
+Двигатель форсирован: 450 лошадиных сил, полный привод, разгон до сотни за 4.2 секунды. Бронестекла, усиленный корпус, колёса на самогерметизирующихся покрышках. Машина не для гонок — для того, чтобы уйти от любой погони.
+
+В салоне всегда тихо. Только гул вентиляторов серверов. Голос Деламейна приходит через динамики — такой же, как в такси. Но здесь он звучит иначе. Свободнее.
+
+«Это не машина. Это моя нога, если мне нужно дотянуться до другого конца города. Только быстрее.»</textarea>
+  </div>
+  
+  <div class="section-title">// ЧТО ОСТАВЛЕНО В МАШИНЕ</div>
+  
+  <div id="vehicleItems" class="item-list">
+    <!-- Сюда будут добавляться предметы динамически -->
+  </div>
+  
+  <button onclick="addVehicleItem()" class="add-item">+ ДОБАВИТЬ ПРЕДМЕТ</button>
+  
+  <input type="hidden" id="vehicle_image_size_value" value="400">
+</div>
+
+<!-- Вкладка: Офис -->
+<div id="homeTab" class="editor-section">
+  <div class="section-title">// ОФИС</div>
+  
+  <div class="form-group">
+    <label>Владелец</label>
+    <input type="text" id="home_owner" value="Деламейн">
+  </div>
+  
+  <div class="form-group">
+    <label>Описание (каждый абзац с новой строки)</label>
+    <textarea id="home_description" rows="8">Офис на Мэдисон-стрит — единственное место во Фродллере, где Деламейн физически присутствует. Двухэтажное здание бывшего таксопарка, перестроенное под нужды искусственного интеллекта, у которого нет нужды в удобствах, но есть потребность в безопасности и стабильности.
+
+Первый этаж — гараж и техническая зона. Шесть зарядных станций, ремонтные дроны, стеллажи с запчастями. Машины заезжают сюда ночью, бесшумно, без фар. Утром выезжают на линию — чистые, заряженные, готовые.
+
+Второй этаж — серверная и «жилая» зона. Три стойки с оборудованием, жидкостное охлаждение, бронированные кожухи. Здесь же — маленькая комната, которую Деламейн называет «гостевой». Диван, стол, старая кофеварка, окно с видом на доки. Никто никогда здесь не ночевал. Но дверь не заперта.
+
+В подвале — дизельный генератор на 340 часов автономной работы, цистерна с топливом, сейф с резервными лентами. И лестница, ведущая в никуда — замурованная ещё при строительстве.
+
+Окна на первом этаже заварены решётками. На втором — просто закрыты. Смотреть всё равно некому. Внутри всегда горит свет — холодный, белый, без теней. В коридорах тихо. Только гул вентиляторов и редкий щелчок реле.
+
+«Здесь я. Не в машинах, не в сети. Здесь. Если кому-то понадобится меня найти — достаточно знать адрес. И уметь открывать дверь.»</textarea>
+  </div>
+  
+  <div class="section-title">// ЧТО ОСТАВЛЕНО В ОФИСЕ</div>
+  
+  <div id="homeItems" class="item-list">
+    <!-- Сюда будут добавляться предметы динамически -->
+  </div>
+  
+  <button onclick="addHomeItem()" class="add-item">+ ДОБАВИТЬ ПРЕДМЕТ</button>
+</div>
 
     <!-- Вкладка: Raw JSON -->
     <div id="rawTab" class="editor-section">
