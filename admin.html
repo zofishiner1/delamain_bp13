@@ -2198,7 +2198,6 @@ function collectFormData() {
   const featureCards = document.querySelectorAll('#featuresList .feature-card');
   featureCards.forEach(card => {
     const title = card.querySelector('.feature-title')?.value || '';
-    // !!! ИСПРАВЛЕНО: Был класс .feature-desc, ставим правильный !!!
     const description = card.querySelector('.feature-desc')?.value || '';
     if (title) {
       features.push({ title, description });
@@ -2210,14 +2209,15 @@ function collectFormData() {
   const weaknessCards = document.querySelectorAll('#weaknessesList .weakness-card');
   weaknessCards.forEach(card => {
     const title = card.querySelector('.weakness-title')?.value || '';
-    // !!! ИСПРАВЛЕНО: Был класс .weakness-desc, ставим правильный !!!
     const description = card.querySelector('.weakness-desc')?.value || '';
     if (title) {
       weaknesses.push({ title, description });
     }
   });
+  
   const baseData = currentJsonData || {};
   
+  // Формируем итоговый объект
   return {
     ...baseData,
     name: document.getElementById('char_name').value,
@@ -2228,22 +2228,22 @@ function collectFormData() {
     nickname_note: document.getElementById('char_nickname_note').value,
     specialty: document.getElementById('char_specialty').value,
     specialty_note: document.getElementById('char_specialty_note').value,
-    credits: parseInt(document.getElementById('char_credits').value),
-    oo: parseInt(document.getElementById('char_oo').value),
-    os: parseInt(document.getElementById('char_os').value),
+    credits: parseInt(document.getElementById('char_credits').value) || 0,
+    oo: parseInt(document.getElementById('char_oo').value) || 0,
+    os: parseInt(document.getElementById('char_os').value) || 0,
     extra_status: document.getElementById('char_extra_status').value,
+    last_updated: document.getElementById('last_updated').value,
     last_updated_time: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
-    last_updated_time: document.getElementById('last_updated_time').value,
     
     reputation: {
-      global: parseInt(document.getElementById('rep_global').value),
+      global: parseInt(document.getElementById('rep_global').value) || 0,
       organizations: {
-        'WAR Corp': parseInt(document.getElementById('rep_war').value),
-        'C.L.': parseInt(document.getElementById('rep_cl').value),
-        'Perfection': parseInt(document.getElementById('rep_perfection').value),
-        'PCU': parseInt(document.getElementById('rep_pcu').value),
-        'RDAC': parseInt(document.getElementById('rep_rdac').value),
-        'KRAKEN': parseInt(document.getElementById('rep_kraken').value)
+        'WAR Corp': parseInt(document.getElementById('rep_war').value) || 0,
+        'C.L.': parseInt(document.getElementById('rep_cl').value) || 0,
+        'Perfection': parseInt(document.getElementById('rep_perfection').value) || 0,
+        'PCU': parseInt(document.getElementById('rep_pcu').value) || 0,
+        'RDAC': parseInt(document.getElementById('rep_rdac').value) || 0,
+        'KRAKEN': parseInt(document.getElementById('rep_kraken').value) || -25
       }
     },
     
@@ -2257,7 +2257,6 @@ function collectFormData() {
     },
     
     inventory: {
-      // !!! ИСПРАВЛЕНО: берем security из автопарка, чтобы данные были консистентны !!!
       security: parseInt(document.getElementById('fleet_security').value) || 87,
       archive_size: document.getElementById('inv_archive_size').value,
       archive_free: document.getElementById('inv_archive_free').value,
@@ -2271,8 +2270,8 @@ function collectFormData() {
     },
     
     fleet: {
-      total: parseInt(document.getElementById('fleet_total').value),
-      security: parseInt(document.getElementById('fleet_security').value),
+      total: parseInt(document.getElementById('fleet_total').value) || 10,
+      security: parseInt(document.getElementById('fleet_security').value) || 87,
       description: document.getElementById('fleet_description').value,
       garage_address: document.getElementById('fleet_garage').value,
       vehicles: currentJsonData.fleet.vehicles
