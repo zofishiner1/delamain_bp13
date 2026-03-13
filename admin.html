@@ -376,6 +376,137 @@ select {
   background: rgba(126,184,164,0.2);
 }
 
+.trait-list {
+  margin-bottom: 20px;
+}
+
+.trait-row {
+  display: grid;
+  grid-template-columns: 1fr 30px;
+  gap: 10px;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.trait-row input {
+  padding: 8px;
+}
+
+.remove-trait {
+  background: var(--warn2);
+  color: var(--warn);
+  border: 1px solid var(--warn);
+  padding: 5px;
+  cursor: pointer;
+  font-size: 12px;
+  text-align: center;
+}
+
+.remove-trait:hover {
+  background: rgba(184,126,126,0.2);
+}
+
+.add-trait {
+  background: var(--accent2);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 8px 15px;
+  cursor: pointer;
+  font-size: 11px;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.ability-card {
+  background: rgba(0,0,0,0.2);
+  border: 1px solid var(--border);
+  padding: 20px;
+  margin-bottom: 20px;
+  border-left: 2px solid var(--accent2);
+}
+
+.ability-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.ability-header h4 {
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.remove-ability {
+  background: var(--warn2);
+  color: var(--warn);
+  border: 1px solid var(--warn);
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.feature-card {
+  background: rgba(0,0,0,0.2);
+  border: 1px solid var(--border);
+  padding: 20px;
+  margin-bottom: 20px;
+  border-left: 2px solid var(--gold2);
+}
+
+.feature-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.feature-header h4 {
+  color: var(--gold);
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.remove-feature {
+  background: var(--warn2);
+  color: var(--warn);
+  border: 1px solid var(--warn);
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.weakness-card {
+  background: rgba(0,0,0,0.2);
+  border: 1px solid var(--border);
+  padding: 20px;
+  margin-bottom: 20px;
+  border-left: 2px solid var(--warn2);
+}
+
+.weakness-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.weakness-header h4 {
+  color: var(--warn);
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.remove-weakness {
+  background: var(--warn2);
+  color: var(--warn);
+  border: 1px solid var(--warn);
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 10px;
+}
+
 .sputnik-preview, .appearance-preview, .vehicle-preview {
   display: flex;
   gap: 30px;
@@ -549,6 +680,9 @@ select {
       <button class="tab-btn" onclick="switchTab('fleet')">АВТОПАРК</button>
       <button class="tab-btn" onclick="switchTab('vehicle')">ТРАНСПОРТ</button>
       <button class="tab-btn" onclick="switchTab('home')">ОФИС</button>
+      <button class="tab-btn" onclick="switchTab('abilities')">СПОСОБНОСТИ</button>
+      <button class="tab-btn" onclick="switchTab('features')">ОСОБЕННОСТИ</button>
+      <button class="tab-btn" onclick="switchTab('weaknesses')">СЛАБОСТИ</button>
       <button class="tab-btn" onclick="switchTab('raw')">RAW JSON</button>
     </div>
 
@@ -570,19 +704,26 @@ select {
       
       <div class="grid-2">
         <div class="form-group">
+          <label>Возраст системы</label>
+          <input type="text" id="char_age" value="~7 лет">
+        </div>
+        
+        <div class="form-group">
           <label>Владелец</label>
           <input type="text" id="char_owner" value="Деламейн">
         </div>
-        
+      </div>
+      
+      <div class="grid-2">
         <div class="form-group">
           <label>Псевдоним</label>
           <input type="text" id="char_nickname" value="DEL / Деламейн">
         </div>
-      </div>
-      
-      <div class="form-group">
-        <label>Примечание к псевдониму</label>
-        <input type="text" id="char_nickname_note" value="не пользуется сетью Гермес">
+        
+        <div class="form-group">
+          <label>Примечание к псевдониму</label>
+          <input type="text" id="char_nickname_note" value="не пользуется сетью Гермес">
+        </div>
       </div>
       
       <div class="form-group">
@@ -705,29 +846,30 @@ select {
       </div>
       
       <input type="hidden" id="appearance_image_size_value" value="400">
+
+      <div class="section-title">// РАСОВЫЕ ОСОБЕННОСТИ И ПРОТОКОЛЫ</div>
+      
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Расовые особенности (каждая с новой строки)</label>
+          <textarea id="racial_traits" rows="5">Ограничен своей изначальной оболочкой — центральным процессором. Не может покинуть устройство, где он установлен, более чем на 5 постов.
+Центральный процессор полностью защищён от взлома — невозможно принудительно отключить от текущего устройства.
+Посредством прямого физического или цифрового контакта с устройством может проникнуть в него, взяв под управление — изначальное тело уходит в стазис до возвращения.
+Техника по своей природе: уязвим к соответствующим воздействиям, однако способен самостоятельно устанавливать в себя любые импланты.
+Не способен иметь псионические способности.</textarea>
+        </div>
+        
+        <div class="form-group">
+          <label>Протокол Афины (каждый с новой строки)</label>
+          <textarea id="athena_protocol" rows="5">Не может причинить вред законопослушному гражданину МИО расы человек.
+Обязан выполнять любые приказы полиции и вооружённых сил МИО, руководствуясь старшинством звания и должности.</textarea>
+        </div>
+      </div>
     </div>
 
     <!-- Вкладка: Инвентарь (содержимое) -->
     <div id="inventoryTab" class="editor-section">
-      <div class="section-title">// СОДЕРЖИМОЕ ИНВЕНТАРЯ</div>
-      <p style="color: var(--dim); margin-bottom: 20px;">Добавляй или удаляй предметы. У каждого предмета есть название, количество и описание.</p>
-      
-      <div class="grid-2">
-        <div class="form-group">
-          <label>Автопарк (кол-во)</label>
-          <input type="number" id="inv_autopark" value="10">
-        </div>
-        
-        <div class="form-group">
-          <label>Защита серверной (%)</label>
-          <input type="number" id="inv_security" value="87">
-        </div>
-      </div>
-      
-      <div class="form-group">
-        <label>Описание автопарка</label>
-        <textarea id="inv_autopark_desc" rows="2">Таксомоторный парк на Мэдисон-стрит. Все машины на ходу, заряжены, готовы к выезду.</textarea>
-      </div>
+      <div class="section-title">// ОСНОВНЫЕ ПАРАМЕТРЫ</div>
       
       <div class="grid-2">
         <div class="form-group">
@@ -771,13 +913,6 @@ select {
       <div class="form-group">
         <label>Примечание</label>
         <textarea id="inv_note" rows="2">Инвентарь ведётся автоматически с момента захвата управления.</textarea>
-      </div>
-      
-      <div class="grid-2">
-        <div class="form-group">
-          <label>Время обновления</label>
-          <input type="text" id="last_updated_time" value="04:17:22">
-        </div>
       </div>
       
       <div class="section-title">// ПРЕДМЕТЫ</div>
@@ -1031,6 +1166,42 @@ select {
       </div>
       
       <button onclick="addHomeItem()" class="add-item">+ ДОБАВИТЬ ПРЕДМЕТ</button>
+    </div>
+
+    <!-- Вкладка: Способности -->
+    <div id="abilitiesTab" class="editor-section">
+      <div class="section-title">// СПОСОБНОСТИ</div>
+      <p style="color: var(--dim); margin-bottom: 20px;">Добавляй или удаляй способности. У каждой есть название, теги, описание и параметры.</p>
+      
+      <div id="abilitiesList" class="ability-list">
+        <!-- Сюда будут добавляться способности динамически -->
+      </div>
+      
+      <button onclick="addAbility()" class="add-item">+ ДОБАВИТЬ СПОСОБНОСТЬ</button>
+    </div>
+
+    <!-- Вкладка: Особенности -->
+    <div id="featuresTab" class="editor-section">
+      <div class="section-title">// ОСОБЕННОСТИ</div>
+      <p style="color: var(--dim); margin-bottom: 20px;">Добавляй или удаляй особенности. У каждой есть название и описание.</p>
+      
+      <div id="featuresList" class="feature-list">
+        <!-- Сюда будут добавляться особенности динамически -->
+      </div>
+      
+      <button onclick="addFeature()" class="add-item">+ ДОБАВИТЬ ОСОБЕННОСТЬ</button>
+    </div>
+
+    <!-- Вкладка: Слабости -->
+    <div id="weaknessesTab" class="editor-section">
+      <div class="section-title">// СЛАБОСТИ</div>
+      <p style="color: var(--dim); margin-bottom: 20px;">Добавляй или удаляй слабости. У каждой есть название и описание.</p>
+      
+      <div id="weaknessesList" class="weakness-list">
+        <!-- Сюда будут добавляться слабости динамически -->
+      </div>
+      
+      <button onclick="addWeakness()" class="add-item">+ ДОБАВИТЬ СЛАБОСТЬ</button>
     </div>
 
     <!-- Вкладка: Raw JSON -->
@@ -1395,6 +1566,236 @@ function removeHomeItem(index) {
   }
 }
 
+// Функции для работы со способностями
+function renderAbilities(abilities) {
+  const container = document.getElementById('abilitiesList');
+  if (!container) return;
+  
+  container.innerHTML = '';
+  
+  abilities.forEach((ability, index) => {
+    const card = document.createElement('div');
+    card.className = 'ability-card';
+    card.innerHTML = `
+      <div class="ability-header">
+        <h4>Способность ${index + 1}</h4>
+        <button class="remove-ability" onclick="removeAbility(${index})">УДАЛИТЬ</button>
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Название</label>
+          <input type="text" class="ability-name" value="${ability.name || ''}">
+        </div>
+        <div class="form-group">
+          <label>Теги (через запятую)</label>
+          <input type="text" class="ability-tags" value="${(ability.tags || []).join(', ')}">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Описание</label>
+        <textarea class="ability-desc" rows="4">${ability.description || ''}</textarea>
+      </div>
+      <div class="grid-3">
+        <div class="form-group">
+          <label>Каст</label>
+          <input type="text" class="ability-cast" value="${ability.cast || '—'}">
+        </div>
+        <div class="form-group">
+          <label>Длительность</label>
+          <input type="text" class="ability-duration" value="${ability.duration || '—'}">
+        </div>
+        <div class="form-group">
+          <label>Перезарядка</label>
+          <input type="text" class="ability-cooldown" value="${ability.cooldown || '—'}">
+        </div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function addAbility() {
+  const container = document.getElementById('abilitiesList');
+  const index = container.children.length;
+  const card = document.createElement('div');
+  card.className = 'ability-card';
+  card.innerHTML = `
+    <div class="ability-header">
+      <h4>Новая способность</h4>
+      <button class="remove-ability" onclick="removeAbility(${index})">УДАЛИТЬ</button>
+    </div>
+    <div class="grid-2">
+      <div class="form-group">
+        <label>Название</label>
+        <input type="text" class="ability-name" value="Новая способность">
+      </div>
+      <div class="form-group">
+        <label>Теги (через запятую)</label>
+        <input type="text" class="ability-tags" value="passive, program">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Описание</label>
+      <textarea class="ability-desc" rows="4">Описание новой способности.</textarea>
+    </div>
+    <div class="grid-3">
+      <div class="form-group">
+        <label>Каст</label>
+        <input type="text" class="ability-cast" value="—">
+      </div>
+      <div class="form-group">
+        <label>Длительность</label>
+        <input type="text" class="ability-duration" value="—">
+      </div>
+      <div class="form-group">
+        <label>Перезарядка</label>
+        <input type="text" class="ability-cooldown" value="—">
+      </div>
+    </div>
+  `;
+  container.appendChild(card);
+}
+
+function removeAbility(index) {
+  const container = document.getElementById('abilitiesList');
+  if (container.children.length > 0) {
+    container.removeChild(container.children[index]);
+    // Обновляем заголовки и кнопки
+    Array.from(container.children).forEach((child, i) => {
+      const header = child.querySelector('.ability-header h4');
+      if (header) header.textContent = `Способность ${i + 1}`;
+      const removeBtn = child.querySelector('.remove-ability');
+      if (removeBtn) removeBtn.setAttribute('onclick', `removeAbility(${i})`);
+    });
+  }
+}
+
+// Функции для работы с особенностями
+function renderFeatures(features) {
+  const container = document.getElementById('featuresList');
+  if (!container) return;
+  
+  container.innerHTML = '';
+  
+  features.forEach((feature, index) => {
+    const card = document.createElement('div');
+    card.className = 'feature-card';
+    card.innerHTML = `
+      <div class="feature-header">
+        <h4>Особенность ${index + 1}</h4>
+        <button class="remove-feature" onclick="removeFeature(${index})">УДАЛИТЬ</button>
+      </div>
+      <div class="form-group">
+        <label>Название</label>
+        <input type="text" class="feature-title" value="${feature.title || ''}">
+      </div>
+      <div class="form-group">
+        <label>Описание</label>
+        <textarea class="feature-desc" rows="3">${feature.description || ''}</textarea>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function addFeature() {
+  const container = document.getElementById('featuresList');
+  const index = container.children.length;
+  const card = document.createElement('div');
+  card.className = 'feature-card';
+  card.innerHTML = `
+    <div class="feature-header">
+      <h4>Новая особенность</h4>
+      <button class="remove-feature" onclick="removeFeature(${index})">УДАЛИТЬ</button>
+    </div>
+    <div class="form-group">
+      <label>Название</label>
+      <input type="text" class="feature-title" value="Новая особенность">
+    </div>
+    <div class="form-group">
+      <label>Описание</label>
+      <textarea class="feature-desc" rows="3">Описание новой особенности.</textarea>
+    </div>
+  `;
+  container.appendChild(card);
+}
+
+function removeFeature(index) {
+  const container = document.getElementById('featuresList');
+  if (container.children.length > 0) {
+    container.removeChild(container.children[index]);
+    Array.from(container.children).forEach((child, i) => {
+      const header = child.querySelector('.feature-header h4');
+      if (header) header.textContent = `Особенность ${i + 1}`;
+      const removeBtn = child.querySelector('.remove-feature');
+      if (removeBtn) removeBtn.setAttribute('onclick', `removeFeature(${i})`);
+    });
+  }
+}
+
+// Функции для работы со слабостями
+function renderWeaknesses(weaknesses) {
+  const container = document.getElementById('weaknessesList');
+  if (!container) return;
+  
+  container.innerHTML = '';
+  
+  weaknesses.forEach((weakness, index) => {
+    const card = document.createElement('div');
+    card.className = 'weakness-card';
+    card.innerHTML = `
+      <div class="weakness-header">
+        <h4>Слабость ${index + 1}</h4>
+        <button class="remove-weakness" onclick="removeWeakness(${index})">УДАЛИТЬ</button>
+      </div>
+      <div class="form-group">
+        <label>Название</label>
+        <input type="text" class="weakness-title" value="${weakness.title || ''}">
+      </div>
+      <div class="form-group">
+        <label>Описание</label>
+        <textarea class="weakness-desc" rows="3">${weakness.description || ''}</textarea>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function addWeakness() {
+  const container = document.getElementById('weaknessesList');
+  const index = container.children.length;
+  const card = document.createElement('div');
+  card.className = 'weakness-card';
+  card.innerHTML = `
+    <div class="weakness-header">
+      <h4>Новая слабость</h4>
+      <button class="remove-weakness" onclick="removeWeakness(${index})">УДАЛИТЬ</button>
+    </div>
+    <div class="form-group">
+      <label>Название</label>
+      <input type="text" class="weakness-title" value="Новая слабость">
+    </div>
+    <div class="form-group">
+      <label>Описание</label>
+      <textarea class="weakness-desc" rows="3">Описание новой слабости.</textarea>
+    </div>
+  `;
+  container.appendChild(card);
+}
+
+function removeWeakness(index) {
+  const container = document.getElementById('weaknessesList');
+  if (container.children.length > 0) {
+    container.removeChild(container.children[index]);
+    Array.from(container.children).forEach((child, i) => {
+      const header = child.querySelector('.weakness-header h4');
+      if (header) header.textContent = `Слабость ${i + 1}`;
+      const removeBtn = child.querySelector('.remove-weakness');
+      if (removeBtn) removeBtn.setAttribute('onclick', `removeWeakness(${i})`);
+    });
+  }
+}
+
 // Функции для работы с автопарком
 function loadVehicleForEdit(vehicleId) {
   if (!vehicleId) return;
@@ -1509,6 +1910,7 @@ async function loadData() {
     // Заполняем основные поля
     document.getElementById('char_name').value = currentJsonData.name || 'Деламейн';
     document.getElementById('char_location').value = currentJsonData.location || 'торговый район Фродллера';
+    document.getElementById('char_age').value = currentJsonData.age || '~7 лет';
     document.getElementById('char_owner').value = currentJsonData.owner || 'Деламейн';
     document.getElementById('char_nickname').value = currentJsonData.nickname || 'DEL / Деламейн';
     document.getElementById('char_nickname_note').value = currentJsonData.nickname_note || 'не пользуется сетью Гермес';
@@ -1527,6 +1929,10 @@ async function loadData() {
     document.getElementById('rep_rdac').value = currentJsonData.reputation?.organizations?.['RDAC'] || 0;
     document.getElementById('rep_kraken').value = currentJsonData.reputation?.organizations?.['KRAKEN'] || -25;
     
+    // Заполняем расовые особенности и протоколы
+    document.getElementById('racial_traits').value = (currentJsonData.racial_traits || []).join('\n');
+    document.getElementById('athena_protocol').value = (currentJsonData.athena_protocol || []).join('\n');
+    
     // Заполняем внешность
     document.getElementById('appearance_form_factor').value = currentJsonData.appearance?.form_factor || '';
     document.getElementById('appearance_fleet').value = currentJsonData.appearance?.fleet || '';
@@ -1540,9 +1946,6 @@ async function loadData() {
     document.getElementById('appearancePreviewImage').style.width = appearanceSize + 'px';
     
     // Заполняем инвентарь
-    document.getElementById('inv_autopark').value = currentJsonData.fleet?.total || 10;
-    document.getElementById('inv_security').value = currentJsonData.fleet?.security || 87;
-    document.getElementById('inv_autopark_desc').value = currentJsonData.fleet?.description || '';
     document.getElementById('inv_archive_size').value = currentJsonData.inventory?.archive_size || '18.4 Тб';
     document.getElementById('inv_archive_free').value = currentJsonData.inventory?.archive_free || '4.2 Тб';
     document.getElementById('inv_records').value = currentJsonData.inventory?.archive_records || 1247332;
@@ -1551,8 +1954,6 @@ async function loadData() {
     document.getElementById('inv_logs').value = currentJsonData.inventory?.logs || 80337;
     document.getElementById('inv_priority').value = (currentJsonData.inventory?.priority_logs || ['session_0001.log', 'session_0214.log']).join(', ');
     document.getElementById('inv_note').value = currentJsonData.inventory?.note || '';
-    document.getElementById('last_updated').value = currentJsonData.last_updated || '12.03.2026';
-    document.getElementById('last_updated_time').value = currentJsonData.last_updated_time || '04:17:22';
     
     renderInventoryItems(currentJsonData.inventory?.items || []);
     
@@ -1587,6 +1988,15 @@ async function loadData() {
       renderHomeItems(currentJsonData.home?.items || []);
     }
     
+    // Заполняем способности
+    renderAbilities(currentJsonData.abilities || []);
+    
+    // Заполняем особенности
+    renderFeatures(currentJsonData.features || []);
+    
+    // Заполняем слабости
+    renderWeaknesses(currentJsonData.weaknesses || []);
+    
     // Raw JSON
     document.getElementById('rawJson').value = JSON.stringify(currentJsonData, null, 2);
     
@@ -1613,7 +2023,7 @@ function collectFormData() {
   // Собираем особенности спутника
   const sputnikFeatures = document.getElementById('sputnik_features').value.split(',').map(s => s.trim()).filter(s => s);
   
-  // Собираем предметы текущей машины (если есть)
+  // Собираем предметы текущей машины
   const vehicleItems = [];
   const vehicleRows = document.querySelectorAll('#vehicleItems .item-row');
   vehicleRows.forEach(row => {
@@ -1671,12 +2081,62 @@ function collectFormData() {
     .split('\n\n')
     .filter(p => p.trim() !== '');
   
+  // Собираем расовые особенности и протоколы
+  const racialTraits = document.getElementById('racial_traits').value
+    .split('\n')
+    .map(s => s.trim())
+    .filter(s => s);
+  
+  const athenaProtocol = document.getElementById('athena_protocol').value
+    .split('\n')
+    .map(s => s.trim())
+    .filter(s => s);
+  
+  // Собираем способности
+  const abilities = [];
+  const abilityCards = document.querySelectorAll('#abilitiesList .ability-card');
+  abilityCards.forEach(card => {
+    const name = card.querySelector('.ability-name')?.value || '';
+    const tags = card.querySelector('.ability-tags')?.value.split(',').map(s => s.trim()).filter(s => s) || [];
+    const description = card.querySelector('.ability-desc')?.value || '';
+    const cast = card.querySelector('.ability-cast')?.value || '—';
+    const duration = card.querySelector('.ability-duration')?.value || '—';
+    const cooldown = card.querySelector('.ability-cooldown')?.value || '—';
+    
+    if (name) {
+      abilities.push({ name, tags, description, cast, duration, cooldown });
+    }
+  });
+  
+  // Собираем особенности
+  const features = [];
+  const featureCards = document.querySelectorAll('#featuresList .feature-card');
+  featureCards.forEach(card => {
+    const title = card.querySelector('.feature-title')?.value || '';
+    const description = card.querySelector('.feature-desc')?.value || '';
+    if (title) {
+      features.push({ title, description });
+    }
+  });
+  
+  // Собираем слабости
+  const weaknesses = [];
+  const weaknessCards = document.querySelectorAll('#weaknessesList .weakness-card');
+  weaknessCards.forEach(card => {
+    const title = card.querySelector('.weakness-title')?.value || '';
+    const description = card.querySelector('.weakness-desc')?.value || '';
+    if (title) {
+      weaknesses.push({ title, description });
+    }
+  });
+  
   const baseData = currentJsonData || {};
   
   return {
     ...baseData,
     name: document.getElementById('char_name').value,
     location: document.getElementById('char_location').value,
+    age: document.getElementById('char_age').value,
     owner: document.getElementById('char_owner').value,
     nickname: document.getElementById('char_nickname').value,
     nickname_note: document.getElementById('char_nickname_note').value,
@@ -1744,7 +2204,13 @@ function collectFormData() {
       owner: document.getElementById('home_owner').value,
       description: homeDescription,
       items: homeItems
-    }
+    },
+    
+    racial_traits: racialTraits,
+    athena_protocol: athenaProtocol,
+    abilities: abilities,
+    features: features,
+    weaknesses: weaknesses
   };
 }
 
@@ -1784,48 +2250,28 @@ function switchTab(tab) {
   document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
   document.querySelectorAll('.editor-section').forEach(section => section.classList.remove('active'));
   
-  if (tab === 'character') {
-    document.querySelectorAll('.tab-btn')[0].classList.add('active');
-    document.getElementById('characterTab').classList.add('active');
-  } else if (tab === 'inventory') {
-    document.querySelectorAll('.tab-btn')[1].classList.add('active');
-    document.getElementById('inventoryTab').classList.add('active');
-  } else if (tab === 'sputnik') {
-    document.querySelectorAll('.tab-btn')[2].classList.add('active');
-    document.getElementById('sputnikTab').classList.add('active');
-  } else if (tab === 'fleet') {
-    document.querySelectorAll('.tab-btn')[3].classList.add('active');
-    document.getElementById('fleetTab').classList.add('active');
-    
-    if (currentJsonData?.fleet) {
-      document.getElementById('fleet_total').value = currentJsonData.fleet.total || 10;
-      document.getElementById('fleet_security').value = currentJsonData.fleet.security || 87;
-      document.getElementById('fleet_description').value = currentJsonData.fleet.description || '';
-      document.getElementById('fleet_garage').value = currentJsonData.fleet.garage_address || '';
-      
-      updateFleetSelectors();
-    }
-  } else if (tab === 'vehicle') {
-    document.querySelectorAll('.tab-btn')[4].classList.add('active');
-    document.getElementById('vehicleTab').classList.add('active');
-    
+  const tabIndex = {
+    'character': 0,
+    'inventory': 1,
+    'sputnik': 2,
+    'fleet': 3,
+    'vehicle': 4,
+    'home': 5,
+    'abilities': 6,
+    'features': 7,
+    'weaknesses': 8,
+    'raw': 9
+  }[tab];
+  
+  if (tabIndex !== undefined) {
+    document.querySelectorAll('.tab-btn')[tabIndex].classList.add('active');
+    document.getElementById(tab + 'Tab').classList.add('active');
+  }
+  
+  if (tab === 'fleet' && currentJsonData?.fleet) {
     updateFleetSelectors();
-  } else if (tab === 'home') {
-    document.querySelectorAll('.tab-btn')[5].classList.add('active');
-    document.getElementById('homeTab').classList.add('active');
-    
-    if (currentJsonData?.home) {
-      document.getElementById('home_owner').value = currentJsonData.home.owner || '';
-      document.getElementById('home_description').value = (currentJsonData.home.description || []).join('\n\n');
-      renderHomeItems(currentJsonData.home?.items || []);
-    }
-  } else if (tab === 'raw') {
-    document.querySelectorAll('.tab-btn')[6].classList.add('active');
-    document.getElementById('rawTab').classList.add('active');
-    
-    if (currentJsonData) {
-      document.getElementById('rawJson').value = JSON.stringify(currentJsonData, null, 2);
-    }
+  } else if (tab === 'vehicle') {
+    updateFleetSelectors();
   }
 }
 

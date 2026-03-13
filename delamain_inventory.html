@@ -97,11 +97,17 @@ body::before {
   50%       { opacity: 0.4; box-shadow: 0 0 2px var(--accent); }
 }
 
-.back-link {
+.nav-links {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.nav-link {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 24px;
   color: var(--dim);
   text-decoration: none;
   font-size: 11px;
@@ -112,12 +118,12 @@ body::before {
   transition: all 0.2s;
 }
 
-.back-link:hover {
+.nav-link:hover {
   border-color: var(--accent2);
   color: var(--accent);
 }
 
-.back-link span {
+.nav-link span {
   color: var(--accent2);
 }
 
@@ -495,9 +501,12 @@ h1 span {
 <div class="page">
 
   <div class="header">
-    <a href="index.html" class="back-link">
-      <span>←</span> К АНКЕТЕ
-    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link"><span>←</span> К АНКЕТЕ</a>
+      <a href="delamain_fleet.html" class="nav-link"><span>🚙</span> АВТОПАРК</a>
+      <a href="delamain_vehicle.html?id=v001" class="nav-link"><span>🚗</span> МОЯ МАШИНА</a>
+      <a href="delamain_home.html" class="nav-link"><span>🏠</span> ОФИС</a>
+    </div>
     
     <div class="header-sys">
       <span class="status-dot"></span>
@@ -597,8 +606,8 @@ async function loadInventoryData() {
         </div>
         <div class="t-body">
           <span class="line c-sys">[СИСТЕМА] Загружен реестр материальных активов</span>
-          <span class="line c-dim">[СТАТУС] Автопарк: ${data.inventory.autopark}/10 ед. в рабочем состоянии</span>
-          <span class="line c-dim">[СТАТУС] Серверная: защита ${data.inventory.security}%</span>
+          <span class="line c-dim">[СТАТУС] Автопарк: ${data.fleet.total}/10 ед. в рабочем состоянии</span>
+          <span class="line c-dim">[СТАТУС] Серверная: защита ${data.fleet.security}%</span>
           <span class="line c-sys">[ПОСЛЕДНЕЕ ОБНОВЛЕНИЕ] ${data.last_updated || '12.03.2026'} ${data.last_updated_time || '04:17:22'}</span>
         </div>
       </div>
@@ -612,10 +621,11 @@ async function loadInventoryData() {
         <div class="item-card accent">
           <div class="item-header">
             <div class="item-name">Единицы автопарка</div>
-            <div class="item-quantity">${data.inventory.autopark}</div>
+            <div class="item-quantity">${data.fleet.total}</div>
           </div>
           <div class="item-type">транспорт</div>
-          <div class="item-desc">${data.inventory.autopark_desc}</div>
+          <div class="item-desc">${data.fleet.description}</div>
+          <div style="margin-top: 8px; font-size: 10px; color: var(--accent2);">📍 ${data.fleet.garage_address}</div>
         </div>
       </div>
 
