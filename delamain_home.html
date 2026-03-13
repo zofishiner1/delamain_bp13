@@ -344,7 +344,7 @@ h1 span {
 <script>
 async function loadHomeData() {
   try {
-    const response = await fetch('data_home.json?' + Date.now());
+    const response = await fetch('data_character.json?' + Date.now());
     const data = await response.json();
     
     document.getElementById('update-date').textContent = data.last_updated || '12.03.2026';
@@ -352,7 +352,7 @@ async function loadHomeData() {
     document.getElementById('home-content').innerHTML = `
       <div class="owner-section">
         <span class="owner-label">Владелец</span>
-        <span class="owner-value">${data.owner}</span>
+        <span class="owner-value">${data.home.owner}</span>
       </div>
 
       <div class="section-header">
@@ -361,7 +361,7 @@ async function loadHomeData() {
       </div>
 
       <div class="description-card">
-        ${data.description.map(p => `<p>${p}</p>`).join('')}
+        ${data.home.description.map(p => `<p>${p}</p>`).join('')}
       </div>
 
       <div class="section-header">
@@ -370,8 +370,8 @@ async function loadHomeData() {
       </div>
 
       <div id="homeItemsContainer" class="items-grid">
-        ${data.items && data.items.length > 0 
-          ? data.items.map(item => `
+        ${data.home.items && data.home.items.length > 0 
+          ? data.home.items.map(item => `
               <div class="item-card">
                 <div class="item-header">
                   <div class="item-name">${item.name}</div>

@@ -381,7 +381,7 @@ h1 span {
 <script>
 async function loadVehicleData() {
   try {
-    const response = await fetch('data_vehicle.json?' + Date.now());
+    const response = await fetch('data_character.json?' + Date.now());
     const data = await response.json();
     
     document.getElementById('update-date').textContent = data.last_updated || '12.03.2026';
@@ -389,41 +389,41 @@ async function loadVehicleData() {
     document.getElementById('vehicle-content').innerHTML = `
       <div class="vehicle-card">
         <div class="vehicle-image">
-          <img src="${data.image}" alt="${data.name}" style="width: ${data.image_size || 400}px; image-rendering: pixelated;" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'200\' viewBox=\'0 0 400 200\'><rect width=\'400\' height=\'200\' fill=\'%233d6e60\'/><rect x=\'50\' y=\'50\' width=\'300\' height=\'100\' fill=\'%237eb8a4\'/><circle cx=\'100\' cy=\'150\' r=\'30\' fill=\'%23333\'/><circle cx=\'300\' cy=\'150\' r=\'30\' fill=\'%23333\'/></svg>'">
+          <img src="${data.vehicle.image}" alt="${data.vehicle.name}" style="width: ${data.vehicle.image_size || 400}px; image-rendering: pixelated;" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'200\' viewBox=\'0 0 400 200\'><rect width=\'400\' height=\'200\' fill=\'%233d6e60\'/><rect x=\'50\' y=\'50\' width=\'300\' height=\'100\' fill=\'%237eb8a4\'/><circle cx=\'100\' cy=\'150\' r=\'30\' fill=\'%23333\'/><circle cx=\'300\' cy=\'150\' r=\'30\' fill=\'%23333\'/></svg>'">
         </div>
         
         <div style="margin-bottom: 20px;">
           <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
-            <span style="font-size: 22px; color: #d4d0dc; font-family: var(--display);">${data.name}</span>
-            <span class="badge badge-ai" style="font-size: 10px; padding: 4px 10px;">${data.type}</span>
+            <span style="font-size: 22px; color: #d4d0dc; font-family: var(--display);">${data.vehicle.name}</span>
+            <span class="badge badge-ai" style="font-size: 10px; padding: 4px 10px; background: rgba(126,184,164,0.1); border: 1px solid var(--accent2); color: var(--accent);">${data.vehicle.type}</span>
           </div>
-          <div style="color: var(--dim); font-size: 11px;">Владелец: ${data.owner}</div>
+          <div style="color: var(--dim); font-size: 11px;">Владелец: ${data.vehicle.owner}</div>
         </div>
         
         <div class="vehicle-specs">
           <div class="spec-item">
             <span class="spec-label">Марка</span>
-            <span class="spec-value">${data.make}</span>
+            <span class="spec-value">${data.vehicle.make}</span>
           </div>
           <div class="spec-item">
             <span class="spec-label">Модель</span>
-            <span class="spec-value">${data.model}</span>
+            <span class="spec-value">${data.vehicle.model}</span>
           </div>
           <div class="spec-item">
             <span class="spec-label">Год</span>
-            <span class="spec-value">${data.year}</span>
+            <span class="spec-value">${data.vehicle.year}</span>
           </div>
           <div class="spec-item">
             <span class="spec-label">Двигатель</span>
-            <span class="spec-value">${data.engine}</span>
+            <span class="spec-value">${data.vehicle.engine}</span>
           </div>
           <div class="spec-item">
             <span class="spec-label">Привод</span>
-            <span class="spec-value">${data.drivetrain}</span>
+            <span class="spec-value">${data.vehicle.drivetrain}</span>
           </div>
           <div class="spec-item">
             <span class="spec-label">Мощность</span>
-            <span class="spec-value">${data.power}</span>
+            <span class="spec-value">${data.vehicle.power}</span>
           </div>
         </div>
       </div>
@@ -434,7 +434,7 @@ async function loadVehicleData() {
       </div>
 
       <div class="description-card">
-        ${data.description.map(p => `<p>${p}</p>`).join('')}
+        ${data.vehicle.description.map(p => `<p>${p}</p>`).join('')}
       </div>
 
       <div class="section-header">
@@ -443,8 +443,8 @@ async function loadVehicleData() {
       </div>
 
       <div id="vehicleItemsContainer" class="items-grid">
-        ${data.items && data.items.length > 0 
-          ? data.items.map(item => `
+        ${data.vehicle.items && data.vehicle.items.length > 0 
+          ? data.vehicle.items.map(item => `
               <div class="item-card">
                 <div class="item-header">
                   <div class="item-name">${item.name}</div>
