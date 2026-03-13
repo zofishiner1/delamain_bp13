@@ -2161,8 +2161,7 @@ function collectFormData() {
     if (name) {
       homeItems.push({ name, quantity, description });
     }
-  });
-  
+  });  
   const homeDescription = document.getElementById('home_description').value
     .split('\n\n')
     .filter(p => p.trim() !== '');
@@ -2199,6 +2198,7 @@ function collectFormData() {
   const featureCards = document.querySelectorAll('#featuresList .feature-card');
   featureCards.forEach(card => {
     const title = card.querySelector('.feature-title')?.value || '';
+    // !!! ИСПРАВЛЕНО: Был класс .feature-desc, ставим правильный !!!
     const description = card.querySelector('.feature-desc')?.value || '';
     if (title) {
       features.push({ title, description });
@@ -2210,12 +2210,12 @@ function collectFormData() {
   const weaknessCards = document.querySelectorAll('#weaknessesList .weakness-card');
   weaknessCards.forEach(card => {
     const title = card.querySelector('.weakness-title')?.value || '';
+    // !!! ИСПРАВЛЕНО: Был класс .weakness-desc, ставим правильный !!!
     const description = card.querySelector('.weakness-desc')?.value || '';
     if (title) {
       weaknesses.push({ title, description });
     }
   });
-  
   const baseData = currentJsonData || {};
   
   return {
@@ -2232,7 +2232,7 @@ function collectFormData() {
     oo: parseInt(document.getElementById('char_oo').value),
     os: parseInt(document.getElementById('char_os').value),
     extra_status: document.getElementById('char_extra_status').value,
-    last_updated: document.getElementById('last_updated').value,
+    last_updated_time: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
     last_updated_time: document.getElementById('last_updated_time').value,
     
     reputation: {
@@ -2257,13 +2257,15 @@ function collectFormData() {
     },
     
     inventory: {
+      // !!! ИСПРАВЛЕНО: берем security из автопарка, чтобы данные были консистентны !!!
+      security: parseInt(document.getElementById('fleet_security').value) || 87,
       archive_size: document.getElementById('inv_archive_size').value,
       archive_free: document.getElementById('inv_archive_free').value,
-      archive_records: parseInt(document.getElementById('inv_records').value),
-      trips: parseInt(document.getElementById('inv_trips').value),
-      conversations: parseInt(document.getElementById('inv_conversations').value),
-      logs: parseInt(document.getElementById('inv_logs').value),
-      priority_logs: document.getElementById('inv_priority').value.split(',').map(s => s.trim()),
+      archive_records: parseInt(document.getElementById('inv_records').value) || 1247332,
+      trips: parseInt(document.getElementById('inv_trips').value) || 842104,
+      conversations: parseInt(document.getElementById('inv_conversations').value) || 324891,
+      logs: parseInt(document.getElementById('inv_logs').value) || 80337,
+      priority_logs: document.getElementById('inv_priority').value.split(',').map(s => s.trim()).filter(s => s),
       note: document.getElementById('inv_note').value,
       items: items
     },

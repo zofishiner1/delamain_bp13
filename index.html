@@ -769,8 +769,8 @@ async function loadCharacterData() {
           <div class="ability-header">
             <div class="ability-name">${ability.name}</div>
             <div class="ability-tags">
-              <span class="tag tag-${ability.tags[0]}">${ability.tags[0]}</span>
-              <span class="tag tag-${ability.tags[1]}">${ability.tags[1]}</span>
+              ${ability.tags && ability.tags.length > 0 ? `<span class="tag tag-${ability.tags[0] || 'passive'}">${ability.tags[0] || 'passive'}</span>` : ''}
+              ${ability.tags && ability.tags.length > 1 ? `<span class="tag tag-${ability.tags[1] || 'program'}">${ability.tags[1] || 'program'}</span>` : ''}
             </div>
           </div>
           <div class="ability-body">
