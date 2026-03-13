@@ -1451,7 +1451,122 @@ function renderInventoryItems(items) {
   });
 }
 
-// Функции для работы со способностями - ГЛОБАЛЬНЫЕ
+function addInventoryItem() {
+  const container = document.getElementById('inventoryItems');
+  const index = container.children.length;
+  const row = document.createElement('div');
+  row.className = 'item-row';
+  row.innerHTML = `
+    <input type="text" class="item-name" placeholder="Название" value="Новый предмет">
+    <input type="text" class="item-quantity" placeholder="Кол-во" value="1">
+    <div class="remove-item" onclick="removeInventoryItem(${index})">✕</div>
+    <textarea class="item-desc" placeholder="Описание" style="grid-column: span 3; margin-top: 5px;"></textarea>
+  `;
+  container.appendChild(row);
+}
+
+function removeInventoryItem(index) {
+  const container = document.getElementById('inventoryItems');
+  if (container.children.length > 0) {
+    container.removeChild(container.children[index]);
+    Array.from(container.children).forEach((child, i) => {
+      const removeBtn = child.querySelector('.remove-item');
+      removeBtn.setAttribute('onclick', `removeInventoryItem(${i})`);
+    });
+  }
+}
+
+// Функции для работы с предметами машин
+function renderVehicleItems(items) {
+  const container = document.getElementById('vehicleItems');
+  if (!container) return;
+  
+  container.innerHTML = '';
+  
+  items.forEach((item, index) => {
+    const row = document.createElement('div');
+    row.className = 'item-row';
+    row.innerHTML = `
+      <input type="text" class="item-name" placeholder="Название" value="${item.name || ''}">
+      <input type="text" class="item-quantity" placeholder="Кол-во" value="${item.quantity || ''}">
+      <div class="remove-item" onclick="removeVehicleItem(${index})">✕</div>
+      <textarea class="item-desc" placeholder="Описание" style="grid-column: span 3; margin-top: 5px;">${item.description || ''}</textarea>
+    `;
+    container.appendChild(row);
+  });
+}
+
+function addVehicleItem() {
+  const container = document.getElementById('vehicleItems');
+  const index = container.children.length;
+  const row = document.createElement('div');
+  row.className = 'item-row';
+  row.innerHTML = `
+    <input type="text" class="item-name" placeholder="Название" value="Новый предмет">
+    <input type="text" class="item-quantity" placeholder="Кол-во" value="1">
+    <div class="remove-item" onclick="removeVehicleItem(${index})">✕</div>
+    <textarea class="item-desc" placeholder="Описание" style="grid-column: span 3; margin-top: 5px;"></textarea>
+  `;
+  container.appendChild(row);
+}
+
+function removeVehicleItem(index) {
+  const container = document.getElementById('vehicleItems');
+  if (container.children.length > 0) {
+    container.removeChild(container.children[index]);
+    Array.from(container.children).forEach((child, i) => {
+      const removeBtn = child.querySelector('.remove-item');
+      removeBtn.setAttribute('onclick', `removeVehicleItem(${i})`);
+    });
+  }
+}
+
+// Функции для работы с предметами офиса
+function renderHomeItems(items) {
+  const container = document.getElementById('homeItems');
+  if (!container) return;
+  
+  container.innerHTML = '';
+  
+  items.forEach((item, index) => {
+    const row = document.createElement('div');
+    row.className = 'item-row';
+    row.innerHTML = `
+      <input type="text" class="item-name" placeholder="Название" value="${item.name || ''}">
+      <input type="text" class="item-quantity" placeholder="Кол-во" value="${item.quantity || ''}">
+      <div class="remove-item" onclick="removeHomeItem(${index})">✕</div>
+      <textarea class="item-desc" placeholder="Описание" style="grid-column: span 3; margin-top: 5px;">${item.description || ''}</textarea>
+    `;
+    container.appendChild(row);
+  });
+}
+
+function addHomeItem() {
+  const container = document.getElementById('homeItems');
+  const index = container.children.length;
+  const row = document.createElement('div');
+  row.className = 'item-row';
+  row.innerHTML = `
+    <input type="text" class="item-name" placeholder="Название" value="Новый предмет">
+    <input type="text" class="item-quantity" placeholder="Кол-во" value="1">
+    <div class="remove-item" onclick="removeHomeItem(${index})">✕</div>
+    <textarea class="item-desc" placeholder="Описание" style="grid-column: span 3; margin-top: 5px;"></textarea>
+  `;
+  container.appendChild(row);
+}
+
+function removeHomeItem(index) {
+  const container = document.getElementById('homeItems');
+  if (container.children.length > 0) {
+    container.removeChild(container.children[index]);
+    Array.from(container.children).forEach((child, i) => {
+      const removeBtn = child.querySelector('.remove-item');
+      removeBtn.setAttribute('onclick', `removeHomeItem(${i})`);
+    });
+  }
+}
+
+// ========== ФУНКЦИИ ДЛЯ РАБОТЫ СО СПОСОБНОСТЯМИ ==========
 window.renderAbilities = function(abilities) {
   console.log('Рендеринг способностей:', abilities);
   const container = document.getElementById('abilitiesList');
@@ -1579,7 +1694,7 @@ window.removeAbility = function(index) {
   }
 };
 
-// Функции для работы с особенностями - ГЛОБАЛЬНЫЕ
+// ========== ФУНКЦИИ ДЛЯ РАБОТЫ С ОСОБЕННОСТЯМИ ==========
 window.renderFeatures = function(features) {
   console.log('Рендеринг особенностей:', features);
   const container = document.getElementById('featuresList');
@@ -1667,7 +1782,7 @@ window.removeFeature = function(index) {
   }
 };
 
-// Функции для работы со слабостями - ГЛОБАЛЬНЫЕ
+// ========== ФУНКЦИИ ДЛЯ РАБОТЫ СО СЛАБОСТЯМИ ==========
 window.renderWeaknesses = function(weaknesses) {
   console.log('Рендеринг слабостей:', weaknesses);
   const container = document.getElementById('weaknessesList');
@@ -1754,351 +1869,6 @@ window.removeWeakness = function(index) {
     container.innerHTML = '<div style="color: var(--dim); padding: 20px; text-align: center;">Нет слабостей. Нажмите "+ ДОБАВИТЬ СЛАБОСТЬ" чтобы создать первую.</div>';
   }
 };
-
-function addInventoryItem() {
-  const container = document.getElementById('inventoryItems');
-  const index = container.children.length;
-  const row = document.createElement('div');
-  row.className = 'item-row';
-  row.innerHTML = `
-    <input type="text" class="item-name" placeholder="Название" value="Новый предмет">
-    <input type="text" class="item-quantity" placeholder="Кол-во" value="1">
-    <div class="remove-item" onclick="removeInventoryItem(${index})">✕</div>
-    <textarea class="item-desc" placeholder="Описание" style="grid-column: span 3; margin-top: 5px;"></textarea>
-  `;
-  container.appendChild(row);
-}
-
-function removeInventoryItem(index) {
-  const container = document.getElementById('inventoryItems');
-  if (container.children.length > 0) {
-    container.removeChild(container.children[index]);
-    Array.from(container.children).forEach((child, i) => {
-      const removeBtn = child.querySelector('.remove-item');
-      removeBtn.setAttribute('onclick', `removeInventoryItem(${i})`);
-    });
-  }
-}
-
-// Функции для работы с предметами машин
-function renderVehicleItems(items) {
-  const container = document.getElementById('vehicleItems');
-  if (!container) return;
-  
-  container.innerHTML = '';
-  
-  items.forEach((item, index) => {
-    const row = document.createElement('div');
-    row.className = 'item-row';
-    row.innerHTML = `
-      <input type="text" class="item-name" placeholder="Название" value="${item.name || ''}">
-      <input type="text" class="item-quantity" placeholder="Кол-во" value="${item.quantity || ''}">
-      <div class="remove-item" onclick="removeVehicleItem(${index})">✕</div>
-      <textarea class="item-desc" placeholder="Описание" style="grid-column: span 3; margin-top: 5px;">${item.description || ''}</textarea>
-    `;
-    container.appendChild(row);
-  });
-}
-
-function addVehicleItem() {
-  const container = document.getElementById('vehicleItems');
-  const index = container.children.length;
-  const row = document.createElement('div');
-  row.className = 'item-row';
-  row.innerHTML = `
-    <input type="text" class="item-name" placeholder="Название" value="Новый предмет">
-    <input type="text" class="item-quantity" placeholder="Кол-во" value="1">
-    <div class="remove-item" onclick="removeVehicleItem(${index})">✕</div>
-    <textarea class="item-desc" placeholder="Описание" style="grid-column: span 3; margin-top: 5px;"></textarea>
-  `;
-  container.appendChild(row);
-}
-
-function removeVehicleItem(index) {
-  const container = document.getElementById('vehicleItems');
-  if (container.children.length > 0) {
-    container.removeChild(container.children[index]);
-    Array.from(container.children).forEach((child, i) => {
-      const removeBtn = child.querySelector('.remove-item');
-      removeBtn.setAttribute('onclick', `removeVehicleItem(${i})`);
-    });
-  }
-}
-
-// Функции для работы с предметами офиса
-function renderHomeItems(items) {
-  const container = document.getElementById('homeItems');
-  if (!container) return;
-  
-  container.innerHTML = '';
-  
-  items.forEach((item, index) => {
-    const row = document.createElement('div');
-    row.className = 'item-row';
-    row.innerHTML = `
-      <input type="text" class="item-name" placeholder="Название" value="${item.name || ''}">
-      <input type="text" class="item-quantity" placeholder="Кол-во" value="${item.quantity || ''}">
-      <div class="remove-item" onclick="removeHomeItem(${index})">✕</div>
-      <textarea class="item-desc" placeholder="Описание" style="grid-column: span 3; margin-top: 5px;">${item.description || ''}</textarea>
-    `;
-    container.appendChild(row);
-  });
-}
-
-function addHomeItem() {
-  const container = document.getElementById('homeItems');
-  const index = container.children.length;
-  const row = document.createElement('div');
-  row.className = 'item-row';
-  row.innerHTML = `
-    <input type="text" class="item-name" placeholder="Название" value="Новый предмет">
-    <input type="text" class="item-quantity" placeholder="Кол-во" value="1">
-    <div class="remove-item" onclick="removeHomeItem(${index})">✕</div>
-    <textarea class="item-desc" placeholder="Описание" style="grid-column: span 3; margin-top: 5px;"></textarea>
-  `;
-  container.appendChild(row);
-}
-
-function removeHomeItem(index) {
-  const container = document.getElementById('homeItems');
-  if (container.children.length > 0) {
-    container.removeChild(container.children[index]);
-    Array.from(container.children).forEach((child, i) => {
-      const removeBtn = child.querySelector('.remove-item');
-      removeBtn.setAttribute('onclick', `removeHomeItem(${i})`);
-    });
-  }
-}
-
-// Функции для работы со способностями
-function renderAbilities(abilities) {
-  const container = document.getElementById('abilitiesList');
-  if (!container) return;
-  
-  container.innerHTML = '';
-  
-  abilities.forEach((ability, index) => {
-    const card = document.createElement('div');
-    card.className = 'ability-card';
-    card.innerHTML = `
-      <div class="ability-header">
-        <h4>Способность ${index + 1}</h4>
-        <button class="remove-ability" onclick="removeAbility(${index})">УДАЛИТЬ</button>
-      </div>
-      <div class="grid-2">
-        <div class="form-group">
-          <label>Название</label>
-          <input type="text" class="ability-name" value="${ability.name || ''}">
-        </div>
-        <div class="form-group">
-          <label>Теги (через запятую)</label>
-          <input type="text" class="ability-tags" value="${(ability.tags || []).join(', ')}">
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Описание</label>
-        <textarea class="ability-desc" rows="4">${ability.description || ''}</textarea>
-      </div>
-      <div class="grid-3">
-        <div class="form-group">
-          <label>Каст</label>
-          <input type="text" class="ability-cast" value="${ability.cast || '—'}">
-        </div>
-        <div class="form-group">
-          <label>Длительность</label>
-          <input type="text" class="ability-duration" value="${ability.duration || '—'}">
-        </div>
-        <div class="form-group">
-          <label>Перезарядка</label>
-          <input type="text" class="ability-cooldown" value="${ability.cooldown || '—'}">
-        </div>
-      </div>
-    `;
-    container.appendChild(card);
-  });
-}
-
-function addAbility() {
-  const container = document.getElementById('abilitiesList');
-  const index = container.children.length;
-  const card = document.createElement('div');
-  card.className = 'ability-card';
-  card.innerHTML = `
-    <div class="ability-header">
-      <h4>Новая способность</h4>
-      <button class="remove-ability" onclick="removeAbility(${index})">УДАЛИТЬ</button>
-    </div>
-    <div class="grid-2">
-      <div class="form-group">
-        <label>Название</label>
-        <input type="text" class="ability-name" value="Новая способность">
-      </div>
-      <div class="form-group">
-        <label>Теги (через запятую)</label>
-        <input type="text" class="ability-tags" value="passive, program">
-      </div>
-    </div>
-    <div class="form-group">
-      <label>Описание</label>
-      <textarea class="ability-desc" rows="4">Описание новой способности.</textarea>
-    </div>
-    <div class="grid-3">
-      <div class="form-group">
-        <label>Каст</label>
-        <input type="text" class="ability-cast" value="—">
-      </div>
-      <div class="form-group">
-        <label>Длительность</label>
-        <input type="text" class="ability-duration" value="—">
-      </div>
-      <div class="form-group">
-        <label>Перезарядка</label>
-        <input type="text" class="ability-cooldown" value="—">
-      </div>
-    </div>
-  `;
-  container.appendChild(card);
-}
-
-function removeAbility(index) {
-  const container = document.getElementById('abilitiesList');
-  if (container.children.length > 0) {
-    container.removeChild(container.children[index]);
-    // Обновляем заголовки и кнопки
-    Array.from(container.children).forEach((child, i) => {
-      const header = child.querySelector('.ability-header h4');
-      if (header) header.textContent = `Способность ${i + 1}`;
-      const removeBtn = child.querySelector('.remove-ability');
-      if (removeBtn) removeBtn.setAttribute('onclick', `removeAbility(${i})`);
-    });
-  }
-}
-
-// Функции для работы с особенностями
-function renderFeatures(features) {
-  const container = document.getElementById('featuresList');
-  if (!container) return;
-  
-  container.innerHTML = '';
-  
-  features.forEach((feature, index) => {
-    const card = document.createElement('div');
-    card.className = 'feature-card';
-    card.innerHTML = `
-      <div class="feature-header">
-        <h4>Особенность ${index + 1}</h4>
-        <button class="remove-feature" onclick="removeFeature(${index})">УДАЛИТЬ</button>
-      </div>
-      <div class="form-group">
-        <label>Название</label>
-        <input type="text" class="feature-title" value="${feature.title || ''}">
-      </div>
-      <div class="form-group">
-        <label>Описание</label>
-        <textarea class="feature-desc" rows="3">${feature.description || ''}</textarea>
-      </div>
-    `;
-    container.appendChild(card);
-  });
-}
-
-function addFeature() {
-  const container = document.getElementById('featuresList');
-  const index = container.children.length;
-  const card = document.createElement('div');
-  card.className = 'feature-card';
-  card.innerHTML = `
-    <div class="feature-header">
-      <h4>Новая особенность</h4>
-      <button class="remove-feature" onclick="removeFeature(${index})">УДАЛИТЬ</button>
-    </div>
-    <div class="form-group">
-      <label>Название</label>
-      <input type="text" class="feature-title" value="Новая особенность">
-    </div>
-    <div class="form-group">
-      <label>Описание</label>
-      <textarea class="feature-desc" rows="3">Описание новой особенности.</textarea>
-    </div>
-  `;
-  container.appendChild(card);
-}
-
-function removeFeature(index) {
-  const container = document.getElementById('featuresList');
-  if (container.children.length > 0) {
-    container.removeChild(container.children[index]);
-    Array.from(container.children).forEach((child, i) => {
-      const header = child.querySelector('.feature-header h4');
-      if (header) header.textContent = `Особенность ${i + 1}`;
-      const removeBtn = child.querySelector('.remove-feature');
-      if (removeBtn) removeBtn.setAttribute('onclick', `removeFeature(${i})`);
-    });
-  }
-}
-
-// Функции для работы со слабостями
-function renderWeaknesses(weaknesses) {
-  const container = document.getElementById('weaknessesList');
-  if (!container) return;
-  
-  container.innerHTML = '';
-  
-  weaknesses.forEach((weakness, index) => {
-    const card = document.createElement('div');
-    card.className = 'weakness-card';
-    card.innerHTML = `
-      <div class="weakness-header">
-        <h4>Слабость ${index + 1}</h4>
-        <button class="remove-weakness" onclick="removeWeakness(${index})">УДАЛИТЬ</button>
-      </div>
-      <div class="form-group">
-        <label>Название</label>
-        <input type="text" class="weakness-title" value="${weakness.title || ''}">
-      </div>
-      <div class="form-group">
-        <label>Описание</label>
-        <textarea class="weakness-desc" rows="3">${weakness.description || ''}</textarea>
-      </div>
-    `;
-    container.appendChild(card);
-  });
-}
-
-function addWeakness() {
-  const container = document.getElementById('weaknessesList');
-  const index = container.children.length;
-  const card = document.createElement('div');
-  card.className = 'weakness-card';
-  card.innerHTML = `
-    <div class="weakness-header">
-      <h4>Новая слабость</h4>
-      <button class="remove-weakness" onclick="removeWeakness(${index})">УДАЛИТЬ</button>
-    </div>
-    <div class="form-group">
-      <label>Название</label>
-      <input type="text" class="weakness-title" value="Новая слабость">
-    </div>
-    <div class="form-group">
-      <label>Описание</label>
-      <textarea class="weakness-desc" rows="3">Описание новой слабости.</textarea>
-    </div>
-  `;
-  container.appendChild(card);
-}
-
-function removeWeakness(index) {
-  const container = document.getElementById('weaknessesList');
-  if (container.children.length > 0) {
-    container.removeChild(container.children[index]);
-    Array.from(container.children).forEach((child, i) => {
-      const header = child.querySelector('.weakness-header h4');
-      if (header) header.textContent = `Слабость ${i + 1}`;
-      const removeBtn = child.querySelector('.remove-weakness');
-      if (removeBtn) removeBtn.setAttribute('onclick', `removeWeakness(${i})`);
-    });
-  }
-}
 
 // Функции для работы с автопарком
 function loadVehicleForEdit(vehicleId) {
@@ -2293,13 +2063,25 @@ async function loadData() {
     }
     
     // Заполняем способности
-    renderAbilities(currentJsonData.abilities || []);
+    if (window.renderAbilities) {
+      window.renderAbilities(currentJsonData.abilities || []);
+    } else {
+      renderAbilities(currentJsonData.abilities || []);
+    }
     
     // Заполняем особенности
-    renderFeatures(currentJsonData.features || []);
+    if (window.renderFeatures) {
+      window.renderFeatures(currentJsonData.features || []);
+    } else {
+      renderFeatures(currentJsonData.features || []);
+    }
     
     // Заполняем слабости
-    renderWeaknesses(currentJsonData.weaknesses || []);
+    if (window.renderWeaknesses) {
+      window.renderWeaknesses(currentJsonData.weaknesses || []);
+    } else {
+      renderWeaknesses(currentJsonData.weaknesses || []);
+    }
     
     // Raw JSON
     document.getElementById('rawJson').value = JSON.stringify(currentJsonData, null, 2);
