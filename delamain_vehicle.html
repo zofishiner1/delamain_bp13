@@ -305,6 +305,36 @@ h1 span {
   line-height: 1.6;
 }
 
+.vehicle-nav {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+  gap: 10px;
+}
+
+.vehicle-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--dim);
+  text-decoration: none;
+  font-size: 11px;
+  padding: 8px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  transition: all 0.2s;
+}
+
+.vehicle-nav-btn:hover:not(.disabled) {
+  border-color: var(--accent2);
+  color: var(--accent);
+}
+
+.vehicle-nav-btn.disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
 .admin-btn {
   position: fixed;
   bottom: 20px;
@@ -349,12 +379,12 @@ h1 span {
 <body>
 <div class="page">
 
-  <div class="header">
-    <div class="nav-links">
-      <a href="index.html" class="nav-link"><span>←</span> К АНКЕТЕ</a>
-      <a href="delamain_inventory.html" class="nav-link"><span>//</span> ИНВЕНТАРЬ</a>
-      <a href="delamain_home.html" class="nav-link"><span>🏠</span> ОФИС</a>
-    </div>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link"><span>←</span> К АНКЕТЕ</a>
+    <a href="delamain_inventory.html" class="nav-link"><span>//</span> ИНВЕНТАРЬ</a>
+    <a href="delamain_fleet.html" class="nav-link"><span>🚙</span> АВТОПАРК</a>
+    <a href="delamain_home.html" class="nav-link"><span>🏠</span> ОФИС</a>
+  </div>
     
     <div class="header-sys">
       <span class="status-dot"></span>
@@ -362,12 +392,13 @@ h1 span {
     </div>
     
     <div class="title-block">
-      <h1><span>//</span> ТРАНСПОРТ</h1>
-      <div style="font-size: 11px; color: var(--dim);">Деламейн // личное авто</div>
+      <h1><span>//</span> <span id="vehicle-title">ТРАНСПОРТ</span></h1>
+      <div style="font-size: 11px; color: var(--dim);" id="vehicle-subtitle">Деламейн // личное авто</div>
     </div>
   </div>
 
   <div id="vehicle-content"></div>
+  <div id="vehicle-navigation" class="vehicle-nav"></div>
 
   <div class="footer">
     <span>DEL // ТРАНСПОРТ v1.0</span>
@@ -379,51 +410,74 @@ h1 span {
 <a href="admin.html" class="admin-btn">⚙️ ADMIN</a>
 
 <script>
+function getVehicleIdFromUrl() {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get('id') || 'v001'; // по умолчанию первая машина
+}
+
 async function loadVehicleData() {
   try {
+    const vehicleId = getVehicleIdFromUrl();
     const response = await fetch('data_character.json?' + Date.now());
     const data = await response.json();
     
+    const vehicle = data.fleet.vehicles.find(v => v.id === vehicleId);
+    if (!vehicle) {
+      window.location.href = 'delamain_fleet.html';
+      return;
+    }
+    
     document.getElementById('update-date').textContent = data.last_updated || '12.03.2026';
+    document.getElementById('vehicle-title').textContent = vehicle.name;
+    document.getElementById('vehicle-subtitle').textContent = `${vehicle.make} ${vehicle.model} // ${vehicle.role}`;
     
     document.getElementById('vehicle-content').innerHTML = `
       <div class="vehicle-card">
         <div class="vehicle-image">
-          <img src="${data.vehicle.image}" alt="${data.vehicle.name}" style="width: ${data.vehicle.image_size || 400}px; image-rendering: pixelated;" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'200\' viewBox=\'0 0 400 200\'><rect width=\'400\' height=\'200\' fill=\'%233d6e60\'/><rect x=\'50\' y=\'50\' width=\'300\' height=\'100\' fill=\'%237eb8a4\'/><circle cx=\'100\' cy=\'150\' r=\'30\' fill=\'%23333\'/><circle cx=\'300\' cy=\'150\' r=\'30\' fill=\'%23333\'/></svg>'">
+          <img src="${vehicle.image}" alt="${vehicle.name}" style="width: ${vehicle.image_size || 400}px; image-rendering: pixelated;" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'200\' viewBox=\'0 0 400 200\'><rect width=\'400\' height=\'200\' fill=\'%233d6e60\'/><rect x=\'50\' y=\'50\' width=\'300\' height=\'100\' fill=\'%237eb8a4\'/><circle cx=\'100\' cy=\'150\' r=\'30\' fill=\'%23333\'/><circle cx=\'300\' cy=\'150\' r=\'30\' fill=\'%23333\'/></svg>'">
         </div>
         
         <div style="margin-bottom: 20px;">
-          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
-            <span style="font-size: 22px; color: #d4d0dc; font-family: var(--display);">${data.vehicle.name}</span>
-            <span class="badge badge-ai" style="font-size: 10px; padding: 4px 10px; background: rgba(126,184,164,0.1); border: 1px solid var(--accent2); color: var(--accent);">${data.vehicle.type}</span>
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px; flex-wrap: wrap;">
+            <span style="font-size: 22px; color: #d4d0dc; font-family: var(--display);">${vehicle.name}</span>
+            <span class="badge badge-ai" style="font-size: 10px; padding: 4px 10px; background: rgba(126,184,164,0.1); border: 1px solid var(--accent2); color: var(--accent);">${vehicle.type}</span>
+            <span class="badge ${vehicle.role === 'резервная' ? 'badge-warn' : 'badge-act'}" style="font-size: 10px; padding: 4px 10px;">${vehicle.role.toUpperCase()}</span>
           </div>
-          <div style="color: var(--dim); font-size: 11px;">Владелец: ${data.vehicle.owner}</div>
+          <div style="color: var(--dim); font-size: 11px;">Владелец: Деламейн // статус: ${vehicle.status}</div>
         </div>
         
         <div class="vehicle-specs">
           <div class="spec-item">
             <span class="spec-label">Марка</span>
-            <span class="spec-value">${data.vehicle.make}</span>
+            <span class="spec-value">${vehicle.make}</span>
           </div>
           <div class="spec-item">
             <span class="spec-label">Модель</span>
-            <span class="spec-value">${data.vehicle.model}</span>
+            <span class="spec-value">${vehicle.model}</span>
           </div>
           <div class="spec-item">
             <span class="spec-label">Год</span>
-            <span class="spec-value">${data.vehicle.year}</span>
+            <span class="spec-value">${vehicle.year}</span>
           </div>
           <div class="spec-item">
             <span class="spec-label">Двигатель</span>
-            <span class="spec-value">${data.vehicle.engine}</span>
+            <span class="spec-value">${vehicle.engine}</span>
           </div>
           <div class="spec-item">
             <span class="spec-label">Привод</span>
-            <span class="spec-value">${data.vehicle.drivetrain}</span>
+            <span class="spec-value">${vehicle.drivetrain}</span>
           </div>
           <div class="spec-item">
             <span class="spec-label">Мощность</span>
-            <span class="spec-value">${data.vehicle.power}</span>
+            <span class="spec-value">${vehicle.power}</span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">Разгон</span>
+            <span class="spec-value">${vehicle.acceleration}</span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">Макс.</span>
+            <span class="spec-value">${vehicle.topspeed}</span>
           </div>
         </div>
       </div>
@@ -434,7 +488,7 @@ async function loadVehicleData() {
       </div>
 
       <div class="description-card">
-        ${data.vehicle.description.map(p => `<p>${p}</p>`).join('')}
+        ${vehicle.description.map(p => `<p>${p}</p>`).join('')}
       </div>
 
       <div class="section-header">
@@ -443,8 +497,8 @@ async function loadVehicleData() {
       </div>
 
       <div id="vehicleItemsContainer" class="items-grid">
-        ${data.vehicle.items && data.vehicle.items.length > 0 
-          ? data.vehicle.items.map(item => `
+        ${vehicle.items && vehicle.items.length > 0 
+          ? vehicle.items.map(item => `
               <div class="item-card">
                 <div class="item-header">
                   <div class="item-name">${item.name}</div>
@@ -457,6 +511,18 @@ async function loadVehicleData() {
         }
       </div>
     `;
+    
+    // Навигация между машинами
+    const currentIndex = data.fleet.vehicles.findIndex(v => v.id === vehicleId);
+    const prevVehicle = currentIndex > 0 ? data.fleet.vehicles[currentIndex - 1] : null;
+    const nextVehicle = currentIndex < data.fleet.vehicles.length - 1 ? data.fleet.vehicles[currentIndex + 1] : null;
+    
+    document.getElementById('vehicle-navigation').innerHTML = `
+      ${prevVehicle ? `<a href="delamain_vehicle.html?id=${prevVehicle.id}" class="vehicle-nav-btn"><span>←</span> ${prevVehicle.name}</a>` : '<div class="vehicle-nav-btn disabled"><span>←</span> Нет предыдущей</div>'}
+      <a href="delamain_fleet.html" class="vehicle-nav-btn"><span>🚙</span> ВСЕ МАШИНЫ</a>
+      ${nextVehicle ? `<a href="delamain_vehicle.html?id=${nextVehicle.id}" class="vehicle-nav-btn">${nextVehicle.name} <span>→</span></a>` : '<div class="vehicle-nav-btn disabled">Нет следующей <span>→</span></div>'}
+    `;
+    
   } catch (error) {
     console.error('Ошибка загрузки данных транспорта:', error);
   }

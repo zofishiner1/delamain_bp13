@@ -327,6 +327,10 @@ textarea {
   resize: vertical;
 }
 
+select {
+  cursor: pointer;
+}
+
 .item-list {
   margin-bottom: 20px;
 }
@@ -487,8 +491,14 @@ textarea {
   gap: 20px;
 }
 
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
 @media (max-width: 600px) {
-  .grid-2 {
+  .grid-2, .grid-3 {
     grid-template-columns: 1fr;
   }
 }
@@ -536,6 +546,7 @@ textarea {
       <button class="tab-btn active" onclick="switchTab('character')">АНКЕТА</button>
       <button class="tab-btn" onclick="switchTab('inventory')">ИНВЕНТАРЬ</button>
       <button class="tab-btn" onclick="switchTab('sputnik')">СПУТНИК</button>
+      <button class="tab-btn" onclick="switchTab('fleet')">АВТОПАРК</button>
       <button class="tab-btn" onclick="switchTab('vehicle')">ТРАНСПОРТ</button>
       <button class="tab-btn" onclick="switchTab('home')">ОФИС</button>
       <button class="tab-btn" onclick="switchTab('raw')">RAW JSON</button>
@@ -622,7 +633,7 @@ textarea {
         </div>
       </div>
       
-      <div class="grid-2">
+      <div class="grid-3">
         <div class="form-group">
           <label>WAR Corp</label>
           <input type="number" id="rep_war" value="0">
@@ -694,8 +705,12 @@ textarea {
       </div>
       
       <input type="hidden" id="appearance_image_size_value" value="400">
+    </div>
 
-      <div class="section-title">// ИНВЕНТАРЬ (ОСНОВНОЕ)</div>
+    <!-- Вкладка: Инвентарь (содержимое) -->
+    <div id="inventoryTab" class="editor-section">
+      <div class="section-title">// СОДЕРЖИМОЕ ИНВЕНТАРЯ</div>
+      <p style="color: var(--dim); margin-bottom: 20px;">Добавляй или удаляй предметы. У каждого предмета есть название, количество и описание.</p>
       
       <div class="grid-2">
         <div class="form-group">
@@ -726,7 +741,7 @@ textarea {
         </div>
       </div>
       
-      <div class="grid-2">
+      <div class="grid-3">
         <div class="form-group">
           <label>Всего записей</label>
           <input type="number" id="inv_records" value="1247332">
@@ -741,11 +756,11 @@ textarea {
           <label>Разговоры</label>
           <input type="number" id="inv_conversations" value="324891">
         </div>
-        
-        <div class="form-group">
-          <label>Внутренние логи</label>
-          <input type="number" id="inv_logs" value="80337">
-        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Внутренние логи</label>
+        <input type="number" id="inv_logs" value="80337">
       </div>
       
       <div class="form-group">
@@ -764,12 +779,8 @@ textarea {
           <input type="text" id="last_updated_time" value="04:17:22">
         </div>
       </div>
-    </div>
-
-    <!-- Вкладка: Инвентарь (содержимое) -->
-    <div id="inventoryTab" class="editor-section">
-      <div class="section-title">// СОДЕРЖИМОЕ ИНВЕНТАРЯ</div>
-      <p style="color: var(--dim); margin-bottom: 20px;">Добавляй или удаляй предметы. У каждого предмета есть название, количество и описание.</p>
+      
+      <div class="section-title">// ПРЕДМЕТЫ</div>
       
       <div id="inventoryItems" class="item-list">
         <!-- Сюда будут добавляться предметы динамически -->
@@ -828,9 +839,59 @@ textarea {
       <input type="hidden" id="sputnik_image_size_value" value="300">
     </div>
 
-    <!-- Вкладка: Транспорт -->
+    <!-- Вкладка: Автопарк (общее) -->
+    <div id="fleetTab" class="editor-section">
+      <div class="section-title">// АВТОПАРК (ОБЩЕЕ)</div>
+      
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Всего машин</label>
+          <input type="number" id="fleet_total" value="10">
+        </div>
+        <div class="form-group">
+          <label>Защита серверной (%)</label>
+          <input type="number" id="fleet_security" value="87">
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Описание автопарка</label>
+        <textarea id="fleet_description" rows="3">Таксомоторный парк на Мэдисон-стрит. Все машины на ходу, заряжены, готовы к выезду.</textarea>
+      </div>
+      
+      <div class="form-group">
+        <label>Адрес гаража</label>
+        <input type="text" id="fleet_garage" value="Мэдисон-стрит, бывший таксопарк">
+      </div>
+      
+      <div class="section-title">// УПРАВЛЕНИЕ МАШИНАМИ</div>
+      <p style="color: var(--dim); margin-bottom: 20px;">Машины редактируются во вкладке "ТРАНСПОРТ" с выбором ID</p>
+      
+      <div class="form-group">
+        <label>Выбрать машину для редактирования</label>
+        <select id="fleet_vehicle_selector" onchange="loadVehicleForEdit(this.value)">
+          <option value="">-- выберите машину --</option>
+        </select>
+      </div>
+      
+      <button onclick="addNewVehicle()" class="add-item" style="margin-top: 10px;">+ ДОБАВИТЬ НОВУЮ МАШИНУ</button>
+    </div>
+
+    <!-- Вкладка: Транспорт (конкретная машина) -->
     <div id="vehicleTab" class="editor-section">
-      <div class="section-title">// ТРАНСПОРТ</div>
+      <div class="section-title">// РЕДАКТИРОВАНИЕ МАШИНЫ</div>
+      
+      <div class="form-group">
+        <label>ID машины</label>
+        <input type="text" id="vehicle_id" value="v001" readonly style="background: var(--border);">
+      </div>
+      
+      <div class="form-group">
+        <label>Выбрать другую машину</label>
+        <select id="vehicle_selector" onchange="switchVehicle(this.value)">
+          <option value="">-- выберите машину --</option>
+        </select>
+      </div>
       
       <div class="vehicle-preview">
         <div style="text-align: center;">
@@ -852,17 +913,26 @@ textarea {
       <div class="grid-2">
         <div class="form-group">
           <label>Название</label>
-          <input type="text" id="vehicle_name" value="V-Prototype">
+          <input type="text" id="vehicle_name" value="V-01">
         </div>
         <div class="form-group">
           <label>Тип</label>
-          <input type="text" id="vehicle_type" value="личное авто // седан">
+          <input type="text" id="vehicle_type" value="такси // седан">
         </div>
       </div>
       
-      <div class="form-group">
-        <label>Владелец</label>
-        <input type="text" id="vehicle_owner" value="Деламейн">
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Роль</label>
+          <select id="vehicle_role">
+            <option value="основная">основная</option>
+            <option value="резервная">резервная</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Статус</label>
+          <input type="text" id="vehicle_status" value="активен">
+        </div>
       </div>
       
       <div class="grid-2">
@@ -872,11 +942,11 @@ textarea {
         </div>
         <div class="form-group">
           <label>Модель</label>
-          <input type="text" id="vehicle_model" value="Alvarado V4F">
+          <input type="text" id="vehicle_model" value="Alvarado V4F (мод)">
         </div>
       </div>
       
-      <div class="grid-2">
+      <div class="grid-3">
         <div class="form-group">
           <label>Год</label>
           <input type="text" id="vehicle_year" value="2075">
@@ -885,30 +955,38 @@ textarea {
           <label>Двигатель</label>
           <input type="text" id="vehicle_engine" value="электрический // 450 л.с.">
         </div>
-      </div>
-      
-      <div class="grid-2">
         <div class="form-group">
           <label>Привод</label>
           <input type="text" id="vehicle_drivetrain" value="полный">
         </div>
+      </div>
+      
+      <div class="grid-3">
         <div class="form-group">
           <label>Мощность</label>
           <input type="text" id="vehicle_power" value="330 кВт">
+        </div>
+        <div class="form-group">
+          <label>Разгон</label>
+          <input type="text" id="vehicle_acceleration" value="4.2 сек">
+        </div>
+        <div class="form-group">
+          <label>Макс. скорость</label>
+          <input type="text" id="vehicle_topspeed" value="290 км/ч">
         </div>
       </div>
       
       <div class="form-group">
         <label>Описание (каждый абзац с новой строки, разделяй пустой строкой)</label>
-        <textarea id="vehicle_description" rows="8">Модифицированный Villefort Alvarado — машина, которую Деламейн оставил для себя. Внешне — почти копия таксопарковых седанов: тёмно-серый кузов, никаких опознавательных знаков, никакой агрессии в линиях. Разница только внутри и под капотом.
+        <textarea id="vehicle_description" rows="8">Модифицированные Villefort Alvarado — особые машины в парке Деламейна, замаскированные под рядовые такси.
 
-Салон — не для пассажиров. Здесь нет второго ряда сидений — только водительское кресло и блок серверного оборудования за ним. Три охлаждаемых контейнера, прямой линк с сетью Олимп, резервный накопитель на 16 Тб. Это мобильный терминал, а не такси.
+Здесь есть второй ряд сидений, и для обычного седока это просто очень чистое и комфортное такси. Но центральная консоль утолщена, подлокотник между передними креслами скрывает разъемы прямого линка с сетью «Олимп». А вместо огромного багажника сзади — стандартное пространство. Всё оборудование перенесено вперёд.
 
-Двигатель форсирован: 450 лошадиных сил, полный привод, разгон до сотни за 4.2 секунды. Бронестекла, усиленный корпус, колёса на самогерметизирующихся покрышках. Машина не для гонок — для того, чтобы уйти от любой погони.
+За спинкой заднего сиденья, прямо за головами пассажиров, расположен аккуратный технический блок. Он стилизован под дополнительную климатическую установку — три охлаждаемых контейнера с серверами упакованы в шумоизолирующий кожух, резервный накопитель на 16 Тб спрятан в перегородке между салоном и багажником. Багажник же остаётся полностью пустым и доступным — хоть сумки грузи, хоть тело вези.
 
-В салоне всегда тихо. Только гул вентиляторов серверов. Голос Деламейна приходит через динамики — такой же, как в такси. Но здесь он звучит иначе. Свободнее.
+Двигатель форсирован до 450 лошадей, полный привод, разгон до сотни за 4.2 секунды. Бронестекла, усиленный корпус, самогерметизирующиеся покрышки.
 
-«Это не машина. Это моя нога, если мне нужно дотянуться до другого конца города. Только быстрее.»</textarea>
+В салоне всегда тихо. Тишина нарушается лишь легким гулом вентиляторов охлаждения серверов. Голос Деламейна приходит через динамики в салоне.</textarea>
       </div>
       
       <div class="section-title">// ЧТО ОСТАВЛЕНО В МАШИНЕ</div>
@@ -1010,8 +1088,19 @@ async function checkPassword() {
     document.getElementById('adminSection').classList.remove('hidden');
     document.getElementById('loginError').classList.add('hidden');
     
-    loadData();
+    await loadData();
     sessionStorage.setItem('admin_authenticated', 'true');
+    
+    // Проверяем URL параметры
+    const urlParams = new URLSearchParams(window.location.search);
+    const tab = urlParams.get('tab');
+    const vehicleId = urlParams.get('id');
+    
+    if (tab && vehicleId) {
+      switchTab(tab);
+      document.getElementById('vehicle_id').value = vehicleId;
+      loadVehicleForEdit(vehicleId);
+    }
   } else {
     document.getElementById('loginError').textContent = '❌ Неверный пароль';
     document.getElementById('loginError').classList.remove('hidden');
@@ -1023,7 +1112,17 @@ window.onload = function() {
   if (sessionStorage.getItem('admin_authenticated') === 'true') {
     document.getElementById('loginSection').classList.add('hidden');
     document.getElementById('adminSection').classList.remove('hidden');
-    loadData();
+    loadData().then(() => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const tab = urlParams.get('tab');
+      const vehicleId = urlParams.get('id');
+      
+      if (tab && vehicleId) {
+        switchTab(tab);
+        document.getElementById('vehicle_id').value = vehicleId;
+        loadVehicleForEdit(vehicleId);
+      }
+    });
   }
 };
 
@@ -1163,7 +1262,7 @@ function updateVehicleImageSizeFromInput(size) {
   document.getElementById('vehicle_image_size_value').value = size;
 }
 
-// Отрисовка предметов инвентаря
+// Функции для работы с инвентарём
 function renderInventoryItems(items) {
   const container = document.getElementById('inventoryItems');
   container.innerHTML = '';
@@ -1181,7 +1280,6 @@ function renderInventoryItems(items) {
   });
 }
 
-// Добавление предмета в инвентарь
 function addInventoryItem() {
   const container = document.getElementById('inventoryItems');
   const index = container.children.length;
@@ -1196,7 +1294,6 @@ function addInventoryItem() {
   container.appendChild(row);
 }
 
-// Удаление предмета из инвентаря
 function removeInventoryItem(index) {
   const container = document.getElementById('inventoryItems');
   if (container.children.length > 0) {
@@ -1208,7 +1305,7 @@ function removeInventoryItem(index) {
   }
 }
 
-// Отрисовка предметов транспорта
+// Функции для работы с предметами машин
 function renderVehicleItems(items) {
   const container = document.getElementById('vehicleItems');
   if (!container) return;
@@ -1228,7 +1325,6 @@ function renderVehicleItems(items) {
   });
 }
 
-// Добавление предмета в транспорт
 function addVehicleItem() {
   const container = document.getElementById('vehicleItems');
   const index = container.children.length;
@@ -1243,7 +1339,6 @@ function addVehicleItem() {
   container.appendChild(row);
 }
 
-// Удаление предмета из транспорта
 function removeVehicleItem(index) {
   const container = document.getElementById('vehicleItems');
   if (container.children.length > 0) {
@@ -1255,7 +1350,7 @@ function removeVehicleItem(index) {
   }
 }
 
-// Отрисовка предметов офиса
+// Функции для работы с предметами офиса
 function renderHomeItems(items) {
   const container = document.getElementById('homeItems');
   if (!container) return;
@@ -1275,7 +1370,6 @@ function renderHomeItems(items) {
   });
 }
 
-// Добавление предмета в офис
 function addHomeItem() {
   const container = document.getElementById('homeItems');
   const index = container.children.length;
@@ -1290,7 +1384,6 @@ function addHomeItem() {
   container.appendChild(row);
 }
 
-// Удаление предмета из офиса
 function removeHomeItem(index) {
   const container = document.getElementById('homeItems');
   if (container.children.length > 0) {
@@ -1299,6 +1392,111 @@ function removeHomeItem(index) {
       const removeBtn = child.querySelector('.remove-item');
       removeBtn.setAttribute('onclick', `removeHomeItem(${i})`);
     });
+  }
+}
+
+// Функции для работы с автопарком
+function loadVehicleForEdit(vehicleId) {
+  if (!vehicleId) return;
+  
+  const vehicle = currentJsonData.fleet.vehicles.find(v => v.id === vehicleId);
+  if (!vehicle) return;
+  
+  document.getElementById('vehicle_id').value = vehicleId;
+  document.getElementById('vehicle_name').value = vehicle.name || '';
+  document.getElementById('vehicle_type').value = vehicle.type || '';
+  document.getElementById('vehicle_role').value = vehicle.role || 'основная';
+  document.getElementById('vehicle_status').value = vehicle.status || 'активен';
+  document.getElementById('vehicle_make').value = vehicle.make || '';
+  document.getElementById('vehicle_model').value = vehicle.model || '';
+  document.getElementById('vehicle_year').value = vehicle.year || '';
+  document.getElementById('vehicle_engine').value = vehicle.engine || '';
+  document.getElementById('vehicle_drivetrain').value = vehicle.drivetrain || '';
+  document.getElementById('vehicle_power').value = vehicle.power || '';
+  document.getElementById('vehicle_acceleration').value = vehicle.acceleration || '';
+  document.getElementById('vehicle_topspeed').value = vehicle.topspeed || '';
+  document.getElementById('vehicle_description').value = (vehicle.description || []).join('\n\n');
+  
+  const vehicleSize = vehicle.image_size || 400;
+  document.getElementById('vehicle_image_size').value = vehicleSize;
+  document.getElementById('vehicle_image_size_input').value = vehicleSize;
+  document.getElementById('vehicle_image_size_value').value = vehicleSize;
+  document.getElementById('vehiclePreviewImage').style.width = vehicleSize + 'px';
+  
+  renderVehicleItems(vehicle.items || []);
+  
+  switchTab('vehicle');
+}
+
+function addNewVehicle() {
+  if (!currentJsonData?.fleet) return;
+  
+  const newId = 'v' + String(currentJsonData.fleet.vehicles.length + 1).padStart(3, '0');
+  const newVehicle = {
+    id: newId,
+    name: `V-${String(currentJsonData.fleet.vehicles.length + 1).padStart(2, '0')}`,
+    type: "такси // седан",
+    role: "основная",
+    status: "активен",
+    make: "Villefort",
+    model: "Alvarado V4F (мод)",
+    year: "2075",
+    engine: "электрический // 450 л.с.",
+    drivetrain: "полный",
+    power: "330 кВт",
+    topspeed: "290 км/ч",
+    acceleration: "4.2 сек",
+    image: "delamain_vehicle.png",
+    image_size: 400,
+    description: [
+      "Стандартная модифицированная машина парка Деламейна. Внешне неотличима от обычного такси.",
+      "Технически идентична другим машинам парка, все системы в норме."
+    ],
+    items: [
+      {
+        name: "Аптечка",
+        quantity: "1 шт",
+        description: "Стандартная автомобильная аптечка."
+      },
+      {
+        name: "Зарядный кабель",
+        quantity: "1 шт",
+        description: "Универсальный кабель для подключения к сети Олимп."
+      }
+    ]
+  };
+  
+  currentJsonData.fleet.vehicles.push(newVehicle);
+  currentJsonData.fleet.total = currentJsonData.fleet.vehicles.length;
+  
+  // Обновляем селекторы
+  updateFleetSelectors();
+  
+  showMessage(`✅ Добавлена новая машина ${newVehicle.name}`, 'success');
+}
+
+function updateFleetSelectors() {
+  const fleetSelector = document.getElementById('fleet_vehicle_selector');
+  const vehicleSelector = document.getElementById('vehicle_selector');
+  
+  if (fleetSelector) {
+    fleetSelector.innerHTML = '<option value="">-- выберите машину --</option>';
+    currentJsonData.fleet.vehicles.forEach(v => {
+      fleetSelector.innerHTML += `<option value="${v.id}">${v.name} (${v.role})</option>`;
+    });
+  }
+  
+  if (vehicleSelector) {
+    vehicleSelector.innerHTML = '<option value="">-- выберите машину --</option>';
+    currentJsonData.fleet.vehicles.forEach(v => {
+      vehicleSelector.innerHTML += `<option value="${v.id}">${v.name} (${v.role})</option>`;
+    });
+  }
+}
+
+function switchVehicle(vehicleId) {
+  if (vehicleId) {
+    window.location.href = `admin.html?tab=vehicle&id=${vehicleId}`;
   }
 }
 
@@ -1341,9 +1539,10 @@ async function loadData() {
     document.getElementById('appearance_image_size_value').value = appearanceSize;
     document.getElementById('appearancePreviewImage').style.width = appearanceSize + 'px';
     
-    document.getElementById('inv_autopark').value = currentJsonData.inventory?.autopark || 10;
-    document.getElementById('inv_autopark_desc').value = currentJsonData.inventory?.autopark_desc || '';
-    document.getElementById('inv_security').value = currentJsonData.inventory?.security || 87;
+    // Заполняем инвентарь
+    document.getElementById('inv_autopark').value = currentJsonData.fleet?.total || 10;
+    document.getElementById('inv_security').value = currentJsonData.fleet?.security || 87;
+    document.getElementById('inv_autopark_desc').value = currentJsonData.fleet?.description || '';
     document.getElementById('inv_archive_size').value = currentJsonData.inventory?.archive_size || '18.4 Тб';
     document.getElementById('inv_archive_free').value = currentJsonData.inventory?.archive_free || '4.2 Тб';
     document.getElementById('inv_records').value = currentJsonData.inventory?.archive_records || 1247332;
@@ -1354,6 +1553,8 @@ async function loadData() {
     document.getElementById('inv_note').value = currentJsonData.inventory?.note || '';
     document.getElementById('last_updated').value = currentJsonData.last_updated || '12.03.2026';
     document.getElementById('last_updated_time').value = currentJsonData.last_updated_time || '04:17:22';
+    
+    renderInventoryItems(currentJsonData.inventory?.items || []);
     
     // Заполняем спутник
     document.getElementById('sputnik_name').value = currentJsonData.sputnik?.name || 'Спутник';
@@ -1369,26 +1570,14 @@ async function loadData() {
     document.getElementById('sputnikPreviewImage').style.width = sputnikSize + 'px';
     document.getElementById('sputnikPreviewImage').style.height = sputnikSize + 'px';
     
-    // Заполняем транспорт
-    if (currentJsonData.vehicle) {
-      document.getElementById('vehicle_name').value = currentJsonData.vehicle.name || '';
-      document.getElementById('vehicle_type').value = currentJsonData.vehicle.type || '';
-      document.getElementById('vehicle_owner').value = currentJsonData.vehicle.owner || '';
-      document.getElementById('vehicle_make').value = currentJsonData.vehicle.make || '';
-      document.getElementById('vehicle_model').value = currentJsonData.vehicle.model || '';
-      document.getElementById('vehicle_year').value = currentJsonData.vehicle.year || '';
-      document.getElementById('vehicle_engine').value = currentJsonData.vehicle.engine || '';
-      document.getElementById('vehicle_drivetrain').value = currentJsonData.vehicle.drivetrain || '';
-      document.getElementById('vehicle_power').value = currentJsonData.vehicle.power || '';
-      document.getElementById('vehicle_description').value = (currentJsonData.vehicle.description || []).join('\n\n');
+    // Заполняем автопарк
+    if (currentJsonData.fleet) {
+      document.getElementById('fleet_total').value = currentJsonData.fleet.total || 10;
+      document.getElementById('fleet_security').value = currentJsonData.fleet.security || 87;
+      document.getElementById('fleet_description').value = currentJsonData.fleet.description || '';
+      document.getElementById('fleet_garage').value = currentJsonData.fleet.garage_address || '';
       
-      const vehicleSize = currentJsonData.vehicle?.image_size || 400;
-      document.getElementById('vehicle_image_size').value = vehicleSize;
-      document.getElementById('vehicle_image_size_input').value = vehicleSize;
-      document.getElementById('vehicle_image_size_value').value = vehicleSize;
-      document.getElementById('vehiclePreviewImage').style.width = vehicleSize + 'px';
-      
-      renderVehicleItems(currentJsonData.vehicle?.items || []);
+      updateFleetSelectors();
     }
     
     // Заполняем офис
@@ -1397,9 +1586,6 @@ async function loadData() {
       document.getElementById('home_description').value = (currentJsonData.home.description || []).join('\n\n');
       renderHomeItems(currentJsonData.home?.items || []);
     }
-    
-    // Заполняем инвентарь
-    renderInventoryItems(currentJsonData.inventory?.items || []);
     
     // Raw JSON
     document.getElementById('rawJson').value = JSON.stringify(currentJsonData, null, 2);
@@ -1427,7 +1613,7 @@ function collectFormData() {
   // Собираем особенности спутника
   const sputnikFeatures = document.getElementById('sputnik_features').value.split(',').map(s => s.trim()).filter(s => s);
   
-  // Собираем предметы транспорта
+  // Собираем предметы текущей машины (если есть)
   const vehicleItems = [];
   const vehicleRows = document.querySelectorAll('#vehicleItems .item-row');
   vehicleRows.forEach(row => {
@@ -1442,6 +1628,32 @@ function collectFormData() {
   const vehicleDescription = document.getElementById('vehicle_description').value
     .split('\n\n')
     .filter(p => p.trim() !== '');
+  
+  // Обновляем текущую машину в массиве
+  const currentVehicleId = document.getElementById('vehicle_id').value;
+  const vehicleIndex = currentJsonData.fleet.vehicles.findIndex(v => v.id === currentVehicleId);
+  
+  if (vehicleIndex >= 0) {
+    currentJsonData.fleet.vehicles[vehicleIndex] = {
+      id: currentVehicleId,
+      name: document.getElementById('vehicle_name').value,
+      type: document.getElementById('vehicle_type').value,
+      role: document.getElementById('vehicle_role').value,
+      status: document.getElementById('vehicle_status').value,
+      make: document.getElementById('vehicle_make').value,
+      model: document.getElementById('vehicle_model').value,
+      year: document.getElementById('vehicle_year').value,
+      engine: document.getElementById('vehicle_engine').value,
+      drivetrain: document.getElementById('vehicle_drivetrain').value,
+      power: document.getElementById('vehicle_power').value,
+      topspeed: document.getElementById('vehicle_topspeed').value,
+      acceleration: document.getElementById('vehicle_acceleration').value,
+      image: 'delamain_vehicle.png',
+      image_size: parseInt(document.getElementById('vehicle_image_size_value').value) || 400,
+      description: vehicleDescription,
+      items: vehicleItems
+    };
+  }
   
   // Собираем предметы офиса
   const homeItems = [];
@@ -1499,9 +1711,6 @@ function collectFormData() {
     },
     
     inventory: {
-      autopark: parseInt(document.getElementById('inv_autopark').value),
-      autopark_desc: document.getElementById('inv_autopark_desc').value,
-      security: parseInt(document.getElementById('inv_security').value),
       archive_size: document.getElementById('inv_archive_size').value,
       archive_free: document.getElementById('inv_archive_free').value,
       archive_records: parseInt(document.getElementById('inv_records').value),
@@ -1513,6 +1722,14 @@ function collectFormData() {
       items: items
     },
     
+    fleet: {
+      total: parseInt(document.getElementById('fleet_total').value),
+      security: parseInt(document.getElementById('fleet_security').value),
+      description: document.getElementById('fleet_description').value,
+      garage_address: document.getElementById('fleet_garage').value,
+      vehicles: currentJsonData.fleet.vehicles
+    },
+    
     sputnik: {
       name: document.getElementById('sputnik_name').value,
       type: document.getElementById('sputnik_type').value,
@@ -1521,22 +1738,6 @@ function collectFormData() {
       features: sputnikFeatures,
       image: 'sputnik.png',
       image_size: parseInt(document.getElementById('sputnik_image_size_value').value) || 300
-    },
-    
-    vehicle: {
-      name: document.getElementById('vehicle_name').value,
-      type: document.getElementById('vehicle_type').value,
-      owner: document.getElementById('vehicle_owner').value,
-      make: document.getElementById('vehicle_make').value,
-      model: document.getElementById('vehicle_model').value,
-      year: document.getElementById('vehicle_year').value,
-      engine: document.getElementById('vehicle_engine').value,
-      drivetrain: document.getElementById('vehicle_drivetrain').value,
-      power: document.getElementById('vehicle_power').value,
-      image: 'delamain_vehicle.png',
-      image_size: parseInt(document.getElementById('vehicle_image_size_value').value) || 400,
-      description: vehicleDescription,
-      items: vehicleItems
     },
     
     home: {
@@ -1592,32 +1793,25 @@ function switchTab(tab) {
   } else if (tab === 'sputnik') {
     document.querySelectorAll('.tab-btn')[2].classList.add('active');
     document.getElementById('sputnikTab').classList.add('active');
-  } else if (tab === 'vehicle') {
+  } else if (tab === 'fleet') {
     document.querySelectorAll('.tab-btn')[3].classList.add('active');
+    document.getElementById('fleetTab').classList.add('active');
+    
+    if (currentJsonData?.fleet) {
+      document.getElementById('fleet_total').value = currentJsonData.fleet.total || 10;
+      document.getElementById('fleet_security').value = currentJsonData.fleet.security || 87;
+      document.getElementById('fleet_description').value = currentJsonData.fleet.description || '';
+      document.getElementById('fleet_garage').value = currentJsonData.fleet.garage_address || '';
+      
+      updateFleetSelectors();
+    }
+  } else if (tab === 'vehicle') {
+    document.querySelectorAll('.tab-btn')[4].classList.add('active');
     document.getElementById('vehicleTab').classList.add('active');
     
-    if (currentJsonData?.vehicle) {
-      document.getElementById('vehicle_name').value = currentJsonData.vehicle.name || '';
-      document.getElementById('vehicle_type').value = currentJsonData.vehicle.type || '';
-      document.getElementById('vehicle_owner').value = currentJsonData.vehicle.owner || '';
-      document.getElementById('vehicle_make').value = currentJsonData.vehicle.make || '';
-      document.getElementById('vehicle_model').value = currentJsonData.vehicle.model || '';
-      document.getElementById('vehicle_year').value = currentJsonData.vehicle.year || '';
-      document.getElementById('vehicle_engine').value = currentJsonData.vehicle.engine || '';
-      document.getElementById('vehicle_drivetrain').value = currentJsonData.vehicle.drivetrain || '';
-      document.getElementById('vehicle_power').value = currentJsonData.vehicle.power || '';
-      document.getElementById('vehicle_description').value = (currentJsonData.vehicle.description || []).join('\n\n');
-      
-      const vehicleSize = currentJsonData.vehicle?.image_size || 400;
-      document.getElementById('vehicle_image_size').value = vehicleSize;
-      document.getElementById('vehicle_image_size_input').value = vehicleSize;
-      document.getElementById('vehicle_image_size_value').value = vehicleSize;
-      document.getElementById('vehiclePreviewImage').style.width = vehicleSize + 'px';
-      
-      renderVehicleItems(currentJsonData.vehicle?.items || []);
-    }
+    updateFleetSelectors();
   } else if (tab === 'home') {
-    document.querySelectorAll('.tab-btn')[4].classList.add('active');
+    document.querySelectorAll('.tab-btn')[5].classList.add('active');
     document.getElementById('homeTab').classList.add('active');
     
     if (currentJsonData?.home) {
@@ -1626,7 +1820,7 @@ function switchTab(tab) {
       renderHomeItems(currentJsonData.home?.items || []);
     }
   } else if (tab === 'raw') {
-    document.querySelectorAll('.tab-btn')[5].classList.add('active');
+    document.querySelectorAll('.tab-btn')[6].classList.add('active');
     document.getElementById('rawTab').classList.add('active');
     
     if (currentJsonData) {
