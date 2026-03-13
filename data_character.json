@@ -11,7 +11,7 @@
   "os": 0,
   "extra_status": "",
   "last_updated": "12.03.2026",
-  "last_updated_time": "20:43:22",
+  "last_updated_time": "20:44:53",
   "reputation": {
     "global": 0,
     "organizations": {
@@ -76,7 +76,7 @@
       "тихий режим"
     ],
     "image": "sputnik.png",
-    "image_size": 300
+    "image_size": 500
   },
   "fleet": {
     "total": 10,
