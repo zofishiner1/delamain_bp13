@@ -2123,7 +2123,8 @@ function collectFormData() {
   
   const vehicleDescription = document.getElementById('vehicle_description').value
     .split('\n\n')
-    .filter(p => p.trim() !== '');
+    .map(p => p.trim())
+    .filter(p => p !== '');
   
   // Обновляем текущую машину в массиве
   const currentVehicleId = document.getElementById('vehicle_id').value;
@@ -2164,7 +2165,8 @@ function collectFormData() {
   });  
   const homeDescription = document.getElementById('home_description').value
     .split('\n\n')
-    .filter(p => p.trim() !== '');
+    .map(p => p.trim())
+    .filter(p => p !== '');
   
   // Собираем расовые особенности и протоколы
   const racialTraits = document.getElementById('racial_traits').value
