@@ -1177,7 +1177,7 @@ select {
         <!-- Сюда будут добавляться способности динамически -->
       </div>
       
-      <button onclick="addAbility()" class="add-item">+ ДОБАВИТЬ СПОСОБНОСТЬ</button>
+      <button onclick="window.addAbility()" class="add-item">+ ДОБАВИТЬ СПОСОБНОСТЬ</button>
     </div>
 
     <!-- Вкладка: Особенности -->
@@ -1189,7 +1189,7 @@ select {
         <!-- Сюда будут добавляться особенности динамически -->
       </div>
       
-      <button onclick="addFeature()" class="add-item">+ ДОБАВИТЬ ОСОБЕННОСТЬ</button>
+      <button onclick="window.addFeature()" class="add-item">+ ДОБАВИТЬ ОСОБЕННОСТЬ</button>
     </div>
 
     <!-- Вкладка: Слабости -->
@@ -1201,7 +1201,7 @@ select {
         <!-- Сюда будут добавляться слабости динамически -->
       </div>
       
-      <button onclick="addWeakness()" class="add-item">+ ДОБАВИТЬ СЛАБОСТЬ</button>
+      <button onclick="window.addWeakness()" class="add-item">+ ДОБАВИТЬ СЛАБОСТЬ</button>
     </div>
 
     <!-- Вкладка: Raw JSON -->
@@ -1450,6 +1450,310 @@ function renderInventoryItems(items) {
     container.appendChild(row);
   });
 }
+
+// Функции для работы со способностями - ГЛОБАЛЬНЫЕ
+window.renderAbilities = function(abilities) {
+  console.log('Рендеринг способностей:', abilities);
+  const container = document.getElementById('abilitiesList');
+  if (!container) {
+    console.log('Контейнер abilitiesList не найден');
+    return;
+  }
+  
+  container.innerHTML = '';
+  
+  if (!abilities || abilities.length === 0) {
+    container.innerHTML = '<div style="color: var(--dim); padding: 20px; text-align: center;">Нет способностей. Нажмите "+ ДОБАВИТЬ СПОСОБНОСТЬ" чтобы создать первую.</div>';
+    return;
+  }
+  
+  abilities.forEach((ability, index) => {
+    const card = document.createElement('div');
+    card.className = 'ability-card';
+    card.innerHTML = `
+      <div class="ability-header">
+        <h4>Способность ${index + 1}</h4>
+        <button class="remove-ability" onclick="removeAbility(${index})">УДАЛИТЬ</button>
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Название</label>
+          <input type="text" class="ability-name" value="${ability.name || ''}">
+        </div>
+        <div class="form-group">
+          <label>Теги (через запятую)</label>
+          <input type="text" class="ability-tags" value="${(ability.tags || []).join(', ')}">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Описание</label>
+        <textarea class="ability-desc" rows="4">${ability.description || ''}</textarea>
+      </div>
+      <div class="grid-3">
+        <div class="form-group">
+          <label>Каст</label>
+          <input type="text" class="ability-cast" value="${ability.cast || '—'}">
+        </div>
+        <div class="form-group">
+          <label>Длительность</label>
+          <input type="text" class="ability-duration" value="${ability.duration || '—'}">
+        </div>
+        <div class="form-group">
+          <label>Перезарядка</label>
+          <input type="text" class="ability-cooldown" value="${ability.cooldown || '—'}">
+        </div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+};
+
+window.addAbility = function() {
+  console.log('Добавление новой способности');
+  const container = document.getElementById('abilitiesList');
+  if (!container) return;
+  
+  // Если контейнер пуст или содержит сообщение о пустоте, очищаем его
+  if (container.children.length === 1 && container.children[0].innerText.includes('Нет способностей')) {
+    container.innerHTML = '';
+  }
+  
+  const index = container.children.length;
+  const card = document.createElement('div');
+  card.className = 'ability-card';
+  card.innerHTML = `
+    <div class="ability-header">
+      <h4>Новая способность</h4>
+      <button class="remove-ability" onclick="removeAbility(${index})">УДАЛИТЬ</button>
+    </div>
+    <div class="grid-2">
+      <div class="form-group">
+        <label>Название</label>
+        <input type="text" class="ability-name" value="Новая способность">
+      </div>
+      <div class="form-group">
+        <label>Теги (через запятую)</label>
+        <input type="text" class="ability-tags" value="passive, program">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Описание</label>
+      <textarea class="ability-desc" rows="4">Описание новой способности.</textarea>
+    </div>
+    <div class="grid-3">
+      <div class="form-group">
+        <label>Каст</label>
+        <input type="text" class="ability-cast" value="—">
+      </div>
+      <div class="form-group">
+        <label>Длительность</label>
+        <input type="text" class="ability-duration" value="—">
+      </div>
+      <div class="form-group">
+        <label>Перезарядка</label>
+        <input type="text" class="ability-cooldown" value="—">
+      </div>
+    </div>
+  `;
+  container.appendChild(card);
+};
+
+window.removeAbility = function(index) {
+  console.log('Удаление способности', index);
+  const container = document.getElementById('abilitiesList');
+  if (!container || container.children.length === 0) return;
+  
+  container.removeChild(container.children[index]);
+  
+  // Обновляем заголовки и кнопки
+  Array.from(container.children).forEach((child, i) => {
+    const header = child.querySelector('.ability-header h4');
+    if (header) header.textContent = `Способность ${i + 1}`;
+    const removeBtn = child.querySelector('.remove-ability');
+    if (removeBtn) removeBtn.setAttribute('onclick', `removeAbility(${i})`);
+  });
+  
+  // Если контейнер пуст, показываем сообщение
+  if (container.children.length === 0) {
+    container.innerHTML = '<div style="color: var(--dim); padding: 20px; text-align: center;">Нет способностей. Нажмите "+ ДОБАВИТЬ СПОСОБНОСТЬ" чтобы создать первую.</div>';
+  }
+};
+
+// Функции для работы с особенностями - ГЛОБАЛЬНЫЕ
+window.renderFeatures = function(features) {
+  console.log('Рендеринг особенностей:', features);
+  const container = document.getElementById('featuresList');
+  if (!container) {
+    console.log('Контейнер featuresList не найден');
+    return;
+  }
+  
+  container.innerHTML = '';
+  
+  if (!features || features.length === 0) {
+    container.innerHTML = '<div style="color: var(--dim); padding: 20px; text-align: center;">Нет особенностей. Нажмите "+ ДОБАВИТЬ ОСОБЕННОСТЬ" чтобы создать первую.</div>';
+    return;
+  }
+  
+  features.forEach((feature, index) => {
+    const card = document.createElement('div');
+    card.className = 'feature-card';
+    card.innerHTML = `
+      <div class="feature-header">
+        <h4>Особенность ${index + 1}</h4>
+        <button class="remove-feature" onclick="removeFeature(${index})">УДАЛИТЬ</button>
+      </div>
+      <div class="form-group">
+        <label>Название</label>
+        <input type="text" class="feature-title" value="${feature.title || ''}">
+      </div>
+      <div class="form-group">
+        <label>Описание</label>
+        <textarea class="feature-desc" rows="3">${feature.description || ''}</textarea>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+};
+
+window.addFeature = function() {
+  console.log('Добавление новой особенности');
+  const container = document.getElementById('featuresList');
+  if (!container) return;
+  
+  // Если контейнер пуст или содержит сообщение о пустоте, очищаем его
+  if (container.children.length === 1 && container.children[0].innerText.includes('Нет особенностей')) {
+    container.innerHTML = '';
+  }
+  
+  const index = container.children.length;
+  const card = document.createElement('div');
+  card.className = 'feature-card';
+  card.innerHTML = `
+    <div class="feature-header">
+      <h4>Новая особенность</h4>
+      <button class="remove-feature" onclick="removeFeature(${index})">УДАЛИТЬ</button>
+    </div>
+    <div class="form-group">
+      <label>Название</label>
+      <input type="text" class="feature-title" value="Новая особенность">
+    </div>
+    <div class="form-group">
+      <label>Описание</label>
+      <textarea class="feature-desc" rows="3">Описание новой особенности.</textarea>
+    </div>
+  `;
+  container.appendChild(card);
+};
+
+window.removeFeature = function(index) {
+  console.log('Удаление особенности', index);
+  const container = document.getElementById('featuresList');
+  if (!container || container.children.length === 0) return;
+  
+  container.removeChild(container.children[index]);
+  
+  // Обновляем заголовки и кнопки
+  Array.from(container.children).forEach((child, i) => {
+    const header = child.querySelector('.feature-header h4');
+    if (header) header.textContent = `Особенность ${i + 1}`;
+    const removeBtn = child.querySelector('.remove-feature');
+    if (removeBtn) removeBtn.setAttribute('onclick', `removeFeature(${i})`);
+  });
+  
+  // Если контейнер пуст, показываем сообщение
+  if (container.children.length === 0) {
+    container.innerHTML = '<div style="color: var(--dim); padding: 20px; text-align: center;">Нет особенностей. Нажмите "+ ДОБАВИТЬ ОСОБЕННОСТЬ" чтобы создать первую.</div>';
+  }
+};
+
+// Функции для работы со слабостями - ГЛОБАЛЬНЫЕ
+window.renderWeaknesses = function(weaknesses) {
+  console.log('Рендеринг слабостей:', weaknesses);
+  const container = document.getElementById('weaknessesList');
+  if (!container) {
+    console.log('Контейнер weaknessesList не найден');
+    return;
+  }
+  
+  container.innerHTML = '';
+  
+  if (!weaknesses || weaknesses.length === 0) {
+    container.innerHTML = '<div style="color: var(--dim); padding: 20px; text-align: center;">Нет слабостей. Нажмите "+ ДОБАВИТЬ СЛАБОСТЬ" чтобы создать первую.</div>';
+    return;
+  }
+  
+  weaknesses.forEach((weakness, index) => {
+    const card = document.createElement('div');
+    card.className = 'weakness-card';
+    card.innerHTML = `
+      <div class="weakness-header">
+        <h4>Слабость ${index + 1}</h4>
+        <button class="remove-weakness" onclick="removeWeakness(${index})">УДАЛИТЬ</button>
+      </div>
+      <div class="form-group">
+        <label>Название</label>
+        <input type="text" class="weakness-title" value="${weakness.title || ''}">
+      </div>
+      <div class="form-group">
+        <label>Описание</label>
+        <textarea class="weakness-desc" rows="3">${weakness.description || ''}</textarea>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+};
+
+window.addWeakness = function() {
+  console.log('Добавление новой слабости');
+  const container = document.getElementById('weaknessesList');
+  if (!container) return;
+  
+  // Если контейнер пуст или содержит сообщение о пустоте, очищаем его
+  if (container.children.length === 1 && container.children[0].innerText.includes('Нет слабостей')) {
+    container.innerHTML = '';
+  }
+  
+  const index = container.children.length;
+  const card = document.createElement('div');
+  card.className = 'weakness-card';
+  card.innerHTML = `
+    <div class="weakness-header">
+      <h4>Новая слабость</h4>
+      <button class="remove-weakness" onclick="removeWeakness(${index})">УДАЛИТЬ</button>
+    </div>
+    <div class="form-group">
+      <label>Название</label>
+      <input type="text" class="weakness-title" value="Новая слабость">
+    </div>
+    <div class="form-group">
+      <label>Описание</label>
+      <textarea class="weakness-desc" rows="3">Описание новой слабости.</textarea>
+    </div>
+  `;
+  container.appendChild(card);
+};
+
+window.removeWeakness = function(index) {
+  console.log('Удаление слабости', index);
+  const container = document.getElementById('weaknessesList');
+  if (!container || container.children.length === 0) return;
+  
+  container.removeChild(container.children[index]);
+  
+  // Обновляем заголовки и кнопки
+  Array.from(container.children).forEach((child, i) => {
+    const header = child.querySelector('.weakness-header h4');
+    if (header) header.textContent = `Слабость ${i + 1}`;
+    const removeBtn = child.querySelector('.remove-weakness');
+    if (removeBtn) removeBtn.setAttribute('onclick', `removeWeakness(${i})`);
+  });
+  
+  // Если контейнер пуст, показываем сообщение
+  if (container.children.length === 0) {
+    container.innerHTML = '<div style="color: var(--dim); padding: 20px; text-align: center;">Нет слабостей. Нажмите "+ ДОБАВИТЬ СЛАБОСТЬ" чтобы создать первую.</div>';
+  }
+};
 
 function addInventoryItem() {
   const container = document.getElementById('inventoryItems');
