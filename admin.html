@@ -1976,6 +1976,7 @@ function switchVehicle(vehicleId) {
 }
 
 // Загрузка данных
+// Загрузка данных
 async function loadData() {
   try {
     const response = await fetch('data_character.json?' + Date.now());
@@ -2003,11 +2004,11 @@ async function loadData() {
     document.getElementById('rep_rdac').value = currentJsonData.reputation?.organizations?.['RDAC'] || 0;
     document.getElementById('rep_kraken').value = currentJsonData.reputation?.organizations?.['KRAKEN'] || -25;
     
-    // Заполняем расовые особенности и протоколы
+    // Заполняем расовые особенности и протоколы с переносами строк
     document.getElementById('racial_traits').value = (currentJsonData.racial_traits || []).join('\n');
     document.getElementById('athena_protocol').value = (currentJsonData.athena_protocol || []).join('\n');
     
-    // Заполняем внешность
+    // Заполняем внешность (сохраняем переносы строк)
     document.getElementById('appearance_form_factor').value = currentJsonData.appearance?.form_factor || '';
     document.getElementById('appearance_fleet').value = currentJsonData.appearance?.fleet || '';
     document.getElementById('appearance_voice').value = currentJsonData.appearance?.voice || '';
@@ -2058,7 +2059,9 @@ async function loadData() {
     // Заполняем офис
     if (currentJsonData.home) {
       document.getElementById('home_owner').value = currentJsonData.home.owner || '';
-      document.getElementById('home_description').value = (currentJsonData.home.description || []).join('\n\n');
+      // Собираем описание офиса из массива обратно в текст с переносами строк
+      const homeDescArray = currentJsonData.home.description || [];
+      document.getElementById('home_description').value = homeDescArray.join('\n\n');
       renderHomeItems(currentJsonData.home?.items || []);
     }
     
@@ -2121,10 +2124,12 @@ function collectFormData() {
     }
   });
   
+  // Сохраняем описание машины с переносами строк
   const vehicleDescription = document.getElementById('vehicle_description').value
     .split('\n\n')
     .map(p => p.trim())
-    .filter(p => p !== '');
+    .filter(p => p !== '')
+    .map(p => p.replace(/\n/g, ' ')); // Заменяем одиночные переносы на пробелы внутри абзацев
   
   // Обновляем текущую машину в массиве
   const currentVehicleId = document.getElementById('vehicle_id').value;
@@ -2162,22 +2167,32 @@ function collectFormData() {
     if (name) {
       homeItems.push({ name, quantity, description });
     }
-  });  
+  });
+  
+  // Сохраняем описание офиса с переносами строк
   const homeDescription = document.getElementById('home_description').value
     .split('\n\n')
     .map(p => p.trim())
-    .filter(p => p !== '');
+    .filter(p => p !== '')
+    .map(p => p.replace(/\n/g, ' ')); // Заменяем одиночные переносы на пробелы внутри абзацев
   
-  // Собираем расовые особенности и протоколы
+  // Собираем расовые особенности с сохранением переносов строк
   const racialTraits = document.getElementById('racial_traits').value
     .split('\n')
     .map(s => s.trim())
     .filter(s => s);
   
+  // Собираем протокол Афины с сохранением переносов строк
   const athenaProtocol = document.getElementById('athena_protocol').value
     .split('\n')
     .map(s => s.trim())
     .filter(s => s);
+  
+  // Сохраняем тексты внешности с переносами строк
+  const appearanceFormFactor = document.getElementById('appearance_form_factor').value;
+  const appearanceFleet = document.getElementById('appearance_fleet').value;
+  const appearanceVoice = document.getElementById('appearance_voice').value;
+  const appearancePassengerNote = document.getElementById('appearance_passenger_note').value;
   
   // Собираем способности
   const abilities = [];
@@ -2250,10 +2265,10 @@ function collectFormData() {
     },
     
     appearance: {
-      form_factor: document.getElementById('appearance_form_factor').value,
-      fleet: document.getElementById('appearance_fleet').value,
-      voice: document.getElementById('appearance_voice').value,
-      passenger_note: document.getElementById('appearance_passenger_note').value,
+      form_factor: appearanceFormFactor,
+      fleet: appearanceFleet,
+      voice: appearanceVoice,
+      passenger_note: appearancePassengerNote,
       image: 'delamain.png',
       image_size: parseInt(document.getElementById('appearance_image_size_value').value) || 400
     },
