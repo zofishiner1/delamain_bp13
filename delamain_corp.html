@@ -439,6 +439,7 @@ h1 span {
       <a href="delamain_fleet.html" class="nav-link"><span>🚙</span> АВТОПАРК</a>
       <a href="delamain_vehicle.html?id=v001" class="nav-link"><span>🚗</span> ТРАНСПОРТ</a>
       <a href="delamain_home.html" class="nav-link"><span>🏠</span> ОФИС</a>
+      <a href="delamain_docs.html" class="nav-link"><span>📄</span> ДОКУМЕНТЫ</a>
     </div>
     
     <div class="header-sys">
@@ -549,7 +550,7 @@ async function loadCorpData() {
           <div class="tariff-desc">${tariff.description}</div>
           <div class="tariff-price">${tariff.price} <small>${tariff.unit}</small></div>
         </div>
-      `).join('');https://zofishiner1.github.io/delamain_bp13/delamain_corp.html
+      `).join('');
     } else {
       document.getElementById('tariffs-container').innerHTML = '<div class="tariff-row"><div class="tariff-desc" style="text-align: center;">Нет доступных тарифов</div></div>';
     }
