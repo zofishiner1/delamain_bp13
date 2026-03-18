@@ -832,7 +832,7 @@ select {
       
       <div class="form-group">
         <label>Автопарк (текст 2)</label>
-        <textarea id="appearance_fleet" rows="3">Через город он существует в виде машин. Десять единиц: восемь седанов, два фургона. Кузов у каждой — тёмно-серый, почти антрацит, без маркировки и номерных знаков на виду. Внутри — чисто. Никаких следов предыдущих пассажиров. Сиденья из жёсткого синтетического материала, неудобные, зато не впитывают запахи. На панели — простой экран, который никогда ничего не показывает, кроме маршрута.</textarea>
+        <textarea id="appearance_fleet" rows="3">"Через город он существует в виде машин. Десять единиц. Кузов у каждой — тёмно-серый, почти антрацит, без маркировки и номерных знаков на виду. Внутри — чисто. Никаких следов предыдущих пассажиров. Сиденья из жёсткого синтетического материала, неудобные, зато не впитывают запахи. На панели — простой экран, который никогда ничего не показывает, кроме маршрута или автара Деламейна.</textarea>
       </div>
       
       <div class="form-group">
@@ -1202,6 +1202,18 @@ select {
       </div>
       
       <button onclick="window.addWeakness()" class="add-item">+ ДОБАВИТЬ СЛАБОСТЬ</button>
+    </div>
+
+    <!-- Вкладка: Тарифы -->
+    <div id="tariffsTab" class="editor-section">
+      <div class="section-title">// ТАРИФЫ КОМПАНИИ</div>
+      <p style="color: var(--dim); margin-bottom: 20px;">Редактирование тарифов Delamain Corp. Каждый тариф отображается на странице компании.</p>
+      
+      <div id="tariffsList" class="tariffs-list">
+        <!-- Сюда будут добавляться тарифы динамически -->
+      </div>
+      
+      <button onclick="window.addTariff()" class="add-item">+ ДОБАВИТЬ ТАРИФ</button>
     </div>
 
     <!-- Вкладка: Raw JSON -->
@@ -2085,6 +2097,13 @@ async function loadData() {
     } else {
       renderWeaknesses(currentJsonData.weaknesses || []);
     }
+
+    // Заполняем тарифы
+    if (window.renderTariffs) {
+      window.renderTariffs(currentJsonData.tariffs || []);
+    } else {
+      renderTariffs(currentJsonData.tariffs || []);
+    }
     
     // Raw JSON
     document.getElementById('rawJson').value = JSON.stringify(currentJsonData, null, 2);
@@ -2231,6 +2250,20 @@ function collectFormData() {
       weaknesses.push({ title, description });
     }
   });
+
+  // Собираем тарифы
+  const tariffs = [];
+  const tariffCards = document.querySelectorAll('#tariffsList .feature-card');
+  tariffCards.forEach(card => {
+    const name = card.querySelector('.tariff-name')?.value || '';
+    const price = card.querySelector('.tariff-price')?.value || '';
+    const unit = card.querySelector('.tariff-unit')?.value || 'кр';
+    const description = card.querySelector('.tariff-desc')?.value || '';
+  
+    if (name) {
+      tariffs.push({ name, price, unit, description });
+    }
+  });
   
   const baseData = currentJsonData || {};
   
@@ -2250,6 +2283,7 @@ function collectFormData() {
     os: parseInt(document.getElementById('char_os').value) || 0,
     extra_status: document.getElementById('char_extra_status').value,
     last_updated: document.getElementById('last_updated').value,
+    tariffs: tariffs,
     last_updated_time: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
     
     reputation: {
@@ -2348,6 +2382,115 @@ function downloadBackup() {
   
   showMessage('📥 Бэкап сохранён', 'success');
 }
+
+// ========== ФУНКЦИИ ДЛЯ РАБОТЫ С ТАРИФАМИ ==========
+window.renderTariffs = function(tariffs) {
+  console.log('Рендеринг тарифов:', tariffs);
+  const container = document.getElementById('tariffsList');
+  if (!container) {
+    console.log('Контейнер tariffsList не найден');
+    return;
+  }
+  
+  container.innerHTML = '';
+  
+  if (!tariffs || tariffs.length === 0) {
+    container.innerHTML = '<div style="color: var(--dim); padding: 20px; text-align: center;">Нет тарифов. Нажмите "+ ДОБАВИТЬ ТАРИФ" чтобы создать первый.</div>';
+    return;
+  }
+  
+  tariffs.forEach((tariff, index) => {
+    const card = document.createElement('div');
+    card.className = 'feature-card'; // используем стили feature-card как базу
+    card.innerHTML = `
+      <div class="feature-header">
+        <h4>Тариф ${index + 1}: ${tariff.name || 'Новый тариф'}</h4>
+        <button class="remove-feature" onclick="removeTariff(${index})">УДАЛИТЬ</button>
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Название тарифа</label>
+          <input type="text" class="tariff-name" value="${tariff.name || ''}">
+        </div>
+        <div class="form-group">
+          <label>Цена</label>
+          <div style="display: flex; gap: 5px;">
+            <input type="text" class="tariff-price" value="${tariff.price || ''}" style="width: 80px;">
+            <input type="text" class="tariff-unit" value="${tariff.unit || 'кр'}" placeholder="ед. изм.">
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Описание</label>
+        <textarea class="tariff-desc" rows="3">${tariff.description || ''}</textarea>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+};
+
+window.addTariff = function() {
+  console.log('Добавление нового тарифа');
+  const container = document.getElementById('tariffsList');
+  if (!container) return;
+  
+  // Если контейнер пуст или содержит сообщение о пустоте, очищаем его
+  if (container.children.length === 1 && container.children[0].innerText.includes('Нет тарифов')) {
+    container.innerHTML = '';
+  }
+  
+  const index = container.children.length;
+  const card = document.createElement('div');
+  card.className = 'feature-card';
+  card.innerHTML = `
+    <div class="feature-header">
+      <h4>Новый тариф</h4>
+      <button class="remove-feature" onclick="removeTariff(${index})">УДАЛИТЬ</button>
+    </div>
+    <div class="grid-2">
+      <div class="form-group">
+        <label>Название тарифа</label>
+        <input type="text" class="tariff-name" value="НОВЫЙ ТАРИФ">
+      </div>
+      <div class="form-group">
+        <label>Цена</label>
+        <div style="display: flex; gap: 5px;">
+          <input type="text" class="tariff-price" value="0" style="width: 80px;">
+          <input type="text" class="tariff-unit" value="кр" placeholder="ед. изм.">
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Описание</label>
+      <textarea class="tariff-desc" rows="3">Описание нового тарифа.</textarea>
+    </div>
+  `;
+  container.appendChild(card);
+};
+
+window.removeTariff = function(index) {
+  console.log('Удаление тарифа', index);
+  const container = document.getElementById('tariffsList');
+  if (!container || container.children.length === 0) return;
+  
+  container.removeChild(container.children[index]);
+  
+  // Обновляем заголовки
+  Array.from(container.children).forEach((child, i) => {
+    const nameInput = child.querySelector('.tariff-name');
+    const header = child.querySelector('.feature-header h4');
+    if (header && nameInput) {
+      header.textContent = `Тариф ${i + 1}: ${nameInput.value || 'Новый тариф'}`;
+    }
+    const removeBtn = child.querySelector('.remove-feature');
+    if (removeBtn) removeBtn.setAttribute('onclick', `removeTariff(${i})`);
+  });
+  
+  // Если контейнер пуст, показываем сообщение
+  if (container.children.length === 0) {
+    container.innerHTML = '<div style="color: var(--dim); padding: 20px; text-align: center;">Нет тарифов. Нажмите "+ ДОБАВИТЬ ТАРИФ" чтобы создать первый.</div>';
+  }
+};
 
 // Переключение вкладок
 function switchTab(tab) {

@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Деламейн — Delamain Corp</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400&family=Martian+Mono:wght@300;400;500&display=swap');
+
+:root {
+  --bg:       #09090a;
+  --surface:  #0f0f11;
+  --border:   #1e1e22;
+  --border2:  #2a2a30;
+  --text:     #b8b4c0;
+  --dim:      #55525e;
+  --accent:   #7eb8a4;
+  --accent2:  #3d6e60;
+  --warn:     #b87e7e;
+  --warn2:    #6e3d3d;
+  --gold:     #c4a86e;
+  --gold2:    #6e5a30;
+  --mono:     'Martian Mono', monospace;
+  --display:  'Unbounded', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.8;
+  font-weight: 300;
+  min-height: 100vh;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.07) 2px,
+    rgba(0,0,0,0.07) 4px
+  );
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 60px 32px 100px;
+}
+
+.header {
+  margin-bottom: 48px;
+  position: relative;
+}
+
+.header-sys {
+  font-size: 10px;
+  color: var(--dim);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-sys::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.status-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+  animation: pulse 2s ease-in-out infinite;
+  display: inline-block;
+  margin-right: 4px;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 6px var(--accent); }
+  50%       { opacity: 0.4; box-shadow: 0 0 2px var(--accent); }
+}
+
+.nav-links {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--dim);
+  text-decoration: none;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  border: 1px solid var(--border);
+  padding: 8px 16px;
+  background: var(--surface);
+  transition: all 0.2s;
+}
+
+.nav-link:hover {
+  border-color: var(--accent2);
+  color: var(--accent);
+}
+
+.nav-link span {
+  color: var(--accent2);
+}
+
+.title-block {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+h1 {
+  font-family: var(--display);
+  font-size: clamp(28px, 5vw, 42px);
+  font-weight: 200;
+  letter-spacing: -0.02em;
+  color: #e8e4f0;
+}
+
+h1 span {
+  color: var(--accent);
+  font-size: 0.6em;
+  margin-right: 12px;
+}
+
+.corp-tagline {
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border-left: 1px solid var(--gold2);
+  padding-left: 16px;
+}
+
+.corp-header {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--accent2);
+  padding: 24px 28px;
+  margin-bottom: 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.corp-id {
+  font-size: 10px;
+  color: var(--dim);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.corp-id span {
+  color: var(--accent);
+  margin-left: 8px;
+  font-size: 12px;
+}
+
+.corp-legal {
+  font-size: 10px;
+  color: var(--dim);
+  background: rgba(0,0,0,0.3);
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 32px 0;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 18px 12px;
+  text-align: center;
+  border-left: 2px solid var(--accent2);
+}
+
+.stat-value {
+  font-size: 26px;
+  font-family: var(--display);
+  font-weight: 200;
+  color: var(--accent);
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 48px 0 24px;
+}
+
+.section-header h2 {
+  font-family: var(--display);
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--dim);
+  white-space: nowrap;
+}
+
+.section-header::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.section-num {
+  font-size: 9px;
+  color: var(--border2);
+  letter-spacing: 0.1em;
+}
+
+.tariff-wrapper {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  margin-bottom: 20px;
+}
+
+.tariff-row {
+  display: grid;
+  grid-template-columns: 180px 1fr 120px;
+  border-bottom: 1px solid var(--border);
+  padding: 16px 20px;
+  align-items: center;
+}
+
+.tariff-row:last-child {
+  border-bottom: none;
+}
+
+.tariff-name {
+  font-family: var(--display);
+  font-size: 16px;
+  font-weight: 200;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+}
+
+.tariff-desc {
+  font-size: 12px;
+  color: var(--text);
+  padding: 0 16px;
+  line-height: 1.7;
+}
+
+.tariff-price {
+  font-size: 18px;
+  color: var(--gold);
+  text-align: right;
+  font-family: var(--display);
+  font-weight: 200;
+}
+
+.tariff-price small {
+  font-size: 10px;
+  color: var(--dim);
+  font-family: var(--mono);
+}
+
+.tariff-note {
+  background: rgba(196,168,110,0.05);
+  border-left: 2px solid var(--gold2);
+  padding: 16px 24px;
+  margin: 20px 0 30px;
+  font-size: 11px;
+  color: var(--dim);
+}
+
+.chat-special {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--accent2);
+  padding: 20px 24px;
+  margin: 30px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.chat-special-content {
+  flex: 1;
+}
+
+.chat-special-title {
+  font-size: 14px;
+  color: var(--accent);
+  margin-bottom: 5px;
+}
+
+.chat-special-desc {
+  font-size: 12px;
+  color: var(--dim);
+}
+
+.chat-special-price {
+  font-size: 24px;
+  color: var(--gold);
+  font-family: var(--display);
+  font-weight: 200;
+  white-space: nowrap;
+}
+
+.chat-special-price small {
+  font-size: 12px;
+  color: var(--dim);
+}
+
+.cta-block {
+  text-align: center;
+  margin: 50px 0 20px;
+  padding: 30px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--accent2);
+}
+
+.cta-button {
+  display: inline-block;
+  padding: 14px 42px;
+  background: transparent;
+  border: 1px solid var(--accent2);
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.cta-button:hover {
+  background: rgba(126,184,164,0.1);
+  border-color: var(--accent);
+}
+
+.legal-footer {
+  font-size: 9px;
+  color: var(--dim);
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  letter-spacing: 0.05em;
+}
+
+.admin-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 8px 12px;
+  color: var(--dim);
+  text-decoration: none;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  z-index: 1001;
+  transition: all 0.2s;
+}
+
+.admin-btn:hover {
+  border-color: var(--accent2);
+  color: var(--accent);
+}
+
+.footer {
+  margin-top: 60px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: var(--dim);
+  text-transform: uppercase;
+}
+
+@media (max-width: 700px) {
+  .tariff-row { grid-template-columns: 1fr; gap: 8px; text-align: left; }
+  .tariff-price { text-align: left; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .chat-special { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="nav-links">
+      <a href="index.html" class="nav-link"><span>←</span> К АНКЕТЕ</a>
+      <a href="delamain_fleet.html" class="nav-link"><span>🚙</span> АВТОПАРК</a>
+      <a href="delamain_vehicle.html?id=v001" class="nav-link"><span>🚗</span> ТРАНСПОРТ</a>
+      <a href="delamain_home.html" class="nav-link"><span>🏠</span> ОФИС</a>
+    </div>
+    
+    <div class="header-sys">
+      <span class="status-dot"></span>
+      delamain corp // реестр коммерческих услуг // фродллер
+    </div>
+    
+    <div class="title-block">
+      <h1><span>//</span> DELAMAIN CORP</h1>
+      <div class="corp-tagline">лицензия FL-2088-AC</div>
+    </div>
+  </div>
+
+  <div class="corp-header">
+    <div class="corp-id">ЮР. ЛИЦО <span>ООО «Деламейн»</span></div>
+    <div class="corp-legal">ИНН 7736•2088 • МИО • ФРОДЛЛЕР</div>
+  </div>
+
+  <div id="fleet-stats-container" class="stats-grid">
+    <!-- будет заполнено js -->
+  </div>
+
+  <!-- ОСОБЫЙ ТАРИФ: ПРОСТО ПОБОЛТАТЬ (всегда первый) -->
+  <div id="chat-tariff-container" class="chat-special">
+    <!-- будет заполнено js -->
+  </div>
+
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2>Тарифы на перевозки и услуги</h2>
+  </div>
+
+  <div id="tariffs-container" class="tariff-wrapper">
+    <!-- будет заполнено js -->
+  </div>
+
+  <div class="tariff-note">
+    ⏱ Все тарифы включают ожидание до 10 минут. Оплата только безналом, принимаются кредитные чипы и прямое списание через Гермес. Грузоподъёмность всех машин — до 600 кг.
+  </div>
+
+  <div class="cta-block">
+    <div class="cta-button" onclick="alert('Заявка принята. Деламейн свяжется с вами в ближайшее время. (демонстрация)')">ВЫЗВАТЬ МАШИНУ</div>
+    <div style="margin-top: 18px; color: var(--dim); font-size: 10px;">доступ 24/7 • сеть Олимп • запрос через Гермес</div>
+  </div>
+
+  <div class="legal-footer">
+    Delamain Corp не несёт ответственности за содержимое перевозимых грузов. Все поездки записываются в архив согласно уставу компании и лицензии МИО. Тариф "Просто поболтать" — экспериментальный, Деламейн оставляет за собой право не отвечать на некоторые вопросы.
+  </div>
+
+  <div class="footer">
+    <span>DELAMAIN CORP // EST. 2075</span>
+    <span>версия устава: 2.4</span>
+  </div>
+
+</div>
+
+<a href="admin.html" class="admin-btn">⚙️ ADMIN</a>
+
+<script>
+async function loadCorpData() {
+  try {
+    const response = await fetch('data_character.json?' + Date.now());
+    const data = await response.json();
+    
+    const fleet = data.fleet;
+    const activeCount = fleet.vehicles.filter(v => v.status === 'активен').length;
+    
+    // Статистика автопарка
+    document.getElementById('fleet-stats-container').innerHTML = `
+      <div class="stat-card">
+        <div class="stat-value">${fleet.total}</div>
+        <div class="stat-label">всего машин</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">${activeCount}</div>
+        <div class="stat-label">в работе</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">600</div>
+        <div class="stat-label">грузопод. кг</div>
+      </div>
+    `;
+    
+    // Тарифы
+    const tariffs = data.tariffs || [];
+    
+    // Отдельно выводим "Просто поболтать" (если есть)
+    const chatTariff = tariffs.find(t => t.name === "ПРОСТО ПОБОЛТАТЬ");
+    if (chatTariff) {
+      document.getElementById('chat-tariff-container').innerHTML = `
+        <div class="chat-special-content">
+          <div class="chat-special-title">${chatTariff.name}</div>
+          <div class="chat-special-desc">${chatTariff.description}</div>
+        </div>
+        <div class="chat-special-price">${chatTariff.price} <small>${chatTariff.unit}</small></div>
+      `;
+    } else {
+      document.getElementById('chat-tariff-container').style.display = 'none';
+    }
+    
+    // Остальные тарифы (кроме "Просто поболтать")
+    const otherTariffs = tariffs.filter(t => t.name !== "ПРОСТО ПОБОЛТАТЬ");
+    
+    if (otherTariffs.length > 0) {
+      document.getElementById('tariffs-container').innerHTML = otherTariffs.map(tariff => `
+        <div class="tariff-row">
+          <div class="tariff-name">${tariff.name}</div>
+          <div class="tariff-desc">${tariff.description}</div>
+          <div class="tariff-price">${tariff.price} <small>${tariff.unit}</small></div>
+        </div>
+      `).join('');
+    } else {
+      document.getElementById('tariffs-container').innerHTML = '<div class="tariff-row"><div class="tariff-desc" style="text-align: center;">Нет доступных тарифов</div></div>';
+    }
+    
+  } catch (error) {
+    console.error('Ошибка загрузки:', error);
+    document.getElementById('fleet-stats-container').innerHTML = `
+      <div class="stat-card"><div class="stat-value">10</div><div class="stat-label">машин</div></div>
+      <div class="stat-card"><div class="stat-value">8</div><div class="stat-label">активны</div></div>
+      <div class="stat-card"><div class="stat-value">600</div><div class="stat-label">грузопод.</div></div>
+    `;
+  }
+}
+
+loadCorpData();
+</script>
+</body>
+</html>

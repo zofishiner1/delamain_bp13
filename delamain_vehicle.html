@@ -475,6 +475,10 @@ async function loadVehicleData() {
             <span class="spec-label">Макс.</span>
             <span class="spec-value">${vehicle.topspeed}</span>
           </div>
+          <div class="spec-item">
+            <span class="spec-label">Грузоподъемность</span>
+            <span class="spec-value">${vehicle.payload || 'до 600 кг'}</span>
+        </div>
         </div>
       </div>
 

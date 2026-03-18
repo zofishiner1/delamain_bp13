@@ -416,6 +416,7 @@ async function loadFleetData() {
               <div class="vehicle-spec-item"><span>Мощность</span>${v.power}</div>
               <div class="vehicle-spec-item"><span>Разгон</span>${v.acceleration}</div>
               <div class="vehicle-spec-item"><span>Макс.</span>${v.topspeed}</div>
+              <div class="vehicle-spec-item"><span>Грузоп.</span>${v.payload || 'до 600 кг'}</div>
             </div>
             <div class="vehicle-items-count">
               📦 ${v.items.length} предметов
