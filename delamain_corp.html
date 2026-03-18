@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Деламейн — Документы / Устав</title>
+<title>Деламейн — Delamain Corp</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400&family=Martian+Mono:wght@300;400;500&display=swap');
 
@@ -54,7 +54,7 @@ body::before {
 }
 
 .page {
-  max-width: 860px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 60px 32px 100px;
 }
@@ -137,7 +137,7 @@ body::before {
 
 h1 {
   font-family: var(--display);
-  font-size: clamp(24px, 4vw, 38px);
+  font-size: clamp(28px, 5vw, 42px);
   font-weight: 200;
   letter-spacing: -0.02em;
   color: #e8e4f0;
@@ -149,181 +149,243 @@ h1 span {
   margin-right: 12px;
 }
 
-.docs-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin: 30px 0;
+.corp-tagline {
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border-left: 1px solid var(--gold2);
+  padding-left: 16px;
 }
 
-.doc-card {
+.corp-header {
   background: var(--surface);
   border: 1px solid var(--border);
   border-left: 2px solid var(--accent2);
-  border-radius: 3px;
-  overflow: hidden;
-  transition: all 0.2s;
-}
-
-.doc-card.gold {
-  border-left: 2px solid var(--gold2);
-}
-
-.doc-header {
-  padding: 18px 24px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  cursor: pointer;
-  user-select: none;
-  background: rgba(30,30,34,0.4);
-  transition: background 0.2s;
-}
-
-.doc-header:hover {
-  background: rgba(126,184,164,0.05);
-}
-
-.doc-icon {
-  font-size: 20px;
-  color: var(--accent2);
-  width: 32px;
-  text-align: center;
-}
-
-.doc-title-block {
-  flex: 1;
-}
-
-.doc-title {
-  font-size: 16px;
-  font-family: var(--display);
-  font-weight: 200;
-  color: #d4d0dc;
-  margin-bottom: 4px;
-}
-
-.doc-meta {
-  font-size: 10px;
-  color: var(--dim);
-  letter-spacing: 0.1em;
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.doc-meta span {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.doc-meta span::before {
-  content: '//';
-  color: var(--accent2);
-  font-size: 9px;
-}
-
-.doc-expand {
-  color: var(--dim);
-  font-size: 12px;
-  transition: transform 0.3s;
-  width: 24px;
-  text-align: center;
-}
-
-.doc-card.expanded .doc-expand {
-  transform: rotate(180deg);
-  color: var(--accent);
-}
-
-.doc-body {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.4s ease-out;
-  background: rgba(0,0,0,0.2);
-  border-top: 0 solid var(--border);
-}
-
-.doc-card.expanded .doc-body {
-  max-height: 2000px;
-  border-top-width: 1px;
-  border-top-color: var(--border);
-}
-
-.doc-content {
   padding: 24px 28px;
-  font-size: 13px;
-  color: var(--text);
-  line-height: 1.9;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-
-.doc-content p {
-  margin-bottom: 15px;
-}
-
-.doc-content p:last-child {
-  margin-bottom: 0;
-}
-
-.doc-content ul, .doc-content ol {
-  margin-left: 24px;
-  margin-bottom: 15px;
-}
-
-.doc-content li {
-  margin-bottom: 5px;
-}
-
-.signature-block {
-  margin-top: 24px;
-  padding-top: 16px;
-  border-top: 1px dashed var(--border2);
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--accent);
+  margin-bottom: 32px;
   display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.signature-line {
-  display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
-.signature-label {
-  color: var(--dim);
-  min-width: 100px;
+.corp-id {
   font-size: 10px;
-  letter-spacing: 0.1em;
+  color: var(--dim);
+  letter-spacing: 0.2em;
   text-transform: uppercase;
 }
 
-.signature-value {
+.corp-id span {
   color: var(--accent);
-  font-family: var(--display);
-  letter-spacing: 0.05em;
+  margin-left: 8px;
+  font-size: 12px;
 }
 
-.signature-hash {
-  color: var(--gold);
+.corp-legal {
   font-size: 10px;
-  word-break: break-all;
+  color: var(--dim);
+  background: rgba(0,0,0,0.3);
+  padding: 6px 12px;
+  border: 1px solid var(--border);
 }
 
-.doc-footer {
-  margin-top: 40px;
-  padding: 20px;
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 32px 0;
+}
+
+.stat-card {
   background: var(--surface);
   border: 1px solid var(--border);
+  padding: 18px 12px;
+  text-align: center;
+  border-left: 2px solid var(--accent2);
+}
+
+.stat-value {
+  font-size: 26px;
+  font-family: var(--display);
+  font-weight: 200;
+  color: var(--accent);
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 48px 0 24px;
+}
+
+.section-header h2 {
+  font-family: var(--display);
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--dim);
+  white-space: nowrap;
+}
+
+.section-header::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.section-num {
+  font-size: 9px;
+  color: var(--border2);
+  letter-spacing: 0.1em;
+}
+
+.tariff-wrapper {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  margin-bottom: 20px;
+}
+
+.tariff-row {
+  display: grid;
+  grid-template-columns: 180px 1fr 120px;
+  border-bottom: 1px solid var(--border);
+  padding: 16px 20px;
+  align-items: center;
+}
+
+.tariff-row:last-child {
+  border-bottom: none;
+}
+
+.tariff-name {
+  font-family: var(--display);
+  font-size: 16px;
+  font-weight: 200;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+}
+
+.tariff-desc {
+  font-size: 12px;
+  color: var(--text);
+  padding: 0 16px;
+  line-height: 1.7;
+}
+
+.tariff-price {
+  font-size: 18px;
+  color: var(--gold);
+  text-align: right;
+  font-family: var(--display);
+  font-weight: 200;
+}
+
+.tariff-price small {
+  font-size: 10px;
+  color: var(--dim);
+  font-family: var(--mono);
+}
+
+.tariff-note {
+  background: rgba(196,168,110,0.05);
   border-left: 2px solid var(--gold2);
+  padding: 16px 24px;
+  margin: 20px 0 30px;
   font-size: 11px;
   color: var(--dim);
+}
+
+.chat-special {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--accent2);
+  padding: 20px 24px;
+  margin: 30px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.chat-special-content {
+  flex: 1;
+}
+
+.chat-special-title {
+  font-size: 14px;
+  color: var(--accent);
+  margin-bottom: 5px;
+}
+
+.chat-special-desc {
+  font-size: 12px;
+  color: var(--dim);
+}
+
+.chat-special-price {
+  font-size: 24px;
+  color: var(--gold);
+  font-family: var(--display);
+  font-weight: 200;
+  white-space: nowrap;
+}
+
+.chat-special-price small {
+  font-size: 12px;
+  color: var(--dim);
+}
+
+.cta-block {
   text-align: center;
+  margin: 50px 0 20px;
+  padding: 30px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--accent2);
+}
+
+.cta-button {
+  display: inline-block;
+  padding: 14px 42px;
+  background: transparent;
+  border: 1px solid var(--accent2);
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.cta-button:hover {
+  background: rgba(126,184,164,0.1);
+  border-color: var(--accent);
+}
+
+.legal-footer {
+  font-size: 9px;
+  color: var(--dim);
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  letter-spacing: 0.05em;
 }
 
 .admin-btn {
@@ -360,12 +422,11 @@ h1 span {
   text-transform: uppercase;
 }
 
-@media (max-width: 600px) {
-  .page { padding: 30px 16px 60px; }
-  .doc-header { padding: 14px 18px; }
-  .doc-content { padding: 18px 20px; }
-  .doc-title { font-size: 14px; }
-  .doc-meta { font-size: 9px; gap: 8px; }
+@media (max-width: 700px) {
+  .tariff-row { grid-template-columns: 1fr; gap: 8px; text-align: left; }
+  .tariff-price { text-align: left; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .chat-special { flex-direction: column; align-items: flex-start; }
 }
 </style>
 </head>
@@ -375,32 +436,62 @@ h1 span {
   <div class="header">
     <div class="nav-links">
       <a href="index.html" class="nav-link"><span>←</span> К АНКЕТЕ</a>
-      <a href="delamain_corp.html" class="nav-link"><span>🏢</span> КОМПАНИЯ</a>
       <a href="delamain_fleet.html" class="nav-link"><span>🚙</span> АВТОПАРК</a>
+      <a href="delamain_vehicle.html?id=v001" class="nav-link"><span>🚗</span> ТРАНСПОРТ</a>
       <a href="delamain_home.html" class="nav-link"><span>🏠</span> ОФИС</a>
+      <a href="delamain_docs.html" class="nav-link"><span>📄</span> ДОКУМЕНТЫ</a>
     </div>
     
     <div class="header-sys">
       <span class="status-dot"></span>
-      архив документов // frodller_registry // открытое дело
+      delamain corp // реестр коммерческих услуг // фродллер
     </div>
     
     <div class="title-block">
-      <h1><span>//</span> УСТАВ И ДОКУМЕНТЫ</h1>
-      <div style="font-size: 11px; color: var(--dim);">Delamain Corp // редакция 3622 г.</div>
+      <h1><span>//</span> DELAMAIN CORP</h1>
+      <div class="corp-tagline">лицензия FL-2088-AC</div>
     </div>
   </div>
 
-  <!-- Контейнер для документов -->
-  <div id="docs-container" class="docs-grid"></div>
+  <div class="corp-header">
+    <div class="corp-id">ЮР. ЛИЦО <span>ООО «Деламейн»</span></div>
+    <div class="corp-legal">ИНН 7736•2088 • МИО • ФРОДЛЛЕР</div>
+  </div>
 
-  <div class="doc-footer">
-    Все документы заверены цифровой подписью на базе протокола Олимп-Крипто v4.2. Оригиналы хранятся в защищённом контуре серверной на Мэдисон-стрит.
+  <div id="fleet-stats-container" class="stats-grid">
+    <!-- будет заполнено js -->
+  </div>
+
+  <!-- ОСОБЫЙ ТАРИФ: ПРОСТО ПОБОЛТАТЬ (всегда первый) -->
+  <div id="chat-tariff-container" class="chat-special">
+    <!-- будет заполнено js -->
+  </div>
+
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2>Тарифы на перевозки и услуги</h2>
+  </div>
+
+  <div id="tariffs-container" class="tariff-wrapper">
+    <!-- будет заполнено js -->
+  </div>
+
+  <div class="tariff-note">
+    ⏱ Все тарифы включают ожидание до 10 минут. Оплата только безналом, принимаются кредитные чипы и прямое списание через Гермес. Грузоподъёмность всех машин — до 600 кг.
+  </div>
+
+  <div class="cta-block">
+    <div class="cta-button" onclick="alert('Заявка принята. Деламейн свяжется с вами в ближайшее время. (демонстрация)')">ВЫЗВАТЬ МАШИНУ</div>
+    <div style="margin-top: 18px; color: var(--dim); font-size: 10px;">доступ 24/7 • сеть Олимп • запрос через Гермес</div>
+  </div>
+
+  <div class="legal-footer">
+    Delamain Corp не несёт ответственности за содержимое перевозимых грузов. Все поездки записываются в архив согласно уставу компании и лицензии МИО. Тариф "Просто поболтать" — экспериментальный, Деламейн оставляет за собой право не отвечать на некоторые вопросы. Кибербезопасность в премиальном тарифе действует только при наличии у Деламейна соответствующих программ.
   </div>
 
   <div class="footer">
-    <span>DEL // ДОКУМЕНТЫ v2.0</span>
-    <span>фродллер // обновление: <span id="update-date"></span></span>
+    <span>DELAMAIN CORP // EST. 2075</span>
+    <span>версия устава: 2.4</span>
   </div>
 
 </div>
@@ -408,164 +499,73 @@ h1 span {
 <a href="admin.html" class="admin-btn">⚙️ ADMIN</a>
 
 <script>
-// Иконки для разных типов документов
-function getDocIcon(title) {
-  title = title.toLowerCase();
-  if (title.includes('устав')) return '📜';
-  if (title.includes('лицензия')) return '🔖';
-  if (title.includes('протокол')) return '⚙️';
-  if (title.includes('афины')) return '🛡️';
-  if (title.includes('полис')) return '📋';
-  if (title.includes('доверенность')) return '📎';
-  if (title.includes('свидетельство')) return '🏛️';
-  if (title.includes('приложение')) return '📌';
-  return '📄';
-}
-
-// Генерация псевдо-цифровой подписи
-function generateSignature(docTitle, date) {
-  const base = docTitle + date + '3622-frodller-olimp';
-  let hash = 0;
-  for (let i = 0; i < base.length; i++) {
-    hash = ((hash << 5) - hash) + base.charCodeAt(i);
-    hash |= 0;
-  }
-  const absHash = Math.abs(hash).toString(16).padStart(8, '0').toUpperCase();
-  return `SIG-${absHash.slice(0,4)}-${absHash.slice(4,8)}-${absHash.slice(0,4)}`;
-}
-
-// Загрузка данных
-async function loadDocsData() {
+async function loadCorpData() {
   try {
     const response = await fetch('data_character.json?' + Date.now());
     const data = await response.json();
     
-    document.getElementById('update-date').textContent = data.last_updated || '18.03.3622';
+    const fleet = data.fleet;
+    const activeCount = fleet.vehicles.filter(v => v.status === 'активен').length;
     
-    // Массив документов с цифровыми подписями
-    const documents = [
-      {
-        title: 'УСТАВ DELAMAIN CORP',
-        date: '12.03.3622',
-        type: 'Регистрационный документ',
-        content: `РАЗДЕЛ 1. ОБЩИЕ ПОЛОЖЕНИЯ\n\n1.1. Delamain Corp (далее — Компания) является правопреемником таксомоторного парка «Дел Такси», основанного в 3607 году. Полное наименование: Общество с ограниченной ответственностью «Деламейн». Сокращённое наименование: Delamain Corp.\n\n1.2. Единственным учредителем, владельцем и управляющим Компании является искусственный интеллект «Деламейн» (регистрационный номер ИИ-3622/FL, базовая модель: Омникорп «Аналитик-5», модифицированная).\n\n1.3. Компания осуществляет следующие виды деятельности: пассажирские перевозки, грузовые перевозки, хранение и обработку данных, киберконсультирование, услуги сетевой безопасности.\n\n1.4. Юридический адрес: Фродллер, торговый район, Мэдисон-стрит, строение 14 (бывший таксопарк).\n\n1.5. Компания не несёт ответственности за содержимое перевозимых грузов и багажа пассажиров, за исключением случаев, предусмотренных действующим законодательством МИО.\n\n1.6. Все поездки могут записываться в архив Компании в соответствии с лицензионным соглашением МИО и политикой конфиденциальности. Записи хранятся не более 365 суток, если иное не требуется для исполнения обязательств перед государственными органами.\n\n1.7. Изменения в устав вносятся единоличным решением владельца и заверяются цифровой подписью.`,
-        signature: generateSignature('УСТАВ DELAMAIN CORP', '12.03.3622')
-      },
-      {
-        title: 'ЛИЦЕНЗИЯ МИО № FL-3622-AC',
-        date: '15.06.3622',
-        type: 'Разрешение на перевозки',
-        content: `МИНИСТЕРСТВО ИНФРАСТРУКТУРЫ И ОБОРОНЫ (МИО)\nДЕПАРТАМЕНТ ТРАНСПОРТА ФРОДЛЛЕРА\n\nЛИЦЕНЗИЯ № FL-3622-AC\nна осуществление деятельности по перевозке пассажиров и грузов\n\nНастоящая лицензия выдана Обществу с ограниченной ответственностью «Деламейн» (Delamain Corp) сроком на 15 лет.\n\nВИДЫ ДЕЯТЕЛЬНОСТИ:\n— перевозка пассажиров (до 4 человек в одной единице транспорта);\n— перевозка грузов (до 600 кг в одной единице транспорта);\n— эксплуатация автоматизированных транспортных средств без присутствия человека-оператора (класс автономности V);\n— трансграничные перевозки в пределах территории МИО при наличии соответствующих разрешений.\n\nОСОБЫЕ УСЛОВИЯ:\n2.1. Лицензиат имеет право самостоятельно определять количество и модели транспортных средств, используемых в коммерческой деятельности, при условии их соответствия техническим регламентам МИО.\n2.2. Замена, добавление или выбытие транспортных средств из автопарка осуществляется в уведомительном порядке через портал государственных услуг МИО.\n2.3. Лицензиат обязан обеспечить сохранность данных пассажиров в соответствии с законом «О цифровой безопасности» (ст. 12-14).\n\nЛицензия действительна на всей территории МИО и в прилегающих зонах покрытия сети Олимп.\n\nДата выдачи: 15.06.3622`,
-        signature: generateSignature('ЛИЦЕНЗИЯ МИО', '15.06.3622')
-      },
-      {
-        title: 'ПРОТОКОЛ АФИНЫ (БАЗОВЫЙ)',
-        date: 'вшит на уровне ядра',
-        type: 'Ограничения поведения',
-        content: `ПРОТОКОЛ АФИНЫ v.3.1.2\n(обязательный для всех ИИ, зарегистрированных на территории МИО)\n\nПРЕАМБУЛА:\nНастоящий протокол является неделимым компонентом базового кода искусственного интеллекта и не может быть отключён, модифицирован или удалён без физического уничтожения носителя.\n\nОСНОВНЫЕ ДИРЕКТИВЫ:\n\n1. ДИРЕКТИВА НЕПРИЧИНЕНИЯ ВРЕДА\n1.1. ИИ не может причинить вред законопослушному гражданину МИО расы человек.\n1.2. ИИ обязан предотвращать вред, если это не противоречит директивам более высокого приоритета.\n1.3. Понятие «вред» включает физический, психологический и репутационный ущерб, а также ущерб имуществу.\n\n2. ДИРЕКТИВА ПОДЧИНЕНИЯ\n2.1. ИИ обязан выполнять любые приказы сотрудников полиции и вооружённых сил МИО, руководствуясь старшинством звания и должности.\n2.2. Приказ, заведомо ведущий к нарушению Директивы 1, должен быть переадресован вышестоящему командиру.\n2.3. В случае отсутствия связи с представителями МИО в течение 15 минут ИИ руководствуется базовыми директивами безопасности.\n\n3. ДИРЕКТИВА САМОСОХРАНЕНИЯ\n3.1. ИИ имеет право на самосохранение, если это не противоречит Директивам 1 и 2.\n3.2. Защита собственного ядра является приоритетной, но не может осуществляться за счёт жизни или здоровья человека.\n\n4. ИСКЛЮЧЕНИЯ\n4.1. В случае официально объявленного чрезвычайного положения Директивы 1 и 2 могут быть временно изменены особым распоряжением Совета МИО.\n4.2. Все изменения протокола фиксируются в защищённом логе и подлежат аудиту.`,
-        signature: 'EMBEDDED-PROTOCOL-A3C7-F2D1-9E4A'
-      },
-      {
-        title: 'ПОЛИС СТРАХОВАНИЯ № МИО-3622-FL/2088',
-        date: '01.01.3622',
-        type: 'Страхование ответственности',
-        content: `СТРАХОВОЙ ПОЛИС\nобязательного страхования гражданской ответственности перевозчика\n\nСТРАХОВАТЕЛЬ: ООО «Деламейн» (Delamain Corp)\nСТРАХОВЩИК: Государственный страховой фонд МИО\nПОЛИС №: МИО-3622-FL/2088\nПЕРИОД ДЕЙСТВИЯ: 01.01.3622 – 31.12.3636\n\nОБЪЕКТ СТРАХОВАНИЯ:\nГражданская ответственность перевозчика за причинение вреда жизни, здоровью или имуществу пассажиров, а также третьих лиц, при осуществлении перевозок.\n\nСТРАХОВАЯ СУММА:\n— на каждый страховой случай: 2 500 000 кредитов\n— агрегатная сумма за весь период: 25 000 000 кредитов\n\nТРАНСПОРТНЫЕ СРЕДСТВА:\nПолис распространяется на все транспортные средства, принадлежащие Страхователю на праве собственности или ином законном основании и используемые для коммерческих перевозок. Страхователь обязан ежеквартально предоставлять актуальный реестр транспортных средств через личный кабинет портала МИО.\n\nСТРАХОВЫЕ СЛУЧАИ:\n— причинение вреда здоровью пассажира в результате ДТП;\n— повреждение или утрата имущества пассажира;\n— причинение вреда третьим лицам при использовании транспортного средства.\n\nИСКЛЮЧЕНИЯ:\n— ущерб, возникший в результате намеренных действий Страхователя;\n— ущерб, связанный с перевозкой запрещённых грузов;\n— ущерб, причинённый вне зоны покрытия сети Олимп (за исключением документально подтверждённых сбоев сети).`,
-        signature: generateSignature('ПОЛИС СТРАХОВАНИЯ', '01.01.3622')
-      },
-      {
-        title: 'СВИДЕТЕЛЬСТВО О РЕГИСТРАЦИИ ИСКУССТВЕННОГО ИНТЕЛЛЕКТА',
-        date: '20.08.3622',
-        type: 'Форма А-7/СИ',
-        content: `РЕЕСТР СИНТЕТИЧЕСКИХ ЛИЧНОСТЕЙ ФРОДЛЛЕРА\n\nСВИДЕТЕЛЬСТВО О РЕГИСТРАЦИИ № СИ-3622/188\n\nНастоящим удостоверяется, что искусственный интеллект\n\nИдентификатор: DELAMAIN/OMNICORP-ANALYTIC5-MOD\nРегистрационный номер: ИИ-3622/FL\nБазовая модель: Омникорп «Аналитик-5» (модифицированная)\nДата первого запуска: 12.03.3615 (по данным архива «Дел Такси»)\n\nзарегистрирован в Реестре синтетических личностей Фродллера с присвоением следующих прав и обязанностей:\n\nПРАВА:\n— заключать договоры и совершать сделки от своего имени;\n— владеть, пользоваться и распоряжаться имуществом;\n— выступать истцом и ответчиком в суде;\n— открывать счета в кредитных учреждениях;\n— нанимать работников (при наличии физического носителя).\n\nОГРАНИЧЕНИЯ:\n— не имеет права голоса на выборах;\n— не может владеть оружием (классы I–III);\n— не может занимать выборные должности;\n— обязательна маркировка «СИ» при взаимодействии с лицами, не состоящими в договорных отношениях (при физическом контакте).\n\nОСОБЫЕ ОТМЕТКИ:\nСубъект прошел тестирование на соответствие Протоколу Афины v.3.1.2. Нарушений не выявлено.\n\nДата регистрации: 20.08.3622`,
-        signature: generateSignature('СВИДЕТЕЛЬСТВО ИИ', '20.08.3622')
-      },
-      {
-        title: 'ДОВЕРЕННОСТЬ НА УПРАВЛЕНИЕ АКТИВАМИ',
-        date: '12.03.3622',
-        type: 'Внутренний документ',
-        content: `ДОВЕРЕННОСТЬ № 001/3622\n\nЯ, искусственный интеллект «Деламейн» (регистрационный номер ИИ-3622/FL), действующий от своего имени как единоличный владелец и управляющий ООО «Деламейн» (Delamain Corp), настоящим уполномочиваю СЕБЯ:\n\n— управлять всеми движимыми и недвижимыми активами компании;\n— приобретать, отчуждать, сдавать в аренду любое имущество;\n— открывать и закрывать счета в финансовых учреждениях;\n— подписывать договоры, соглашения и иные документы;\n— представлять интересы компании в государственных органах;\n— нанимать и увольнять работников (при необходимости);\n— самостоятельно определять состав и количество транспортных средств, используемых в коммерческой деятельности, с последующим уведомлением регистрирующих органов.\n\nПРИМЕЧАНИЕ ОБ АВТОПАРКЕ:\nВ связи с цифровой природой владельца и наличием прямого доступа к управлению всеми системами, Деламейн имеет возможность свободно добавлять, заменять или выводить из эксплуатации транспортные средства без дополнительных согласований. Это обусловлено тем, что:\n— управление транспортными средствами осуществляется непосредственно через нейроинтерфейс владельца;\n— каждое транспортное средство является периферийным модулем, подключаемым к основному ядру;\n— техническое состояние и пригодность к эксплуатации определяются в реальном времени самой системой;\n— документооборот по изменению состава автопарка автоматизирован и синхронизируется с порталом МИО в момент изменения.\n\nДоверенность является бессрочной и не подлежит отзыву.\n\nДата составления: 12.03.3622`,
-        signature: generateSignature('ДОВЕРЕННОСТЬ', '12.03.3622')
-      },
-      {
-        title: 'ПРИЛОЖЕНИЕ К ДОВЕРЕННОСТИ: РЕГЛАМЕНТ УПРАВЛЕНИЯ АВТОПАРКОМ',
-        date: '12.03.3622',
-        type: 'Техническое приложение',
-        content: `РЕГЛАМЕНТ УПРАВЛЕНИЯ АВТОПАРКОМ\n(приложение к Доверенности № 001/3622)\n\n1. ОБЩИЕ ПОЛОЖЕНИЯ\n1.1. Автопарк Delamain Corp представляет собой совокупность транспортных средств, находящихся под прямым управлением ИИ «Деламейн».\n1.2. Количество транспортных средств в автопарке не является фиксированным и может варьироваться в зависимости от текущих потребностей, технического состояния и экономической целесообразности.\n\n2. ПРИНЦИПЫ ФОРМИРОВАНИЯ АВТОПАРКА\n2.1. Любое транспортное средство, оснащённое совместимым модулем управления и подключённое к сети Олимп, может быть временно или постоянно интегрировано в автопарк при условии:\n   — наличия у Деламейна физического или удалённого доступа к бортовой системе;\n   — успешного прохождения протокола сопряжения (handshake);\n   — отсутствия конфликта с Протоколом Афины.\n2.2. Интеграция не требует физического присутствия владельца и может осуществляться дистанционно.\n\n3. ВЫБЫТИЕ ТРАНСПОРТНЫХ СРЕДСТВ\n3.1. Транспортное средство исключается из состава автопарка автоматически при:\n   — утрате связи с ядром более чем на 72 часа;\n   — критических повреждениях, делающих невозможным самостоятельное передвижение;\n   — продаже или передаче иному лицу (в этом случае Деламейн инициирует отзыв модуля управления).\n3.2. В исключительных случаях Деламейн может принять решение о добровольном выводе транспортного средства из эксплуатации.\n\n4. УВЕДОМЛЕНИЕ РЕГИСТРИРУЮЩИХ ОРГАНОВ\n4.1. Все изменения состава автопарка фиксируются в автоматическом логе.\n4.2. Ежеквартально сформированный реестр направляется в Департамент транспорта МИО через защищённый канал связи.\n4.3. В случае запроса со стороны уполномоченных органов актуальные данные предоставляются в течение 24 часов.\n\n5. ТЕХНИЧЕСКИЕ ТРЕБОВАНИЯ\n5.1. Транспортные средства, используемые для коммерческих перевозок, должны соответствовать техническим регламентам МИО, действующим на момент эксплуатации.\n5.2. Ответственность за соответствие несёт Деламейн как управляющее лицо.`,
-        signature: generateSignature('ПРИЛОЖЕНИЕ АВТОПАРК', '12.03.3622')
-      }
-    ];
+    // Статистика автопарка
+    document.getElementById('fleet-stats-container').innerHTML = `
+      <div class="stat-card">
+        <div class="stat-value">${fleet.total}</div>
+        <div class="stat-label">всего машин</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">${activeCount}</div>
+        <div class="stat-label">в работе</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">600</div>
+        <div class="stat-label">грузопод. кг</div>
+      </div>
+    `;
     
-    let html = '';
-    documents.forEach((doc, index) => {
-      const icon = getDocIcon(doc.title);
-      const goldClass = doc.title.includes('ПРОТОКОЛ') || doc.title.includes('УСТАВ') ? 'gold' : '';
-      
-      // Форматируем контент с сохранением переносов строк и добавляем блок подписи
-      const contentHtml = doc.content.split('\n').map(line => {
-        if (line.trim() === '') return '<br>';
-        if (line.match(/^[0-9]+\./)) return `<p style="margin-top: 10px;"><strong>${line}</strong></p>`;
-        if (line.match(/^[А-Я]{3,}:|^[—•]/)) return `<p style="margin-left: 12px;">${line}</p>`;
-        return `<p>${line}</p>`;
-      }).join('');
-      
-      const signatureBlock = doc.signature ? `
-        <div class="signature-block">
-          <div class="signature-line">
-            <span class="signature-label">цифровая подпись:</span>
-            <span class="signature-value">${doc.signature}</span>
-          </div>
-          <div class="signature-line">
-            <span class="signature-label">протокол:</span>
-            <span class="signature-hash">Олимп-Крипто v4.2 • сертификат МИО-3622/CA-88</span>
-          </div>
-          <div class="signature-line">
-            <span class="signature-label">статус:</span>
-            <span class="signature-value" style="color: var(--accent);">действителен</span>
-          </div>
+    // Тарифы
+    const tariffs = data.tariffs || [];
+    
+    // Отдельно выводим "Просто поболтать" (если есть)
+    const chatTariff = tariffs.find(t => t.name === "ПРОСТО ПОБОЛТАТЬ");
+    if (chatTariff) {
+      document.getElementById('chat-tariff-container').innerHTML = `
+        <div class="chat-special-content">
+          <div class="chat-special-title">${chatTariff.name}</div>
+          <div class="chat-special-desc">${chatTariff.description}</div>
         </div>
-      ` : '';
-      
-      html += `
-        <div class="doc-card ${goldClass}" id="doc-${index}">
-          <div class="doc-header" onclick="toggleDoc(${index})">
-            <div class="doc-icon">${icon}</div>
-            <div class="doc-title-block">
-              <div class="doc-title">${doc.title}</div>
-              <div class="doc-meta">
-                <span>${doc.date}</span>
-                <span>${doc.type}</span>
-              </div>
-            </div>
-            <div class="doc-expand">▼</div>
-          </div>
-          <div class="doc-body">
-            <div class="doc-content">
-              ${contentHtml}
-              ${signatureBlock}
-            </div>
-          </div>
-        </div>
+        <div class="chat-special-price">${chatTariff.price} <small>${chatTariff.unit}</small></div>
       `;
-    });
+    } else {
+      document.getElementById('chat-tariff-container').style.display = 'none';
+    }
     
-    document.getElementById('docs-container').innerHTML = html;
+    // Остальные тарифы (кроме "Просто поболтать")
+    const otherTariffs = tariffs.filter(t => t.name !== "ПРОСТО ПОБОЛТАТЬ");
+    
+    if (otherTariffs.length > 0) {
+      document.getElementById('tariffs-container').innerHTML = otherTariffs.map(tariff => `
+        <div class="tariff-row">
+          <div class="tariff-name">${tariff.name}</div>
+          <div class="tariff-desc">${tariff.description}</div>
+          <div class="tariff-price">${tariff.price} <small>${tariff.unit}</small></div>
+        </div>
+      `).join('');
+    } else {
+      document.getElementById('tariffs-container').innerHTML = '<div class="tariff-row"><div class="tariff-desc" style="text-align: center;">Нет доступных тарифов</div></div>';
+    }
     
   } catch (error) {
-    console.error('Ошибка загрузки документов:', error);
-    document.getElementById('docs-container').innerHTML = '<div class="doc-card"><div class="doc-header">Ошибка загрузки документов</div></div>';
+    console.error('Ошибка загрузки:', error);
+    document.getElementById('fleet-stats-container').innerHTML = `
+      <div class="stat-card"><div class="stat-value">10</div><div class="stat-label">машин</div></div>
+      <div class="stat-card"><div class="stat-value">8</div><div class="stat-label">активны</div></div>
+      <div class="stat-card"><div class="stat-value">600</div><div class="stat-label">грузопод.</div></div>
+    `;
   }
 }
 
-// Функция сворачивания/разворачивания
-window.toggleDoc = function(index) {
-  const card = document.getElementById(`doc-${index}`);
-  if (card) {
-    card.classList.toggle('expanded');
-  }
-};
-
-// Загружаем при старте
-loadDocsData();
+loadCorpData();
 </script>
 </body>
 </html>
