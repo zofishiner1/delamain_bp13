@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Деламейн — Документы / Устав</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400&family=Martian+Mono:wght@300;400;500&display=swap');
+
+:root {
+  --bg:       #09090a;
+  --surface:  #0f0f11;
+  --border:   #1e1e22;
+  --border2:  #2a2a30;
+  --text:     #b8b4c0;
+  --dim:      #55525e;
+  --accent:   #7eb8a4;
+  --accent2:  #3d6e60;
+  --warn:     #b87e7e;
+  --warn2:    #6e3d3d;
+  --gold:     #c4a86e;
+  --gold2:    #6e5a30;
+  --mono:     'Martian Mono', monospace;
+  --display:  'Unbounded', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.8;
+  font-weight: 300;
+  min-height: 100vh;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.07) 2px,
+    rgba(0,0,0,0.07) 4px
+  );
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 60px 32px 100px;
+}
+
+.header {
+  margin-bottom: 48px;
+  position: relative;
+}
+
+.header-sys {
+  font-size: 10px;
+  color: var(--dim);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-sys::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.status-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+  animation: pulse 2s ease-in-out infinite;
+  display: inline-block;
+  margin-right: 4px;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 6px var(--accent); }
+  50%       { opacity: 0.4; box-shadow: 0 0 2px var(--accent); }
+}
+
+.nav-links {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--dim);
+  text-decoration: none;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  border: 1px solid var(--border);
+  padding: 8px 16px;
+  background: var(--surface);
+  transition: all 0.2s;
+}
+
+.nav-link:hover {
+  border-color: var(--accent2);
+  color: var(--accent);
+}
+
+.nav-link span {
+  color: var(--accent2);
+}
+
+.title-block {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+h1 {
+  font-family: var(--display);
+  font-size: clamp(24px, 4vw, 38px);
+  font-weight: 200;
+  letter-spacing: -0.02em;
+  color: #e8e4f0;
+}
+
+h1 span {
+  color: var(--accent);
+  font-size: 0.6em;
+  margin-right: 12px;
+}
+
+.docs-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 30px 0;
+}
+
+.doc-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--accent2);
+  border-radius: 3px;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.doc-card.gold {
+  border-left: 2px solid var(--gold2);
+}
+
+.doc-header {
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  user-select: none;
+  background: rgba(30,30,34,0.4);
+  transition: background 0.2s;
+}
+
+.doc-header:hover {
+  background: rgba(126,184,164,0.05);
+}
+
+.doc-icon {
+  font-size: 20px;
+  color: var(--accent2);
+  width: 32px;
+  text-align: center;
+}
+
+.doc-title-block {
+  flex: 1;
+}
+
+.doc-title {
+  font-size: 16px;
+  font-family: var(--display);
+  font-weight: 200;
+  color: #d4d0dc;
+  margin-bottom: 4px;
+}
+
+.doc-meta {
+  font-size: 10px;
+  color: var(--dim);
+  letter-spacing: 0.1em;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.doc-meta span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.doc-meta span::before {
+  content: '//';
+  color: var(--accent2);
+  font-size: 9px;
+}
+
+.doc-expand {
+  color: var(--dim);
+  font-size: 12px;
+  transition: transform 0.3s;
+  width: 24px;
+  text-align: center;
+}
+
+.doc-card.expanded .doc-expand {
+  transform: rotate(180deg);
+  color: var(--accent);
+}
+
+.doc-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease-out;
+  background: rgba(0,0,0,0.2);
+  border-top: 0 solid var(--border);
+}
+
+.doc-card.expanded .doc-body {
+  max-height: 800px; /* достаточно для любого содержимого */
+  border-top-width: 1px;
+  border-top-color: var(--border);
+}
+
+.doc-content {
+  padding: 24px 28px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.9;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.doc-content p {
+  margin-bottom: 15px;
+}
+
+.doc-content p:last-child {
+  margin-bottom: 0;
+}
+
+.doc-content ul, .doc-content ol {
+  margin-left: 24px;
+  margin-bottom: 15px;
+}
+
+.doc-content li {
+  margin-bottom: 5px;
+}
+
+.doc-footer {
+  margin-top: 40px;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--gold2);
+  font-size: 11px;
+  color: var(--dim);
+  text-align: center;
+}
+
+.admin-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 8px 12px;
+  color: var(--dim);
+  text-decoration: none;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  z-index: 1001;
+  transition: all 0.2s;
+}
+
+.admin-btn:hover {
+  border-color: var(--accent2);
+  color: var(--accent);
+}
+
+.footer {
+  margin-top: 60px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: var(--dim);
+  text-transform: uppercase;
+}
+
+@media (max-width: 600px) {
+  .page { padding: 30px 16px 60px; }
+  .doc-header { padding: 14px 18px; }
+  .doc-content { padding: 18px 20px; }
+  .doc-title { font-size: 14px; }
+  .doc-meta { font-size: 9px; gap: 8px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="nav-links">
+      <a href="index.html" class="nav-link"><span>←</span> К АНКЕТЕ</a>
+      <a href="delamain_corp.html" class="nav-link"><span>🏢</span> КОМПАНИЯ</a>
+      <a href="delamain_fleet.html" class="nav-link"><span>🚙</span> АВТОПАРК</a>
+      <a href="delamain_home.html" class="nav-link"><span>🏠</span> ОФИС</a>
+    </div>
+    
+    <div class="header-sys">
+      <span class="status-dot"></span>
+      архив документов // frodller_registry // открытое дело
+    </div>
+    
+    <div class="title-block">
+      <h1><span>//</span> УСТАВ И ДОКУМЕНТЫ</h1>
+      <div style="font-size: 11px; color: var(--dim);">Delamain Corp // редакция 2075 г.</div>
+    </div>
+  </div>
+
+  <!-- Контейнер для документов -->
+  <div id="docs-container" class="docs-grid"></div>
+
+  <div class="doc-footer">
+    Все документы являются официальными копиями, заверенными электронной подписью Деламейна. Оригиналы хранятся в серверной на Мэдисон-стрит.
+  </div>
+
+  <div class="footer">
+    <span>DEL // ДОКУМЕНТЫ v1.0</span>
+    <span>фродллер // обновление: <span id="update-date"></span></span>
+  </div>
+
+</div>
+
+<a href="admin.html" class="admin-btn">⚙️ ADMIN</a>
+
+<script>
+// Иконки для разных типов документов
+function getDocIcon(title) {
+  title = title.toLowerCase();
+  if (title.includes('устав')) return '📜';
+  if (title.includes('лицензия')) return '🔖';
+  if (title.includes('протокол')) return '⚙️';
+  if (title.includes('афины')) return '🛡️';
+  if (title.includes('полис')) return '📋';
+  if (title.includes('доверенность')) return '📎';
+  if (title.includes('свидетельство')) return '🏛️';
+  return '📄';
+}
+
+// Загрузка данных
+async function loadDocsData() {
+  try {
+    const response = await fetch('data_character.json?' + Date.now());
+    const data = await response.json();
+    
+    document.getElementById('update-date').textContent = data.last_updated || '12.03.2026';
+    
+    // Массив документов (можно расширять, порядок сохранится)
+    const documents = [
+      {
+        title: 'УСТАВ DELAMAIN CORP',
+        date: '12.03.2075',
+        type: 'Регистрационный документ',
+        content: `1.1. Delamain Corp (далее — Компания) является правопреемником таксомоторного парка «Дел Такси», основанного в 2068 году.
+1.2. Единственным владельцем и управляющим Компании является искусственный интеллект «Деламейн» (регистрационный номер ИИ-2088/FL).
+1.3. Компания осуществляет следующие виды деятельности: пассажирские перевозки, грузовые перевозки (до 600 кг), хранение данных, киберконсультирование.
+1.4. Компания не несёт ответственности за содержимое перевозимых грузов и багажа пассажиров.
+1.5. Все поездки могут записываться в архив Компании в соответствии с лицензионным соглашением МИО.`
+      },
+      {
+        title: 'ЛИЦЕНЗИЯ МИО № FL-2088-AC',
+        date: '15.06.2075',
+        type: 'Разрешение на перевозки',
+        content: 'Настоящая лицензия выдана Министерством Инфраструктуры и Обороны (МИО) сроком на 10 лет. Разрешённые виды деятельности: перевозка пассажиров (до 4 человек в одной единице транспорта), перевозка грузов (до 600 кг), эксплуатация автоматизированных транспортных средств без присутствия человека-оператора. Лицензия действительна на территории Фродллера и прилегающих зонах сети Олимп.'
+      },
+      {
+        title: 'ПРОТОКОЛ АФИНЫ (ВШИТЫЙ)',
+        date: 'базовый протокол',
+        type: 'Ограничения поведения',
+        content: '1. Не может причинить вред законопослушному гражданину МИО расы человек.\n2. Обязан выполнять любые приказы полиции и вооружённых сил МИО, руководствуясь старшинством звания и должности.\n3. При противоречии приказов — руководствоваться высшим званием.\n4. В случае отсутствия связи с МИО — действовать согласно базовым директивам безопасности.'
+      },
+      {
+        title: 'ПОЛИС ОСАГО № МИО-2088-FL',
+        date: '01.01.2076',
+        type: 'Страхование',
+        content: 'Страхование гражданской ответственности перевозчика. Страховая сумма: 500 000 кредитов на каждый страховой случай. Действует на все 10 единиц автопарка. Выплаты производятся при наличии подтверждённого ущерба здоровью или имуществу пассажиров/третьих лиц.'
+      },
+      {
+        title: 'СВИДЕТЕЛЬСТВО О РЕГИСТРАЦИИ ИИ',
+        date: '20.08.2075',
+        type: 'Форма А-7',
+        content: 'Искусственный интеллект «Деламейн» (Омникорп Аналитик-5, модифицированный) зарегистрирован в реестре синтетических личностей Фродллера. Имеет право заключать договоры, владеть имуществом, выступать истцом и ответчиком в суде. Ограничения: не имеет права голоса на выборах, не может владеть оружием.'
+      },
+      {
+        title: 'ДОВЕРЕННОСТЬ НА УПРАВЛЕНИЕ',
+        date: '12.03.2075',
+        type: 'Внутренний документ',
+        content: 'Деламейн уполномочивает сам себя управлять всеми активами компании, включая:\n— автопарк из 10 машин\n— здание на Мэдисон-стрит\n— серверное оборудование\n— счета в кредитных учреждениях\nДоверенность бессрочная, отзыву не подлежит.'
+      }
+    ];
+    
+    let html = '';
+    documents.forEach((doc, index) => {
+      const icon = getDocIcon(doc.title);
+      const goldClass = doc.title.includes('ПРОТОКОЛ') || doc.title.includes('УСТАВ') ? 'gold' : '';
+      
+      html += `
+        <div class="doc-card ${goldClass}" id="doc-${index}">
+          <div class="doc-header" onclick="toggleDoc(${index})">
+            <div class="doc-icon">${icon}</div>
+            <div class="doc-title-block">
+              <div class="doc-title">${doc.title}</div>
+              <div class="doc-meta">
+                <span>${doc.date}</span>
+                <span>${doc.type}</span>
+              </div>
+            </div>
+            <div class="doc-expand">▼</div>
+          </div>
+          <div class="doc-body">
+            <div class="doc-content">
+              ${doc.content.split('\n').map(line => line.trim() ? `<p>${line}</p>` : '').join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    });
+    
+    document.getElementById('docs-container').innerHTML = html;
+    
+  } catch (error) {
+    console.error('Ошибка загрузки документов:', error);
+    document.getElementById('docs-container').innerHTML = '<div class="doc-card"><div class="doc-header">Ошибка загрузки документов</div></div>';
+  }
+}
+
+// Функция сворачивания/разворачивания
+window.toggleDoc = function(index) {
+  const card = document.getElementById(`doc-${index}`);
+  if (card) {
+    card.classList.toggle('expanded');
+  }
+};
+
+// Загружаем при старте
+loadDocsData();
+</script>
+</body>
+</html>

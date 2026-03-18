@@ -867,6 +867,18 @@ select {
       </div>
     </div>
 
+    <!-- Вкладка: Документы -->
+    <div id="docsTab" class="editor-section">
+      <div class="section-title">// ДОКУМЕНТЫ И УСТАВ</div>
+      <p style="color: var(--dim); margin-bottom: 20px;">Редактирование документов компании. Каждый документ отображается как сворачиваемая карточка на странице <strong>delamain_docs.html</strong>.</p>
+      
+      <div id="docsList" class="docs-list">
+        <!-- Сюда будут добавляться документы динамически -->
+      </div>
+      
+      <button onclick="window.addDocument()" class="add-item">+ ДОБАВИТЬ ДОКУМЕНТ</button>
+    </div>
+
     <!-- Вкладка: Инвентарь (содержимое) -->
     <div id="inventoryTab" class="editor-section">
       <div class="section-title">// ОСНОВНЫЕ ПАРАМЕТРЫ</div>
@@ -2239,6 +2251,20 @@ function collectFormData() {
       features.push({ title, description });
     }
   });
+
+  // Собираем документы
+  const documents = [];
+  const docCards = document.querySelectorAll('#docsList .feature-card');
+  docCards.forEach(card => {
+    const title = card.querySelector('.doc-title')?.value || '';
+    const date = card.querySelector('.doc-date')?.value || '';
+    const type = card.querySelector('.doc-type')?.value || '';
+    const content = card.querySelector('.doc-content')?.value || '';
+  
+    if (title) {
+      documents.push({ title, date, type, content });
+    }
+  });
   
   // Собираем слабости
   const weaknesses = [];
@@ -2284,6 +2310,7 @@ function collectFormData() {
     extra_status: document.getElementById('char_extra_status').value,
     last_updated: document.getElementById('last_updated').value,
     tariffs: tariffs,
+    documents: documents,
     last_updated_time: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
     
     reputation: {
@@ -2521,6 +2548,117 @@ function switchTab(tab) {
     updateFleetSelectors();
   }
 }
+
+// ========== ФУНКЦИИ ДЛЯ РАБОТЫ С ДОКУМЕНТАМИ ==========
+window.renderDocuments = function(docs) {
+  console.log('Рендеринг документов:', docs);
+  const container = document.getElementById('docsList');
+  if (!container) {
+    console.log('Контейнер docsList не найден');
+    return;
+  }
+  
+  container.innerHTML = '';
+  
+  if (!docs || docs.length === 0) {
+    container.innerHTML = '<div style="color: var(--dim); padding: 20px; text-align: center;">Нет документов. Нажмите "+ ДОБАВИТЬ ДОКУМЕНТ" чтобы создать первый.</div>';
+    return;
+  }
+  
+  docs.forEach((doc, index) => {
+    const card = document.createElement('div');
+    card.className = 'feature-card';
+    card.innerHTML = `
+      <div class="feature-header">
+        <h4>Документ ${index + 1}: ${doc.title || 'Без названия'}</h4>
+        <button class="remove-feature" onclick="removeDocument(${index})">УДАЛИТЬ</button>
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Название документа</label>
+          <input type="text" class="doc-title" value="${doc.title || ''}">
+        </div>
+        <div class="form-group">
+          <label>Дата / редакция</label>
+          <input type="text" class="doc-date" value="${doc.date || ''}">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Тип документа</label>
+        <input type="text" class="doc-type" value="${doc.type || ''}">
+      </div>
+      <div class="form-group">
+        <label>Содержание (можно использовать переносы строк)</label>
+        <textarea class="doc-content" rows="6">${doc.content || ''}</textarea>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+};
+
+window.addDocument = function() {
+  console.log('Добавление нового документа');
+  const container = document.getElementById('docsList');
+  if (!container) return;
+  
+  // Если контейнер пуст или содержит сообщение о пустоте, очищаем его
+  if (container.children.length === 1 && container.children[0].innerText.includes('Нет документов')) {
+    container.innerHTML = '';
+  }
+  
+  const index = container.children.length;
+  const card = document.createElement('div');
+  card.className = 'feature-card';
+  card.innerHTML = `
+    <div class="feature-header">
+      <h4>Новый документ</h4>
+      <button class="remove-feature" onclick="removeDocument(${index})">УДАЛИТЬ</button>
+    </div>
+    <div class="grid-2">
+      <div class="form-group">
+        <label>Название документа</label>
+        <input type="text" class="doc-title" value="НОВЫЙ ДОКУМЕНТ">
+      </div>
+      <div class="form-group">
+        <label>Дата / редакция</label>
+        <input type="text" class="doc-date" value="01.01.2076">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Тип документа</label>
+      <input type="text" class="doc-type" value="Внутренний документ">
+    </div>
+    <div class="form-group">
+      <label>Содержание (можно использовать переносы строк)</label>
+      <textarea class="doc-content" rows="6">Текст документа.</textarea>
+    </div>
+  `;
+  container.appendChild(card);
+};
+
+window.removeDocument = function(index) {
+  console.log('Удаление документа', index);
+  const container = document.getElementById('docsList');
+  if (!container || container.children.length === 0) return;
+  
+  container.removeChild(container.children[index]);
+  
+  // Обновляем заголовки
+  Array.from(container.children).forEach((child, i) => {
+    const titleInput = child.querySelector('.doc-title');
+    const header = child.querySelector('.feature-header h4');
+    if (header && titleInput) {
+      header.textContent = `Документ ${i + 1}: ${titleInput.value || 'Без названия'}`;
+    }
+    const removeBtn = child.querySelector('.remove-feature');
+    if (removeBtn) removeBtn.setAttribute('onclick', `removeDocument(${i})`);
+  });
+  
+  // Если контейнер пуст, показываем сообщение
+  if (container.children.length === 0) {
+    container.innerHTML = '<div style="color: var(--dim); padding: 20px; text-align: center;">Нет документов. Нажмите "+ ДОБАВИТЬ ДОКУМЕНТ" чтобы создать первый.</div>';
+  }
+};
 
 // Показать сообщение
 function showMessage(text, type) {
