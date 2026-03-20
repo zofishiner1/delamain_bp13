@@ -216,6 +216,49 @@ h1 span {
   color: var(--gold);
 }
 
+/* Стили для аватарки в блоке псевдонима */
+.nickname-with-avatar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.nickname-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  image-rendering: pixelated;
+  border: 1px solid var(--gold2);
+  background: var(--surface);
+  object-fit: cover;
+}
+
+.nickname-text {
+  flex: 1;
+}
+
+.nickname-value {
+  font-size: 16px;
+  color: var(--accent);
+  font-family: var(--display);
+  font-weight: 200;
+  line-height: 1.3;
+}
+
+.nickname-note {
+  font-size: 9px;
+  color: var(--dim);
+  margin-top: 4px;
+}
+
+.nickname-caption {
+  font-size: 8px;
+  color: var(--gold2);
+  margin-top: 2px;
+  letter-spacing: 0.05em;
+}
+
 .rep-block {
   border-top: 1px solid var(--border);
   padding-top: 20px;
@@ -539,17 +582,6 @@ async function loadInventoryData() {
     
     document.getElementById('update-date').textContent = data.last_updated || '12.03.2026';
     
-    // Создаем копию предметов инвентаря и добавляем аватарку
-    const inventoryItems = [...(data.inventory?.items || [])];
-    
-    // Добавляем аватарку для Гермеса
-    inventoryItems.unshift({
-      name: "Аватарка для «Гермес»",
-      quantity: "1 файл",
-      description: "Нарисовано ребёнком одного из постоянных клиентов. Деламейн использует её как аватар в сети. Файл: delamain_pfp.png",
-      image: "delamain_pfp.png"
-    });
-    
     document.getElementById('inventory-content').innerHTML = `
       <div class="stats-card">
         <div class="stats-grid">
@@ -561,8 +593,14 @@ async function loadInventoryData() {
           </div>
           <div class="stat-item">
             <div class="stat-label">Псевдоним</div>
-            <div class="stat-value small">${data.nickname}</div>
-            <div style="font-size: 9px; color: var(--dim); margin-top: 4px;">${data.nickname_note}</div>
+            <div class="nickname-with-avatar">
+              <img src="delamain_pfp.png" class="nickname-avatar" alt="аватарка Деламейна" onerror="this.style.display='none'">
+              <div class="nickname-text">
+                <div class="nickname-value">${data.nickname}</div>
+                <div class="nickname-note">${data.nickname_note}</div>
+                <div class="nickname-caption">нарисовано ребёнком одного из постоянных клиентов</div>
+              </div>
+            </div>
           </div>
           <div class="stat-item">
             <div class="stat-label">Специальность</div>
@@ -647,21 +685,19 @@ async function loadInventoryData() {
       </div>
 
       <div id="inventoryItemsContainer" class="inventory-grid">
-        ${inventoryItems.map(item => `
-          <div class="item-card accent">
-            <div class="item-header">
-              <div class="item-name">${item.name}</div>
-              <div class="item-quantity">${item.quantity}</div>
-            </div>
-            <div class="item-type">предмет</div>
-            <div class="item-desc">${item.description}</div>
-            ${item.name === "Аватарка для «Гермес»" ? `
-              <div style="margin-top: 12px; display: flex; justify-content: center; border-top: 1px solid var(--border); padding-top: 12px;">
-                <img src="delamain_pfp.png" alt="Аватарка Деламейна" style="width: 96px; height: 96px; image-rendering: pixelated; border: 1px solid var(--gold2); padding: 4px; background: var(--surface); border-radius: 50%;" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'96\' height=\'96\' viewBox=\'0 0 96 96\'><rect width=\'96\' height=\'96\' fill=\'%233d6e60\'/><circle cx=\'48\' cy=\'48\' r=\'32\' fill=\'%237eb8a4\'/><text x=\'48\' y=\'62\' text-anchor=\'middle\' fill=\'%2309090a\' font-size=\'28\' font-family=\'monospace\'>D</text></svg>'">
+        ${data.inventory.items && data.inventory.items.length > 0 
+          ? data.inventory.items.map(item => `
+              <div class="item-card accent">
+                <div class="item-header">
+                  <div class="item-name">${item.name}</div>
+                  <div class="item-quantity">${item.quantity}</div>
+                </div>
+                <div class="item-type">предмет</div>
+                <div class="item-desc">${item.description}</div>
               </div>
-            ` : ''}
-          </div>
-        `).join('')}
+            `).join('')
+          : '<div class="item-card"><div class="item-desc">Пусто</div></div>'
+        }
       </div>
 
       <div class="section-header">
