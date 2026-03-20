@@ -220,16 +220,16 @@ h1 span {
 .nickname-with-avatar {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
   flex-wrap: wrap;
 }
 
 .nickname-avatar {
-  width: 48px;
-  height: 48px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   image-rendering: pixelated;
-  border: 1px solid var(--gold2);
+  border: 2px solid var(--gold2);
   background: var(--surface);
   object-fit: cover;
 }
@@ -597,7 +597,6 @@ async function loadInventoryData() {
               <img src="delamain_pfp.png" class="nickname-avatar" alt="аватарка Деламейна" onerror="this.style.display='none'">
               <div class="nickname-text">
                 <div class="nickname-value">${data.nickname}</div>
-                <div class="nickname-note">${data.nickname_note}</div>
                 <div class="nickname-caption">нарисовано ребёнком одного из постоянных клиентов</div>
               </div>
             </div>
