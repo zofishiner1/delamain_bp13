@@ -634,6 +634,7 @@ select {
   }
 }
 </style>
+<script src="transition.js"></script>
 </head>
 <body>
 <div class="container">
@@ -1285,6 +1286,12 @@ async function checkPassword() {
     
     await loadData();
     sessionStorage.setItem('admin_authenticated', 'true');
+    window.preventTransitions = false; // Разрешаем переходы после входа
+    setTimeout(() => {
+      // Перезапускаем скрипт анимации вручную
+      const event = new Event('DOMContentLoaded');
+      document.dispatchEvent(event);
+    }, 100);
     
     // Проверяем URL параметры
     const urlParams = new URLSearchParams(window.location.search);
