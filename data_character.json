@@ -11,7 +11,7 @@
   "os": 0,
   "extra_status": "",
   "last_updated": "12.03.2026",
-  "last_updated_time": "21:48:21",
+  "last_updated_time": "22:15:42",
   "reputation": {
     "global": 0,
     "organizations": {
@@ -24,7 +24,7 @@
     }
   },
   "inventory": {
-    "security": 87,
+    "security": 100,
     "archive_size": "18.4 Тб",
     "archive_free": "4.2 Тб",
     "archive_records": 1247332,
@@ -79,8 +79,8 @@
     "image_size": 500
   },
   "fleet": {
-    "total": 10,
-    "security": 87,
+    "total": 9,
+    "security": 100,
     "description": "Таксомоторный парк на Мэдисон-стрит. Все машины на ходу, заряжены, готовы к выезду.",
     "garage_address": "Мэдисон-стрит, бывший таксопарк",
     "vehicles": [
